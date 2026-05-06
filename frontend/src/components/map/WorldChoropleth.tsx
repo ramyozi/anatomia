@@ -1,7 +1,16 @@
 import * as d3 from 'd3'
 import { feature } from 'topojson-client'
-import type { FeatureCollection, Geometry } from 'geojson'
 import { useEffect, useRef, useState } from 'react'
+
+// We don't ship @types/geojson; d3-geo is happy with any object that
+// satisfies its loose ExtendedFeature shape, so we keep this lax.
+type GeoFeature = {
+  type: 'Feature'
+  id?: string
+  geometry: any
+  properties: Record<string, unknown> | null
+}
+type GeoFC = { type: 'FeatureCollection'; features: GeoFeature[] }
 
 interface Datum {
   countryCode: string
@@ -23,7 +32,8 @@ export function WorldChoropleth({
 }: Props) {
   const wrapRef = useRef<HTMLDivElement>(null)
   const [size, setSize] = useState({ w: 800, h: 400 })
-  const [geo, setGeo] = useState<FeatureCollection<Geometry> | null>(null)
+  const [geo, setGeo] = useState<GeoFC | null>(null)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [hover, setHover] = useState<{
     code: string
     name: string
@@ -52,7 +62,7 @@ export function WorldChoropleth({
       .then(r => r.json())
       .then(topo => {
         if (cancelled) return
-        const fc = feature(topo, topo.objects.countries) as unknown as FeatureCollection<Geometry>
+        const fc = feature(topo, topo.objects.countries) as unknown as GeoFC
         setGeo(fc)
       })
       .catch(() => {})
