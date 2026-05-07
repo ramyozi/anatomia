@@ -1,11 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy import func, select
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.db import get_db
-from app.models import Disease, Organ, Source, SubOrgan
-from app.schemas import DiseaseSummary, OrganSummary, SourceLink, SubOrganSchema
+from app.models import Disease, Organ, Source
+from app.schemas import OrganSummary, SourceLink, SubOrganSchema
 from app.schemas.organ import Organ as OrganOut, OrganStats, OrganStatsMetric
+from app.services.mappers import disease_summary as _disease_summary
 
 router = APIRouter()
 
@@ -44,16 +45,8 @@ def get_organ(slug: str, db: Session = Depends(get_db)) -> OrganOut:
     if not organ:
         raise HTTPException(status_code=404, detail="organ not found")
 
-    # find diseases linked
-    related_diseases = (
-        db.execute(
-            select(Disease).where(func.json_extract(Disease.organs, "$").like(f"%{slug}%"))
-        ).scalars().all()
-        if "sqlite" in str(db.bind.url)
-        else db.execute(select(Disease)).scalars().all()
-    )
-    # fallback: filter in python so we don't depend on JSON dialect quirks
-    related_diseases = [d for d in db.execute(select(Disease)).scalars().all() if slug in (d.organs or [])]
+    all_diseases = db.execute(select(Disease)).scalars().all()
+    related_diseases = [d for d in all_diseases if slug in (d.organs or [])]
 
     diseases_summaries = [_disease_summary(d) for d in related_diseases]
 
@@ -104,13 +97,3 @@ def get_organ(slug: str, db: Session = Depends(get_db)) -> OrganOut:
     )
 
 
-def _disease_summary(d: Disease) -> DiseaseSummary:
-    return DiseaseSummary(
-        slug=d.slug,
-        name=d.name,
-        shortDescription=d.short_description,
-        severity=d.severity,  # type: ignore[arg-type]
-        prevalencePer100k=d.prevalence_per_100k,
-        category=d.category,
-        organs=d.organs or [],
-    )

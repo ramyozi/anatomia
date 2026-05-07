@@ -13,6 +13,7 @@ from app.schemas import (
     TimelinePoint,
 )
 from app.schemas.disease import WorldDistributionItem
+from app.services.mappers import disease_summary
 
 router = APIRouter()
 
@@ -46,18 +47,7 @@ def list_diseases(
     if limit:
         diseases = diseases[:limit]
 
-    return [
-        DiseaseSummary(
-            slug=d.slug,
-            name=d.name,
-            shortDescription=d.short_description,
-            severity=d.severity,  # type: ignore[arg-type]
-            prevalencePer100k=d.prevalence_per_100k,
-            category=d.category,
-            organs=d.organs or [],
-        )
-        for d in diseases
-    ]
+    return [disease_summary(d) for d in diseases]
 
 
 @router.get("/{slug}", response_model=DiseaseOut)
