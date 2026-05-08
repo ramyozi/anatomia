@@ -13,6 +13,8 @@ import { StatsPage } from './pages/StatsPage'
 import { GlossaryPage } from './pages/GlossaryPage'
 import { QuizPage } from './pages/QuizPage'
 import { CompareDiseasesPage } from './pages/CompareDiseasesPage'
+import { BrainExplorerPage } from './pages/BrainExplorerPage'
+import { SystemsPage } from './pages/SystemsPage'
 import { NotFoundPage } from './pages/NotFoundPage'
 
 export function App() {
@@ -23,6 +25,8 @@ export function App() {
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<PageTransition><HomePage /></PageTransition>} />
           <Route path="/corps" element={<PageTransition><BodyExplorerPage /></PageTransition>} />
+          <Route path="/corps/cerveau/explorer" element={<PageTransition><BrainExplorerPage /></PageTransition>} />
+          <Route path="/corps/systemes/:system" element={<PageTransition><SystemsPage /></PageTransition>} />
           <Route path="/corps/:organSlug" element={<PageTransition><OrganDetailPage /></PageTransition>} />
           <Route path="/corps/:organSlug/:subSlug" element={<PageTransition><OrganDetailPage /></PageTransition>} />
           <Route path="/maladies" element={<PageTransition><DiseasesPage /></PageTransition>} />
