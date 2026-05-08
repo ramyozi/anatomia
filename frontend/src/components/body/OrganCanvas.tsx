@@ -1,8 +1,9 @@
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Environment, OrbitControls, Sparkles } from '@react-three/drei'
+import { OrbitControls, Sparkles } from '@react-three/drei'
 import { useMemo, useRef } from 'react'
 import * as THREE from 'three'
 import { TISSUE_PRESETS } from './materials'
+import { ANATOMICAL_GL_SETTINGS, Stage } from './Stage'
 
 /**
  * High-fidelity stylised organs. Each slug maps to a custom procedural
@@ -14,20 +15,10 @@ export function OrganCanvas({ slug }: { slug: string }) {
     <div className="absolute inset-0">
       <Canvas
         camera={{ position: [0, 0, 4], fov: 40 }}
-        gl={{
-          antialias: true,
-          alpha: true,
-          powerPreference: 'high-performance',
-          toneMapping: THREE.ACESFilmicToneMapping,
-          toneMappingExposure: 1.05,
-        }}
+        gl={ANATOMICAL_GL_SETTINGS}
         dpr={[1, 2]}
       >
-        <Environment preset="studio" background={false} />
-        <ambientLight intensity={0.35} />
-        <pointLight position={[3, 3, 3]} intensity={1.6} color="#9af2e4" distance={10} />
-        <pointLight position={[-3, -2, 1]} intensity={0.7} color="#ff6b6b" distance={10} />
-        <pointLight position={[0, 0, 4]} intensity={0.6} color="#a78bfa" distance={10} />
+        <Stage preset="studio" envIntensity={0.85} />
         <RotatingOrgan slug={slug} />
         <Sparkles
           count={40}
