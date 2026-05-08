@@ -51,6 +51,37 @@ export function BodyExplorerPage() {
           <p className="text-sm text-ink-mute mt-1">
             Survole le modèle pour identifier un organe, clique pour zoomer.
           </p>
+
+          <div className="mt-4 grid grid-cols-2 gap-1.5">
+            <a
+              href="/corps/cerveau/explorer"
+              className="panel-soft p-2 text-center text-xs hover:border-accent/40 transition-colors"
+            >
+              <div className="font-display text-ink">Cerveau</div>
+              <div className="text-ink-dim text-[10px]">19 régions</div>
+            </a>
+            <a
+              href="/corps/systemes/squelettique"
+              className="panel-soft p-2 text-center text-xs hover:border-accent/40 transition-colors"
+            >
+              <div className="font-display text-ink">Squelette</div>
+              <div className="text-ink-dim text-[10px]">206 os</div>
+            </a>
+            <a
+              href="/corps/systemes/musculaire"
+              className="panel-soft p-2 text-center text-xs hover:border-accent/40 transition-colors"
+            >
+              <div className="font-display text-ink">Muscles</div>
+              <div className="text-ink-dim text-[10px]">≈ 640</div>
+            </a>
+            <a
+              href="/corps/systemes/nerveux"
+              className="panel-soft p-2 text-center text-xs hover:border-accent/40 transition-colors"
+            >
+              <div className="font-display text-ink">Nerveux</div>
+              <div className="text-ink-dim text-[10px]">12 + 31</div>
+            </a>
+          </div>
         </div>
         <div className="px-5 mb-3">
           <div className="flex items-center gap-1.5 text-xs text-ink-dim mb-2">
