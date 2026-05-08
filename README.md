@@ -1,23 +1,24 @@
 # Anatomia
 
-Plateforme interactive d'exploration du corps humain, des maladies et de leur répartition mondiale.
+Plateforme interactive — corps humain en 3D, maladies, santé mondiale.
 
 ## Stack
 
-- **Front** : React + TypeScript + Vite + TailwindCSS + Framer Motion + Three.js / R3F + D3
-- **Back** : FastAPI + SQLAlchemy + Pydantic
-- **Data** : PostgreSQL
-- **Infra** : Docker + docker-compose
+- **Front** : React + TS + Vite + Tailwind + Framer Motion + R3F + D3 + Zustand + React Query
+- **Back** : FastAPI + SQLAlchemy 2 + Pydantic v2
+- **Data** : PostgreSQL (SQLite en fallback dev)
+- **Infra** : Docker + docker-compose + Nginx
 
-## Lancer en local
+## Lancer
 
 ```bash
-# Tout en une commande
-docker-compose up --build
+# Tout-en-un
+docker compose up --build
 
-# Ou séparément
-cd backend && uvicorn app.main:app --reload --port 8000
-cd frontend && pnpm install && pnpm dev
+# Ou en local
+make front     # Vite sur :5173
+make back      # FastAPI sur :8000
+make seed      # remplit la DB
 ```
 
 Front : http://localhost:5173 — API : http://localhost:8000/docs
@@ -26,21 +27,20 @@ Front : http://localhost:5173 — API : http://localhost:8000/docs
 
 ```
 anatomia/
-├── frontend/   # React + Vite
-├── backend/    # FastAPI
-├── docs/       # Schémas et architecture
-└── docker-compose.yml
+├── frontend/   # React + Vite + R3F
+├── backend/    # FastAPI + SQLAlchemy
+├── docs/       # Architecture & cas d'usage (Mermaid)
+├── docker-compose.yml
+└── Makefile
 ```
 
-## Commandes utiles
+## Commandes
 
 ```bash
-# Tests back
-cd backend && pytest
-
-# Lint front
-cd frontend && pnpm lint
-
-# Seed DB
-cd backend && python -m app.scripts.seed
+make front          # dev server
+make back           # API + reload
+make seed           # seed catalogue
+make test           # pytest
+make build          # vite build
+make up / make down # docker
 ```
