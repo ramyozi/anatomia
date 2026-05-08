@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { Canvas } from '@react-three/fiber'
-import { OrbitControls, Environment } from '@react-three/drei'
+import { OrbitControls } from '@react-three/drei'
+import { ANATOMICAL_GL_SETTINGS, Stage } from '@/components/body/Stage'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { ChevronRight, Layers3, Filter, Bone, Heart, Activity } from 'lucide-react'
-import * as THREE from 'three'
 import { AnatomicalBody } from '@/components/body/AnatomicalBody'
 import { ORGAN_3D_POSITIONS } from '@/data/organPositions'
 import { api } from '@/lib/api'
@@ -107,21 +107,10 @@ export function BodyExplorerPage() {
       <div className="relative bg-[radial-gradient(circle_at_50%_30%,rgba(126,224,210,0.14),transparent_70%)]">
         <Canvas
           camera={{ position: [0, 0.5, 4.6], fov: 38 }}
-          gl={{
-            antialias: true,
-            alpha: true,
-            powerPreference: 'high-performance',
-            toneMapping: THREE.ACESFilmicToneMapping,
-            toneMappingExposure: 1.0,
-          }}
+          gl={ANATOMICAL_GL_SETTINGS}
           dpr={[1, 2]}
         >
-          <ambientLight intensity={0.32} />
-          <directionalLight position={[3, 5, 5]} intensity={1.3} color="#9af2e4" />
-          <directionalLight position={[-4, -2, 3]} intensity={0.45} color="#ff6b6b" />
-          <pointLight position={[0, 0.5, 2.5]} intensity={1.4} color="#7ee0d2" distance={6} />
-          <pointLight position={[-2, -1, 1.5]} intensity={0.6} color="#a78bfa" distance={5} />
-          <Environment preset="studio" background={false} />
+          <Stage preset="studio" />
           <AnatomicalBody
             interactive
             highlightedSlug={hovered ?? undefined}
