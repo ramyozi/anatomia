@@ -4,8 +4,9 @@ import { OrbitControls, Environment } from '@react-three/drei'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { ChevronRight, Layers3, Filter } from 'lucide-react'
-import { BodyMesh } from '@/components/body/BodyMesh'
+import { ChevronRight, Layers3, Filter, Bone, Heart, Activity } from 'lucide-react'
+import * as THREE from 'three'
+import { AnatomicalBody } from '@/components/body/AnatomicalBody'
 import { ORGAN_3D_POSITIONS } from '@/data/organPositions'
 import { api } from '@/lib/api'
 import type { OrganSummary } from '@/types'
@@ -25,6 +26,9 @@ const SYSTEMS = [
 export function BodyExplorerPage() {
   const [hovered, setHovered] = useState<string | null>(null)
   const [system, setSystem] = useState('all')
+  const [showSkin, setShowSkin] = useState(true)
+  const [showSkeleton, setShowSkeleton] = useState(false)
+  const [showMuscles, setShowMuscles] = useState(false)
   const navigate = useNavigate()
 
   const { data: organs } = useQuery({
@@ -100,20 +104,31 @@ export function BodyExplorerPage() {
       </aside>
 
       {/* 3D viewport */}
-      <div className="relative bg-[radial-gradient(circle_at_50%_30%,rgba(126,224,210,0.12),transparent_70%)]">
+      <div className="relative bg-[radial-gradient(circle_at_50%_30%,rgba(126,224,210,0.14),transparent_70%)]">
         <Canvas
           camera={{ position: [0, 0.5, 4.6], fov: 38 }}
-          gl={{ antialias: true, alpha: true }}
+          gl={{
+            antialias: true,
+            alpha: true,
+            powerPreference: 'high-performance',
+            toneMapping: THREE.ACESFilmicToneMapping,
+            toneMappingExposure: 1.0,
+          }}
           dpr={[1, 2]}
         >
-          <ambientLight intensity={0.4} />
-          <directionalLight position={[3, 5, 5]} intensity={1.1} color="#9af2e4" />
-          <directionalLight position={[-4, -2, 3]} intensity={0.4} color="#ff6b6b" />
-          <Environment preset="city" />
-          <BodyMesh
+          <ambientLight intensity={0.32} />
+          <directionalLight position={[3, 5, 5]} intensity={1.3} color="#9af2e4" />
+          <directionalLight position={[-4, -2, 3]} intensity={0.45} color="#ff6b6b" />
+          <pointLight position={[0, 0.5, 2.5]} intensity={1.4} color="#7ee0d2" distance={6} />
+          <pointLight position={[-2, -1, 1.5]} intensity={0.6} color="#a78bfa" distance={5} />
+          <Environment preset="studio" background={false} />
+          <AnatomicalBody
             interactive
             highlightedSlug={hovered ?? undefined}
             onHover={setHovered}
+            showSkin={showSkin}
+            showSkeleton={showSkeleton}
+            showMuscles={showMuscles}
           />
           <OrbitControls
             enablePan={false}
@@ -121,11 +136,35 @@ export function BodyExplorerPage() {
             maxDistance={7}
             maxPolarAngle={Math.PI / 1.5}
             minPolarAngle={Math.PI / 3}
+            enableDamping
+            dampingFactor={0.08}
           />
         </Canvas>
 
         <div className="absolute top-4 left-4 chip">
           {ORGAN_3D_POSITIONS.length} repères anatomiques
+        </div>
+
+        {/* Layer toggles */}
+        <div className="absolute top-4 right-4 panel-soft p-1.5 flex gap-1">
+          <LayerToggle
+            active={showSkin}
+            onClick={() => setShowSkin(s => !s)}
+            icon={<Activity className="w-3.5 h-3.5" />}
+            label="Peau"
+          />
+          <LayerToggle
+            active={showMuscles}
+            onClick={() => setShowMuscles(s => !s)}
+            icon={<Heart className="w-3.5 h-3.5" />}
+            label="Muscles"
+          />
+          <LayerToggle
+            active={showSkeleton}
+            onClick={() => setShowSkeleton(s => !s)}
+            icon={<Bone className="w-3.5 h-3.5" />}
+            label="Squelette"
+          />
         </div>
 
         <AnimatePresence>
@@ -173,6 +212,33 @@ export function BodyExplorerPage() {
         </div>
       </aside>
     </div>
+  )
+}
+
+function LayerToggle({
+  active,
+  onClick,
+  icon,
+  label,
+}: {
+  active: boolean
+  onClick: () => void
+  icon: React.ReactNode
+  label: string
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={cn(
+        'flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] uppercase tracking-wider transition-colors',
+        active
+          ? 'bg-accent/15 text-accent border border-accent/40'
+          : 'text-ink-mute hover:text-ink border border-transparent',
+      )}
+    >
+      {icon}
+      {label}
+    </button>
   )
 }
 
