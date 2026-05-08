@@ -1,8 +1,8 @@
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Float, OrbitControls, Sparkles } from '@react-three/drei'
+import { Environment, Float, OrbitControls, Sparkles } from '@react-three/drei'
 import { useRef } from 'react'
 import * as THREE from 'three'
-import { BodyMesh } from '@/components/body/BodyMesh'
+import { AnatomicalBody } from '@/components/body/AnatomicalBody'
 
 function Pulse() {
   const ref = useRef<THREE.Mesh>(null)
@@ -33,26 +33,39 @@ export function HeroBody() {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(126,224,210,0.18),transparent_60%)]" />
       <Canvas
         camera={{ position: [0, 0.3, 4.6], fov: 38 }}
-        gl={{ antialias: true, alpha: true }}
+        gl={{
+          antialias: true,
+          alpha: true,
+          powerPreference: 'high-performance',
+          toneMapping: THREE.ACESFilmicToneMapping,
+          toneMappingExposure: 1.05,
+        }}
         dpr={[1, 2]}
       >
-        <ambientLight intensity={0.45} />
-        <directionalLight position={[3, 5, 4]} intensity={1.2} color="#9af2e4" />
-        <directionalLight position={[-4, -2, 3]} intensity={0.4} color="#ff6b6b" />
-        <pointLight position={[0, 0, 3]} intensity={0.3} color="#7ee0d2" />
+        <Environment preset="studio" background={false} />
+        <ambientLight intensity={0.35} />
+        <directionalLight
+          position={[3, 5, 4]}
+          intensity={1.4}
+          color="#9af2e4"
+          castShadow
+        />
+        <directionalLight position={[-4, -2, 3]} intensity={0.45} color="#ff6b6b" />
+        <pointLight position={[0, 0.4, 2.5]} intensity={1.6} color="#7ee0d2" distance={6} />
+        <pointLight position={[-2, -1, 1.5]} intensity={0.6} color="#a78bfa" distance={5} />
 
-        <Float floatIntensity={0.8} rotationIntensity={0.25} speed={1.2}>
-          <BodyMesh interactive={false} />
+        <Float floatIntensity={0.7} rotationIntensity={0.22} speed={1.1}>
+          <AnatomicalBody interactive={false} />
         </Float>
 
         <Pulse />
         <Sparkles
-          count={60}
-          scale={[3.5, 5, 3.5]}
+          count={120}
+          scale={[3.8, 5.5, 3.8]}
           size={2}
-          speed={0.3}
+          speed={0.28}
           color="#9af2e4"
-          opacity={0.4}
+          opacity={0.45}
         />
 
         <OrbitControls
