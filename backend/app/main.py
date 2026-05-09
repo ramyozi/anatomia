@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api import (
+    admin,
     countries,
     diseases,
     glossary,
@@ -47,6 +48,7 @@ def create_app() -> FastAPI:
     app.include_router(glossary.router, prefix="/api/glossary", tags=["glossary"])
     app.include_router(quiz.router, prefix="/api/quiz", tags=["quiz"])
     app.include_router(search.router, prefix="/api/search", tags=["search"])
+    app.include_router(admin.router, prefix="/api/admin", tags=["admin"])
 
     @app.get("/api/health", tags=["meta"])
     def health() -> dict[str, str]:
