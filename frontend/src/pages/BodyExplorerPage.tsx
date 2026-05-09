@@ -2,6 +2,7 @@ import { useState, Suspense } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import { ANATOMICAL_GL_SETTINGS, Stage } from '@/components/body/Stage'
+import { PostFX } from '@/components/body/PostFX'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
@@ -157,6 +158,7 @@ export function BodyExplorerPage() {
             enableDamping
             dampingFactor={0.08}
           />
+          <PostFX bloom={0.55} />
         </Canvas>
 
         <div className="absolute top-4 left-4 chip-accent text-[10px]">

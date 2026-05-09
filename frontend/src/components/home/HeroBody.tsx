@@ -3,6 +3,7 @@ import { Float, OrbitControls } from '@react-three/drei'
 import { Suspense } from 'react'
 import { AnatomyModel } from '@/components/anatomy/AnatomyModel'
 import { ANATOMICAL_GL_SETTINGS, Stage } from '@/components/body/Stage'
+import { PostFX } from '@/components/body/PostFX'
 
 /**
  * Hero scene: a real BodyParts3D cerebellum mesh, lit with a studio
@@ -37,6 +38,7 @@ export function HeroBody() {
           maxPolarAngle={Math.PI / 1.7}
           minPolarAngle={Math.PI / 2.6}
         />
+        <PostFX bloom={0.85} />
       </Canvas>
 
       <div className="absolute bottom-3 left-1/2 -translate-x-1/2 text-[10px] uppercase tracking-[0.25em] text-ink-dim">

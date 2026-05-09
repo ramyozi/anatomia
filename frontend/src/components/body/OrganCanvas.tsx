@@ -3,6 +3,7 @@ import { OrbitControls } from '@react-three/drei'
 import { Suspense } from 'react'
 import { AnatomyModel, getAnatomyModel } from '@/components/anatomy/AnatomyModel'
 import { ANATOMICAL_GL_SETTINGS, Stage } from './Stage'
+import { PostFX } from './PostFX'
 
 /** Map a domain slug to the anatomical model slug used by BodyParts3D. */
 const SLUG_ALIASES: Record<string, string> = {
@@ -47,6 +48,7 @@ export function OrganCanvas({ slug }: { slug: string }) {
           enableDamping
           dampingFactor={0.08}
         />
+        <PostFX bloom={0.7} />
       </Canvas>
 
       {entry && (

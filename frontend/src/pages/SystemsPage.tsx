@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { useQuery } from '@tanstack/react-query'
 import { Suspense } from 'react'
 import { ANATOMICAL_GL_SETTINGS, Stage } from '@/components/body/Stage'
+import { PostFX } from '@/components/body/PostFX'
 import { AnatomicalScene } from '@/components/anatomy/AnatomicalScene'
 import { Breadcrumbs } from '@/components/nav/Breadcrumbs'
 import { api } from '@/lib/api'
@@ -249,6 +250,7 @@ export function SystemsPage() {
               showOrgans={def.showOrgans}
             />
           </Suspense>
+          <PostFX bloom={0.55} />
           <OrbitControls
             enablePan={false}
             minDistance={3}
