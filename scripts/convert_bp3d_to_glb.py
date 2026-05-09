@@ -1,28 +1,28 @@
 #!/usr/bin/env python3
-"""Convert a curated set of BodyParts3D STL meshes to compact GLB models.
+"""Convert curated BodyParts3D STL meshes to compact GLB models.
 
-Pipeline
-========
+Two output modes
+================
+- ``solo``   — one GLB per organ, recentered & rescaled to fit roughly
+               inside a unit cube. Suited to single-organ viewers.
+- ``frame``  — one GLB per assembly, keeping BodyParts3D world coordinates
+               so the parts line up coherently. The whole assembly is
+               then translated/scaled as a unit so the camera can zoom.
+
+Pipeline (per mesh):
 1. Load STL with ``trimesh``.
-2. Apply quadric decimation if the mesh is heavier than a per-organ target
-   triangle budget (so the web stays fast).
-3. Welding & normal recompute for clean shading.
-4. Re-center & rescale so each model fits within a unit-ish bounding box,
-   keeping its original anatomical orientation (Z up in BodyParts3D).
-5. Export as binary GLB with embedded buffers (no external .bin).
-6. Optional Draco compression via ``gltf-transform`` if available.
-
-Usage:
-    python scripts/convert_bp3d_to_glb.py
+2. (BodyParts3D ships in millimetres with a head-up orientation; we leave
+   that intact during merge and apply transforms at the very end.)
+3. Decimate via ``fast_simplification`` to a per-spec triangle budget.
+4. Recompute normals.
+5. Export binary GLB (vertex-colored) with embedded buffers.
 """
 from __future__ import annotations
 
 import json
 import os
-import shutil
-import subprocess
 import sys
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import numpy as np
 import trimesh
@@ -37,27 +37,23 @@ META_FILE = os.path.join(REPO_ROOT, "frontend", "src", "data", "anatomy-models.j
 
 @dataclass
 class ModelSpec:
-    slug: str  # local organ slug
-    fma_id: str  # FMA identifier
-    parts: list[str]  # one or more STL file basenames (without .stl)
+    slug: str
+    fma_id: str
+    parts: list[str]
     target_triangles: int = 30_000
-    color: str = "#c84545"  # default tissue color hint
+    color: str = "#c84545"
     label: str = ""
+    keep_world_frame: bool = False  # used when this slug is part of a composite
+    composite_with: list[str] = field(default_factory=list)  # other slugs to merge
 
 
-# --------------------------- curated catalogue --------------------------- #
-#
-# Each spec maps a domain organ to one or several BP3D primitives. When more
-# than one primitive is provided, they are merged into a single GLB. The
-# triangle budget controls the post-decimation density — bigger organs get
-# more triangles, accessories less.
-
+# Curated solo organs (one GLB each, recentered + scaled to unit cube).
 MODELS: list[ModelSpec] = [
     ModelSpec("coeur",     "FMA7274",  ["FMA7274"],                target_triangles=45_000, color="#c84545", label="Wall of heart"),
-    ModelSpec("cerveau",   "FMA67944", ["FMA67944"],               target_triangles=40_000, color="#caa3c7", label="Cerebellum"),
+    ModelSpec("cervelet",  "FMA67944", ["FMA67944"],               target_triangles=40_000, color="#caa3c7", label="Cerebellum"),
     ModelSpec("hippocampe","FMA62493", ["FMA72713", "FMA72714"],   target_triangles=15_000, color="#e8c1ff", label="Hippocampus L+R"),
     ModelSpec("thalamus",  "FMA62007", ["FMA258714", "FMA258716"], target_triangles=15_000, color="#a78bfa", label="Thalamus L+R"),
-    ModelSpec("hypothalamus","FMA62008","FMA62008nsn".split(),     target_triangles=12_000, color="#fbbf77", label="Hypothalamus"),
+    ModelSpec("hypothalamus","FMA62008",["FMA62008nsn"],           target_triangles=12_000, color="#fbbf77", label="Hypothalamus"),
     ModelSpec("midbrain",  "FMA61993", ["FMA61993nsn"],            target_triangles=20_000, color="#caa3c7", label="Midbrain"),
     ModelSpec("poumons",   "FMA7195",  ["FMA7333", "FMA7383", "FMA7337", "FMA7370", "FMA7371"],
               target_triangles=50_000, color="#b76a78", label="Lungs (5 lobes)"),
@@ -89,29 +85,105 @@ MODELS: list[ModelSpec] = [
 ]
 
 
+# Composite assemblies — multiple BodyParts3D primitives merged in their
+# native frame, then normalized as a unit. The slug names are used directly
+# as GLB filenames.
+@dataclass
+class CompositeSpec:
+    slug: str
+    label: str
+    parts: list[tuple[str, str, str]]  # (region_slug, fma_id, color)
+    target_triangles_per_part: int = 18_000
+
+
+COMPOSITES: list[CompositeSpec] = [
+    CompositeSpec(
+        slug="cerveau",
+        label="Brain (cerebellum + midbrain + thalami + hippocampi)",
+        parts=[
+            ("cervelet",    "FMA67944",  "#caa3c7"),  # cerebellum
+            ("midbrain",    "FMA61993nsn","#a78bfa"),  # midbrain (no-skin-name suffix)
+            ("thalamus-d",  "FMA258714", "#9af2e4"),  # right thalamus
+            ("thalamus-g",  "FMA258716", "#9af2e4"),  # left thalamus
+            ("hippocampe-d","FMA72713",  "#e8c1ff"),  # right hippocampus
+            ("hippocampe-g","FMA72714",  "#e8c1ff"),  # left hippocampus
+            ("hypothalamus","FMA62008nsn","#fbbf77"), # hypothalamus
+            ("fornix",      "FMA61970",  "#caa3c7"),  # commissure of fornix
+            ("peduncle",    "FMA62394",  "#a78bfa"),  # peduncle of midbrain
+        ],
+        target_triangles_per_part=14_000,
+    ),
+    CompositeSpec(
+        slug="thorax",
+        label="Thoracic block (heart + lungs + diaphragm)",
+        parts=[
+            ("coeur",       "FMA7274",   "#c84545"),  # heart wall
+            ("trachea",     "FMA7394",   "#9af2e4"),
+            ("lung-up-r",   "FMA7333",   "#b76a78"),
+            ("lung-mid-r",  "FMA7383",   "#b76a78"),
+            ("lung-low-r",  "FMA7337",   "#b76a78"),
+            ("lung-up-l",   "FMA7370",   "#b76a78"),
+            ("lung-low-l",  "FMA7371",   "#b76a78"),
+            ("diaphragm",   "FMA13295",  "#a83c3c"),
+        ],
+        target_triangles_per_part=12_000,
+    ),
+    CompositeSpec(
+        slug="abdomen",
+        label="Abdominal block (liver + stomach + spleen + kidneys + pancreas + gallbladder + bladder)",
+        parts=[
+            ("liver",       "FMA7197",   "#7a3a2a"),
+            ("stomach",     "FMA7148",   "#c47a4a"),
+            ("spleen",      "FMA7196",   "#7a3447"),
+            ("kidney-r",    "FMA7204",   "#8a3636"),
+            ("kidney-l",    "FMA7205",   "#8a3636"),
+            ("pancreas",    "FMA7198nsn","#e9b87b"),
+            ("gallbladder", "FMA7202",   "#2c8d4e"),
+            ("bladder",     "FMA15900",  "#e9d6a8"),
+            ("esophagus",   "FMA7131",   "#d99268"),
+        ],
+        target_triangles_per_part=14_000,
+    ),
+    CompositeSpec(
+        slug="squelette",
+        label="Skeleton (axial + appendicular major bones)",
+        parts=[
+            ("scapula-r",   "FMA13395",  "#e9e2cf"),
+            ("scapula-l",   "FMA13396",  "#e9e2cf"),
+            ("humerus-r",   "FMA23130",  "#e9e2cf"),
+            ("humerus-l",   "FMA23131",  "#e9e2cf"),
+            ("femur-r",     "FMA24474",  "#e9e2cf"),
+            ("femur-l",     "FMA24475",  "#e9e2cf"),
+            ("tibia-r",     "FMA24477",  "#e9e2cf"),
+            ("tibia-l",     "FMA24478",  "#e9e2cf"),
+            ("sacrum",      "FMA16202",  "#e9e2cf"),
+            ("mandible",    "FMA52748",  "#e9e2cf"),
+            ("sternum",     "FMA7487",   "#e9e2cf"),
+            ("vertebra-l1", "FMA13072",  "#e9e2cf"),
+            ("vertebra-l2", "FMA13073",  "#e9e2cf"),
+            ("vertebra-l3", "FMA13074",  "#e9e2cf"),
+            ("vertebra-l4", "FMA13075",  "#e9e2cf"),
+            ("vertebra-l5", "FMA13076",  "#e9e2cf"),
+        ],
+        target_triangles_per_part=10_000,
+    ),
+]
+
+
 # ---------------------------- conversion core ---------------------------- #
 
 
-def load_and_merge(part_files: list[str]) -> trimesh.Trimesh:
-    meshes: list[trimesh.Trimesh] = []
-    for stem in part_files:
-        path = os.path.join(BP3D_STL_DIR, f"{stem}.stl")
-        m = trimesh.load(path, force="mesh")
-        if isinstance(m, trimesh.Scene):
-            m = trimesh.util.concatenate(list(m.geometry.values()))
-        meshes.append(m)
-    if len(meshes) == 1:
-        return meshes[0]
-    return trimesh.util.concatenate(meshes)
+def _load_stl(stem: str) -> trimesh.Trimesh:
+    path = os.path.join(BP3D_STL_DIR, f"{stem}.stl")
+    m = trimesh.load(path, force="mesh")
+    if isinstance(m, trimesh.Scene):
+        m = trimesh.util.concatenate(list(m.geometry.values()))
+    return m
 
 
-def decimate(mesh: trimesh.Trimesh, target: int) -> trimesh.Trimesh:
+def _decimate(mesh: trimesh.Trimesh, target: int) -> trimesh.Trimesh:
     if len(mesh.faces) <= target:
         return mesh
-    # trimesh wraps the open3d / vtk decimator if either is installed; we
-    # fall back to a pure-Python edge-collapse via .simplify_quadric_decimation
-    # which is bundled when fast_simplification is available. If not, return
-    # the mesh untouched but warn loudly.
     try:
         return mesh.simplify_quadric_decimation(face_count=target)
     except Exception as exc:  # noqa: BLE001
@@ -122,30 +194,31 @@ def decimate(mesh: trimesh.Trimesh, target: int) -> trimesh.Trimesh:
         return mesh
 
 
-def normalize(mesh: trimesh.Trimesh) -> trimesh.Trimesh:
-    """Center on origin, scale to unit-ish bounds, but keep aspect ratio.
+def _normalize_unit(mesh: trimesh.Trimesh) -> trimesh.Trimesh:
+    """Recenter mesh on the origin and rescale so its largest dimension
+    fits in [-1, 1] (i.e. bounding box ~ 2 units across).
 
-    BodyParts3D models share a global coordinate frame so we keep the
-    relative position when merging multiple parts. For a single-organ
-    export we re-center to the origin so the viewer can zoom-fit easily.
+    Crucial fix from the previous version: translation must happen on the
+    raw vertices BEFORE the scale, so the centered mesh stays at origin.
     """
-    bounds = mesh.bounds  # 2x3
+    bounds = mesh.bounds
     center = bounds.mean(axis=0)
-    scale = float(np.linalg.norm(bounds[1] - bounds[0]))
-    if scale < 1e-6:
+    extent = float(np.max(bounds[1] - bounds[0]))
+    if extent < 1e-6:
         return mesh
-    transform = np.eye(4)
-    transform[:3, 3] = -center
-    transform[:3, :3] /= scale / 2.0
-    mesh.apply_transform(transform)
+    mesh.apply_translation(-center)
+    mesh.apply_scale(2.0 / extent)
     return mesh
 
 
-def export_glb(mesh: trimesh.Trimesh, out_path: str, color_hex: str) -> int:
+def _color_mesh(mesh: trimesh.Trimesh, color_hex: str) -> None:
     color = trimesh.visual.color.hex_to_rgba(color_hex)
     mesh.visual = trimesh.visual.ColorVisuals(
         mesh, vertex_colors=np.tile(color, (len(mesh.vertices), 1))
     )
+
+
+def _export_glb(mesh: trimesh.Trimesh, out_path: str) -> int:
     glb = mesh.export(file_type="glb")
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
     with open(out_path, "wb") as f:
@@ -153,22 +226,114 @@ def export_glb(mesh: trimesh.Trimesh, out_path: str, color_hex: str) -> int:
     return len(glb)
 
 
-def maybe_draco(out_path: str) -> int | None:
-    """Optional Draco compression via gltf-transform CLI (npx)."""
-    if not shutil.which("npx"):
-        return None
-    compressed = out_path.replace(".glb", ".draco.glb")
+def convert_solo(spec: ModelSpec) -> dict | None:
+    out_path = os.path.join(OUT_DIR, f"{spec.slug}.glb")
+    meshes = []
+    for stem in spec.parts:
+        try:
+            meshes.append(_load_stl(stem))
+        except FileNotFoundError as exc:
+            print(f"  ! {spec.slug}: missing {stem}: {exc}")
+            return None
+    mesh = meshes[0] if len(meshes) == 1 else trimesh.util.concatenate(meshes)
+
+    before = len(mesh.faces)
+    mesh = _decimate(mesh, spec.target_triangles)
+    mesh = _normalize_unit(mesh)
     try:
-        subprocess.run(
-            ["npx", "--yes", "@gltf-transform/cli", "draco", out_path, compressed],
-            check=True,
-            capture_output=True,
-        )
-        size = os.path.getsize(compressed)
-        os.replace(compressed, out_path)
-        return size
-    except Exception:
+        mesh.fix_normals()
+    except Exception:  # noqa: BLE001
+        pass
+    _color_mesh(mesh, spec.color)
+    size = _export_glb(mesh, out_path)
+    return {
+        "slug": spec.slug,
+        "kind": "solo",
+        "fmaId": spec.fma_id,
+        "label": spec.label,
+        "color": spec.color,
+        "facesAfter": int(len(mesh.faces)),
+        "facesBefore": int(before),
+        "byteSize": size,
+        "path": f"/models/anatomy/{spec.slug}.glb",
+        "parts": spec.parts,
+        "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS",
+    }
+
+
+def convert_composite(spec: CompositeSpec) -> dict | None:
+    """Build a multi-region assembly that keeps each part's native frame.
+
+    We export a glTF scene with one node per region so the frontend can
+    show / hide / highlight individual regions. The whole assembly is
+    centered + rescaled as a single unit so it fits the camera.
+    """
+    out_path = os.path.join(OUT_DIR, f"{spec.slug}.glb")
+    scene = trimesh.Scene()
+    parts_meta: list[dict] = []
+
+    # Pass 1 — load + decimate, accumulate to compute global bbox
+    loaded: list[tuple[str, str, str, trimesh.Trimesh, int]] = []
+    for region_slug, fma, color in spec.parts:
+        try:
+            m = _load_stl(fma)
+        except FileNotFoundError as exc:
+            print(f"  ! {spec.slug}: missing {fma}: {exc}")
+            continue
+        before = len(m.faces)
+        m = _decimate(m, spec.target_triangles_per_part)
+        try:
+            m.fix_normals()
+        except Exception:
+            pass
+        loaded.append((region_slug, fma, color, m, before))
+
+    if not loaded:
         return None
+
+    # Compute global bbox in BodyParts3D world coords
+    all_bounds = np.array([m.bounds for *_, m, _ in loaded])
+    global_min = all_bounds[:, 0, :].min(axis=0)
+    global_max = all_bounds[:, 1, :].max(axis=0)
+    center = (global_min + global_max) / 2.0
+    extent = float(np.max(global_max - global_min))
+    scale = 2.0 / extent if extent > 1e-6 else 1.0
+
+    # Pass 2 — apply the same global transform to every part, color, attach
+    for region_slug, fma, color, m, before in loaded:
+        m.apply_translation(-center)
+        m.apply_scale(scale)
+        _color_mesh(m, color)
+        scene.add_geometry(m, node_name=region_slug)
+        parts_meta.append(
+            {
+                "regionSlug": region_slug,
+                "fmaId": fma,
+                "color": color,
+                "facesAfter": int(len(m.faces)),
+                "facesBefore": int(before),
+            }
+        )
+
+    glb = scene.export(file_type="glb")
+    os.makedirs(os.path.dirname(out_path), exist_ok=True)
+    with open(out_path, "wb") as f:
+        f.write(glb)
+
+    return {
+        "slug": spec.slug,
+        "kind": "composite",
+        "fmaId": "composite",
+        "label": spec.label,
+        "color": "#7ee0d2",
+        "facesAfter": sum(p["facesAfter"] for p in parts_meta),
+        "facesBefore": sum(p["facesBefore"] for p in parts_meta),
+        "byteSize": len(glb),
+        "path": f"/models/anatomy/{spec.slug}.glb",
+        "parts": [p["fmaId"] for p in parts_meta],
+        "regions": parts_meta,
+        "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS",
+    }
 
 
 # --------------------------------- main --------------------------------- #
@@ -184,41 +349,22 @@ def main() -> int:
     total = 0
 
     for spec in MODELS:
-        out_path = os.path.join(OUT_DIR, f"{spec.slug}.glb")
-        try:
-            mesh = load_and_merge(spec.parts)
-        except FileNotFoundError as e:
-            print(f"  - skip {spec.slug}: {e}")
-            continue
+        info = convert_solo(spec)
+        if info:
+            registry.append(info)
+            total += info["byteSize"]
+            print(
+                f"  + solo {spec.slug:<14} {info['facesAfter']:>7} faces  {info['byteSize']/1024:.1f} KB"
+            )
 
-        before_faces = len(mesh.faces)
-        mesh = decimate(mesh, spec.target_triangles)
-        mesh = normalize(mesh)
-        # Some BP3D meshes have inconsistent winding; fix normals
-        try:
-            mesh.fix_normals()
-        except Exception:
-            pass
-
-        size = export_glb(mesh, out_path, spec.color)
-        total += size
-        registry.append(
-            {
-                "slug": spec.slug,
-                "fmaId": spec.fma_id,
-                "label": spec.label,
-                "color": spec.color,
-                "facesAfter": int(len(mesh.faces)),
-                "facesBefore": int(before_faces),
-                "byteSize": size,
-                "path": f"/models/anatomy/{spec.slug}.glb",
-                "parts": spec.parts,
-                "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS",
-            }
-        )
-        print(
-            f"  + {spec.slug:<14} {len(mesh.faces):>7} faces  {size/1024:.1f} KB"
-        )
+    for cspec in COMPOSITES:
+        info = convert_composite(cspec)
+        if info:
+            registry.append(info)
+            total += info["byteSize"]
+            print(
+                f"  + comp {cspec.slug:<14} {info['facesAfter']:>7} faces  {info['byteSize']/1024:.1f} KB ({len(info['regions'])} regions)"
+            )
 
     os.makedirs(os.path.dirname(META_FILE), exist_ok=True)
     with open(META_FILE, "w", encoding="utf-8") as f:
@@ -238,7 +384,7 @@ def main() -> int:
             indent=2,
         )
 
-    print(f"\nWrote {len(registry)} models, total {total/1024/1024:.2f} MB")
+    print(f"\nWrote {len(registry)} entries, total {total/1024/1024:.2f} MB")
     print(f"Registry: {META_FILE}")
     return 0
 
