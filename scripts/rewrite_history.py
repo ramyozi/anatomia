@@ -103,10 +103,11 @@ DAYS: list[tuple[int, list[tuple[int, int]], str]] = [
          (14, 56), (15, 38), (16, 22), (17, 8), (19, 42), (20, 28), (21, 14),
          (22, 4)],
      "polish"),
-    # day 10 — Wed May 20: final wrap + history rewrite
-    (10, [(9, 24), (10, 8), (10, 52), (11, 38), (14, 22), (15, 4), (16, 14),
-          (17, 32)],
-     "wrap"),
+    # day 10 — Wed May 20: BodyParts3D + ingestion + history rewrite
+    (10, [(8, 48), (9, 24), (10, 8), (10, 52), (11, 38), (12, 14), (13, 36),
+          (14, 22), (15, 4), (16, 14), (17, 32), (18, 18), (19, 8), (20, 4),
+          (21, 12), (22, 36)],
+     "wrap+bp3d"),
 ]
 
 START_DATE = datetime(2026, 5, 10, tzinfo=timezone.utc)
