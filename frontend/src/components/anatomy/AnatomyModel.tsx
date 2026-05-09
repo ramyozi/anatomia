@@ -102,19 +102,21 @@ function Inner({
 
   // Replace per-mesh material with a shared anatomical PBR material once.
   const material = useMemo(() => {
-    const m = new THREE.MeshPhysicalMaterial({
+    return new THREE.MeshPhysicalMaterial({
       color,
-      emissive: color,
-      emissiveIntensity,
+      // Very subtle emissive so the shadow side stays legible without
+      // washing out the form. The bulk of the brightness comes from the
+      // PBR lighting in Stage.tsx.
+      emissive: new THREE.Color(color).multiplyScalar(0.3),
+      emissiveIntensity: emissiveIntensity * 0.25,
       roughness,
-      metalness: 0.05,
-      clearcoat: 0.25,
-      clearcoatRoughness: 0.6,
-      sheen: 0.4,
+      metalness: 0.0,
+      clearcoat: 0.4,
+      clearcoatRoughness: 0.35,
+      sheen: 0.7,
       sheenColor: new THREE.Color(color),
-      sheenRoughness: 0.5,
+      sheenRoughness: 0.4,
     })
-    return m
   }, [color, roughness, emissiveIntensity])
 
   const wireMaterial = useMemo(
@@ -163,7 +165,9 @@ function Inner({
   )
 }
 
-// Preload commonly-shown organs so the hero doesn't pop on first render.
-useGLTF.preload('/models/anatomy/cerveau.glb')
+// Preload solo organs that the catalogue links to most often, so the
+// fiche detail page doesn't pop on first navigation. The "cerveau" slug
+// is now a composite GLB and is preloaded by CompositeModel.tsx instead.
 useGLTF.preload('/models/anatomy/coeur.glb')
 useGLTF.preload('/models/anatomy/poumons.glb')
+useGLTF.preload('/models/anatomy/foie.glb')

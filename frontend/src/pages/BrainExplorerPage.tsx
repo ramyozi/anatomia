@@ -1,27 +1,88 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { Canvas } from '@react-three/fiber'
+import { OrbitControls } from '@react-three/drei'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useQuery } from '@tanstack/react-query'
 import { ChevronRight, Brain, ExternalLink } from 'lucide-react'
-import { BrainViewer, BRAIN_REGIONS } from '@/components/body/BrainViewer'
+import { CompositeModel, getCompositeRegions } from '@/components/anatomy/CompositeModel'
+import { SceneDebug } from '@/components/anatomy/SceneDebug'
+import { ANATOMICAL_GL_SETTINGS, Stage } from '@/components/body/Stage'
+import { PostFX } from '@/components/body/PostFX'
 import { Breadcrumbs } from '@/components/nav/Breadcrumbs'
 import { api } from '@/lib/api'
 import type { Organ } from '@/types'
 import { cn } from '@/lib/cn'
+import { Suspense } from 'react'
+
+/**
+ * Region slug → French label and FMA-derived sub-organ slug used by the
+ * organ catalogue. The 9 region slugs are the ones produced by the
+ * conversion pipeline composite for "cerveau".
+ */
+const REGION_LABELS: Record<string, { name: string; subOrganSlug?: string; description: string }> = {
+  cervelet: {
+    name: 'Cervelet',
+    subOrganSlug: 'cervelet',
+    description: 'Coordination motrice fine, équilibre, apprentissage moteur. Compte plus de neurones que tout le reste du SNC.',
+  },
+  midbrain: {
+    name: 'Mésencéphale',
+    subOrganSlug: 'mesencephale',
+    description: 'Étage supérieur du tronc cérébral, contient la substance noire et les noyaux oculomoteurs.',
+  },
+  'thalamus-d': {
+    name: 'Thalamus droit',
+    subOrganSlug: 'thalamus',
+    description: 'Relais sensoriel principal vers le cortex (sauf olfaction). Le thalamus droit projette vers l\'hémisphère droit.',
+  },
+  'thalamus-g': {
+    name: 'Thalamus gauche',
+    subOrganSlug: 'thalamus',
+    description: 'Relais sensoriel projetant vers l\'hémisphère gauche.',
+  },
+  'hippocampe-d': {
+    name: 'Hippocampe droit',
+    subOrganSlug: 'hippocampe',
+    description: 'Mémoire déclarative et navigation spatiale. Atteint précocement dans la maladie d\'Alzheimer.',
+  },
+  'hippocampe-g': {
+    name: 'Hippocampe gauche',
+    subOrganSlug: 'hippocampe',
+    description: 'Spécialisé dans la mémoire verbale et autobiographique.',
+  },
+  hypothalamus: {
+    name: 'Hypothalamus',
+    subOrganSlug: 'hypothalamus',
+    description: 'Homéostasie, thermorégulation, rythmes circadiens. Pilote l\'hypophyse.',
+  },
+  fornix: {
+    name: 'Commissure du fornix',
+    description: 'Faisceau de fibres reliant les deux hippocampes via la commissure du fornix.',
+  },
+  peduncle: {
+    name: 'Pédoncule du mésencéphale',
+    description: 'Faisceau de fibres descendantes (faisceau corticospinal) traversant le mésencéphale.',
+  },
+}
 
 export function BrainExplorerPage() {
   const navigate = useNavigate()
   const [hovered, setHovered] = useState<string | null>(null)
   const [selected, setSelected] = useState<string | null>(null)
 
+  const regions = getCompositeRegions('cerveau')
+
   const { data: organ } = useQuery({
     queryKey: ['organ', 'cerveau'],
     queryFn: () => api.get<Organ>('/organs/cerveau'),
   })
 
+  const focusedRegion = hovered ?? selected
+  const focusedDesc = focusedRegion ? REGION_LABELS[focusedRegion] : null
   const sub =
-    organ && selected
-      ? organ.subOrgans.find(s => s.slug === selected) ?? null
+    organ && focusedDesc?.subOrganSlug
+      ? organ.subOrgans.find(s => s.slug === focusedDesc.subOrganSlug)
       : null
 
   return (
@@ -40,53 +101,86 @@ export function BrainExplorerPage() {
           </div>
           <h2 className="heading text-2xl mt-1">Cerveau humain</h2>
           <p className="text-sm text-ink-mute mt-2">
-            Survole une région pour la mettre en évidence dans le modèle 3D.
-            Clique pour voir les pathologies associées.
+            Modèle 3D réel issu de BodyParts3D. Survole une région du modèle
+            pour la mettre en évidence et lire sa description.
           </p>
         </div>
 
         <ul className="px-2 pb-6 space-y-0.5">
-          {BRAIN_REGIONS.map(r => (
-            <li key={r.slug}>
-              <button
-                onMouseEnter={() => setHovered(r.slug)}
-                onMouseLeave={() => setHovered(null)}
-                onClick={() => setSelected(r.slug)}
-                className={cn(
-                  'w-full flex items-center gap-2 px-3 py-2 rounded-md text-left transition-colors text-sm',
-                  selected === r.slug
-                    ? 'bg-accent/10 border border-accent/30 text-accent'
-                    : hovered === r.slug
-                      ? 'bg-bg-elev'
-                      : 'hover:bg-bg-elev/60 text-ink-mute',
-                )}
-              >
-                <span
-                  className="w-2 h-2 rounded-full flex-shrink-0"
-                  style={{ background: r.color }}
-                />
-                <span className="flex-1">{r.name}</span>
-                <ChevronRight className="w-3.5 h-3.5 opacity-60" />
-              </button>
-            </li>
-          ))}
+          {regions.map(r => {
+            const label = REGION_LABELS[r.regionSlug]?.name ?? r.regionSlug
+            return (
+              <li key={r.regionSlug}>
+                <button
+                  onMouseEnter={() => setHovered(r.regionSlug)}
+                  onMouseLeave={() => setHovered(null)}
+                  onClick={() => setSelected(r.regionSlug)}
+                  className={cn(
+                    'w-full flex items-center gap-2 px-3 py-2 rounded-md text-left transition-colors text-sm',
+                    selected === r.regionSlug
+                      ? 'bg-accent/10 border border-accent/30 text-accent'
+                      : hovered === r.regionSlug
+                        ? 'bg-bg-elev'
+                        : 'hover:bg-bg-elev/60 text-ink-mute',
+                  )}
+                >
+                  <span
+                    className="w-2 h-2 rounded-full flex-shrink-0"
+                    style={{ background: r.color }}
+                  />
+                  <span className="flex-1">{label}</span>
+                  <span className="text-[10px] font-mono text-ink-dim">
+                    {r.fmaId.replace('FMA', '')}
+                  </span>
+                  <ChevronRight className="w-3.5 h-3.5 opacity-60" />
+                </button>
+              </li>
+            )
+          })}
         </ul>
+
+        <div className="px-5 pb-5 text-[10px] text-ink-dim">
+          Données : BodyParts3D / Anatomography (CC BY-SA 2.1 JP).
+        </div>
       </aside>
 
       {/* Center: 3D viewer */}
-      <div className="relative bg-[radial-gradient(circle_at_50%_30%,rgba(167,139,250,0.16),transparent_70%)]">
-        <BrainViewer
-          highlightedSlug={hovered ?? selected ?? undefined}
-          onSelect={setSelected}
-          onHover={setHovered}
-        />
-        <div className="absolute top-4 left-4 chip-accent">
-          {BRAIN_REGIONS.length} régions cérébrales
+      <div className="relative bg-[radial-gradient(circle_at_50%_30%,rgba(167,139,250,0.18),transparent_70%)]">
+        <Canvas
+          camera={{ position: [0, 0.05, 3.0], fov: 38, near: 0.1, far: 50 }}
+          gl={ANATOMICAL_GL_SETTINGS}
+          dpr={[1, 2]}
+        >
+          <Stage preset="studio" envIntensity={1.0} />
+          <Suspense fallback={null}>
+            <CompositeModel
+              slug="cerveau"
+              highlightedRegion={focusedRegion}
+              onRegionHover={setHovered}
+              onRegionClick={setSelected}
+              roughness={0.42}
+              emissiveIntensity={0.16}
+            />
+          </Suspense>
+          <SceneDebug id="brain" />
+          <OrbitControls
+            enablePan={false}
+            minDistance={1.6}
+            maxDistance={5}
+            enableDamping
+            dampingFactor={0.08}
+          />
+          <PostFX bloom={0.55} />
+        </Canvas>
+
+        <div className="absolute top-4 left-4 chip-accent text-[10px]">
+          {regions.length} régions cérébrales · BodyParts3D
         </div>
+
         <AnimatePresence>
-          {(hovered || selected) && (
+          {focusedRegion && (
             <motion.div
-              key={hovered ?? selected}
+              key={focusedRegion}
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 8 }}
@@ -95,14 +189,20 @@ export function BrainExplorerPage() {
               <span
                 className="w-2 h-2 rounded-full animate-pulseSoft"
                 style={{
-                  background:
-                    BRAIN_REGIONS.find(r => r.slug === (hovered ?? selected))
-                      ?.color,
+                  background: regions.find(r => r.regionSlug === focusedRegion)?.color,
                 }}
               />
               <span className="font-display text-ink">
-                {BRAIN_REGIONS.find(r => r.slug === (hovered ?? selected))?.name}
+                {REGION_LABELS[focusedRegion]?.name ?? focusedRegion}
               </span>
+              {focusedDesc?.subOrganSlug && (
+                <button
+                  onClick={() => navigate(`/corps/cerveau/${focusedDesc.subOrganSlug}`)}
+                  className="text-xs text-accent hover:underline ml-2"
+                >
+                  Voir la fiche →
+                </button>
+              )}
             </motion.div>
           )}
         </AnimatePresence>
@@ -111,23 +211,23 @@ export function BrainExplorerPage() {
       {/* Right: region detail */}
       <aside className="border-l border-line/60 bg-bg-soft/50 overflow-y-auto p-5">
         <AnimatePresence mode="wait">
-          {sub ? (
+          {focusedDesc ? (
             <motion.div
-              key={sub.slug}
+              key={focusedRegion}
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.18 }}
             >
               <div className="text-xs uppercase tracking-wider text-accent mb-2">
-                Région
+                Région cérébrale
               </div>
-              <h3 className="heading text-2xl">{sub.name}</h3>
+              <h3 className="heading text-2xl">{focusedDesc.name}</h3>
               <p className="text-sm text-ink-mute mt-3 leading-relaxed">
-                {sub.description}
+                {focusedDesc.description}
               </p>
 
-              {sub.diseases.length > 0 && (
+              {sub && sub.diseases.length > 0 && (
                 <>
                   <div className="text-xs uppercase tracking-wider text-coral mt-6 mb-2">
                     Maladies associées ({sub.diseases.length})
@@ -139,9 +239,7 @@ export function BrainExplorerPage() {
                           to={`/maladies/${d.slug}`}
                           className="panel-soft p-3 flex items-center justify-between hover:border-coral/40 transition-colors"
                         >
-                          <span className="text-sm text-ink truncate">
-                            {d.name}
-                          </span>
+                          <span className="text-sm text-ink truncate">{d.name}</span>
                           <span className="text-[10px] text-ink-dim uppercase tracking-wider">
                             {d.severity}
                           </span>
@@ -151,21 +249,6 @@ export function BrainExplorerPage() {
                   </ul>
                 </>
               )}
-
-              <div className="mt-6 flex flex-wrap gap-2">
-                <Link
-                  to={`/corps/cerveau/${sub.slug}`}
-                  className="btn-primary text-xs"
-                >
-                  Fiche complète <ChevronRight className="w-3.5 h-3.5" />
-                </Link>
-                <button
-                  onClick={() => setSelected(null)}
-                  className="btn-ghost text-xs"
-                >
-                  Retour
-                </button>
-              </div>
             </motion.div>
           ) : organ ? (
             <motion.div key="overview">
@@ -201,9 +284,7 @@ export function BrainExplorerPage() {
                           rel="noopener"
                           className="inline-flex items-center gap-1 text-accent hover:underline"
                         >
-                          <span className="chip text-[9px] uppercase">
-                            {s.type}
-                          </span>
+                          <span className="chip text-[9px] uppercase">{s.type}</span>
                           {s.label} <ExternalLink className="w-3 h-3" />
                         </a>
                       </li>
@@ -211,12 +292,6 @@ export function BrainExplorerPage() {
                   </ul>
                 </div>
               )}
-              <button
-                onClick={() => navigate('/corps/cerveau')}
-                className="btn-ghost mt-6"
-              >
-                Voir la fiche détaillée
-              </button>
             </motion.div>
           ) : (
             <div className="text-sm text-ink-mute">Chargement...</div>

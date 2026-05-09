@@ -30,11 +30,28 @@ export function OrganDetailPage() {
   if (isLoading) return <OrganSkeleton />
   if (!organ)
     return (
-      <div className="p-12 text-center text-ink-mute">
-        Organe introuvable.{' '}
-        <Link to="/corps" className="text-accent">
-          Retour à l'atlas
-        </Link>
+      <div className="max-w-[1400px] mx-auto px-6 py-8">
+        <Breadcrumbs
+          items={[
+            { to: '/corps', label: 'Corps' },
+            { to: `/corps/${organSlug}`, label: organSlug ?? '?' },
+          ]}
+        />
+        <div className="grid lg:grid-cols-[1.2fr_1fr] gap-8 mt-6 items-stretch">
+          <div className="panel p-8">
+            <h1 className="heading text-4xl">{organSlug}</h1>
+            <p className="text-ink-mute mt-4">
+              Fiche détaillée indisponible (API hors ligne). Le modèle 3D
+              reste consultable ci-contre.
+            </p>
+            <Link to="/corps" className="btn-ghost mt-6 inline-flex">
+              ← Retour à l'atlas
+            </Link>
+          </div>
+          <div className="panel relative overflow-hidden h-[480px]">
+            <OrganCanvas slug={organSlug ?? ''} />
+          </div>
+        </div>
       </div>
     )
 
