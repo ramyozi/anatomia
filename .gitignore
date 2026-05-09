@@ -49,6 +49,9 @@ htmlcov/
 postgres_data/
 redis_data/
 
+# Source assets (BodyParts3D upstream STL repo, ~1.8 GB)
+assets-source/
+
 # Divers
 *.bak
 .cache/

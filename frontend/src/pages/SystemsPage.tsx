@@ -3,8 +3,10 @@ import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import { motion } from 'framer-motion'
 import { useQuery } from '@tanstack/react-query'
+import { Suspense } from 'react'
 import { ANATOMICAL_GL_SETTINGS, Stage } from '@/components/body/Stage'
-import { AnatomicalBody } from '@/components/body/AnatomicalBody'
+import { PostFX } from '@/components/body/PostFX'
+import { AnatomicalScene } from '@/components/anatomy/AnatomicalScene'
 import { Breadcrumbs } from '@/components/nav/Breadcrumbs'
 import { api } from '@/lib/api'
 import type { OrganSummary } from '@/types'
@@ -13,9 +15,8 @@ interface SystemDef {
   slug: string
   label: string
   intro: string
-  showSkin: boolean
   showSkeleton: boolean
-  showMuscles: boolean
+  showOrgans: boolean
   highlights: string[]
   facts: { label: string; value: string }[]
 }
@@ -26,9 +27,8 @@ const SYSTEMS: Record<string, SystemDef> = {
     label: 'Système squelettique',
     intro:
       'Le squelette humain compte 206 os à l\'âge adulte. Il assure le soutien, la protection des organes vitaux, le mouvement (avec les muscles) et la production des cellules sanguines dans la moelle.',
-    showSkin: false,
     showSkeleton: true,
-    showMuscles: false,
+    showOrgans: false,
     highlights: ['skeletal'],
     facts: [
       { label: 'Os', value: '206' },
@@ -44,9 +44,8 @@ const SYSTEMS: Record<string, SystemDef> = {
     label: 'Système musculaire',
     intro:
       'Le système musculaire compte environ 640 muscles striés squelettiques, plus le muscle cardiaque et les muscles lisses des viscères. Les muscles convertissent l\'ATP en force mécanique avec un rendement d\'environ 25 %.',
-    showSkin: false,
     showSkeleton: true,
-    showMuscles: true,
+    showOrgans: false,
     highlights: ['muscular'],
     facts: [
       { label: 'Muscles squelettiques', value: '≈ 640' },
@@ -62,9 +61,8 @@ const SYSTEMS: Record<string, SystemDef> = {
     label: 'Système nerveux',
     intro:
       'Le système nerveux comprend le système nerveux central (cerveau et moelle épinière) et le système nerveux périphérique (31 paires de nerfs spinaux et 12 paires de nerfs crâniens). Il assure la perception, l\'intégration et la commande motrice.',
-    showSkin: false,
-    showSkeleton: false,
-    showMuscles: false,
+    showSkeleton: true,
+    showOrgans: true,
     highlights: ['nervous'],
     facts: [
       { label: 'Neurones', value: '86 milliards (cerveau)' },
@@ -80,9 +78,8 @@ const SYSTEMS: Record<string, SystemDef> = {
     label: 'Système cardiovasculaire',
     intro:
       'Le système cardiovasculaire comprend le cœur, les artères, les veines et les capillaires. Il assure le transport de l\'oxygène, des nutriments et l\'élimination du CO₂. Le réseau vasculaire total mesure environ 100 000 km.',
-    showSkin: true,
     showSkeleton: false,
-    showMuscles: false,
+    showOrgans: true,
     highlights: ['cardiovascular'],
     facts: [
       { label: 'Battements / jour', value: '≈ 100 000' },
@@ -98,9 +95,8 @@ const SYSTEMS: Record<string, SystemDef> = {
     label: 'Système respiratoire',
     intro:
       'Le système respiratoire assure les échanges gazeux entre l\'air et le sang via une surface alvéolaire colossale (≈ 70 m²). Il comprend les voies aériennes supérieures, la trachée, les bronches et les poumons.',
-    showSkin: true,
     showSkeleton: false,
-    showMuscles: false,
+    showOrgans: true,
     highlights: ['respiratory'],
     facts: [
       { label: 'Cycles respiratoires / jour', value: '≈ 22 000' },
@@ -115,9 +111,8 @@ const SYSTEMS: Record<string, SystemDef> = {
     label: 'Système digestif',
     intro:
       'Le système digestif est un tube de 9 mètres de la bouche à l\'anus, jalonné de glandes annexes (glandes salivaires, foie, pancréas). Il décompose les aliments et absorbe les nutriments grâce à un microbiote de 100 000 milliards de bactéries.',
-    showSkin: true,
     showSkeleton: false,
-    showMuscles: false,
+    showOrgans: true,
     highlights: ['digestive'],
     facts: [
       { label: 'Longueur totale', value: '≈ 9 m' },
@@ -249,12 +244,13 @@ export function SystemsPage() {
           dpr={[1, 2]}
         >
           <Stage preset="studio" />
-          <AnatomicalBody
-            interactive
-            showSkin={def.showSkin}
-            showSkeleton={def.showSkeleton}
-            showMuscles={def.showMuscles}
-          />
+          <Suspense fallback={null}>
+            <AnatomicalScene
+              showSkeleton={def.showSkeleton}
+              showOrgans={def.showOrgans}
+            />
+          </Suspense>
+          <PostFX bloom={0.55} />
           <OrbitControls
             enablePan={false}
             minDistance={3}

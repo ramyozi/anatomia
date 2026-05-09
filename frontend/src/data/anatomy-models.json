@@ -1,0 +1,452 @@
+{
+  "source": "BodyParts3D / Anatomography",
+  "license": "CC BY-SA 2.1 JP",
+  "citation": "Mitsuhashi N, Fujieda K, Tamura T, Kawamoto S, Takagi T, Okubo K. BodyParts3D: 3D structure database for anatomical concepts. Nucleic Acids Res. 2009;37(D782-5).",
+  "models": [
+    {
+      "slug": "coeur",
+      "fmaId": "FMA7274",
+      "label": "Wall of heart",
+      "color": "#c84545",
+      "facesAfter": 45000,
+      "facesBefore": 331592,
+      "byteSize": 901612,
+      "path": "/models/anatomy/coeur.glb",
+      "parts": [
+        "FMA7274"
+      ],
+      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+    },
+    {
+      "slug": "cerveau",
+      "fmaId": "FMA67944",
+      "label": "Cerebellum",
+      "color": "#caa3c7",
+      "facesAfter": 40000,
+      "facesBefore": 238506,
+      "byteSize": 801084,
+      "path": "/models/anatomy/cerveau.glb",
+      "parts": [
+        "FMA67944"
+      ],
+      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+    },
+    {
+      "slug": "hippocampe",
+      "fmaId": "FMA62493",
+      "label": "Hippocampus L+R",
+      "color": "#e8c1ff",
+      "facesAfter": 8732,
+      "facesBefore": 8732,
+      "byteSize": 175704,
+      "path": "/models/anatomy/hippocampe.glb",
+      "parts": [
+        "FMA72713",
+        "FMA72714"
+      ],
+      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+    },
+    {
+      "slug": "thalamus",
+      "fmaId": "FMA62007",
+      "label": "Thalamus L+R",
+      "color": "#a78bfa",
+      "facesAfter": 10694,
+      "facesBefore": 10694,
+      "byteSize": 214944,
+      "path": "/models/anatomy/thalamus.glb",
+      "parts": [
+        "FMA258714",
+        "FMA258716"
+      ],
+      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+    },
+    {
+      "slug": "hypothalamus",
+      "fmaId": "FMA62008",
+      "label": "Hypothalamus",
+      "color": "#fbbf77",
+      "facesAfter": 12000,
+      "facesBefore": 17690,
+      "byteSize": 241124,
+      "path": "/models/anatomy/hypothalamus.glb",
+      "parts": [
+        "FMA62008nsn"
+      ],
+      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+    },
+    {
+      "slug": "midbrain",
+      "fmaId": "FMA61993",
+      "label": "Midbrain",
+      "color": "#caa3c7",
+      "facesAfter": 20000,
+      "facesBefore": 56314,
+      "byteSize": 400764,
+      "path": "/models/anatomy/midbrain.glb",
+      "parts": [
+        "FMA61993nsn"
+      ],
+      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+    },
+    {
+      "slug": "poumons",
+      "fmaId": "FMA7195",
+      "label": "Lungs (5 lobes)",
+      "color": "#b76a78",
+      "facesAfter": 50000,
+      "facesBefore": 204408,
+      "byteSize": 1001200,
+      "path": "/models/anatomy/poumons.glb",
+      "parts": [
+        "FMA7333",
+        "FMA7383",
+        "FMA7337",
+        "FMA7370",
+        "FMA7371"
+      ],
+      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+    },
+    {
+      "slug": "foie",
+      "fmaId": "FMA7197",
+      "label": "Liver",
+      "color": "#7a3a2a",
+      "facesAfter": 19416,
+      "facesBefore": 19416,
+      "byteSize": 389900,
+      "path": "/models/anatomy/foie.glb",
+      "parts": [
+        "FMA7197"
+      ],
+      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+    },
+    {
+      "slug": "estomac",
+      "fmaId": "FMA7148",
+      "label": "Stomach",
+      "color": "#c47a4a",
+      "facesAfter": 9384,
+      "facesBefore": 9384,
+      "byteSize": 189260,
+      "path": "/models/anatomy/estomac.glb",
+      "parts": [
+        "FMA7148"
+      ],
+      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+    },
+    {
+      "slug": "rate",
+      "fmaId": "FMA7196",
+      "label": "Spleen",
+      "color": "#7a3447",
+      "facesAfter": 9016,
+      "facesBefore": 9016,
+      "byteSize": 181900,
+      "path": "/models/anatomy/rate.glb",
+      "parts": [
+        "FMA7196"
+      ],
+      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+    },
+    {
+      "slug": "reins",
+      "fmaId": "FMA7203",
+      "label": "Kidneys L+R",
+      "color": "#8a3636",
+      "facesAfter": 22000,
+      "facesBefore": 27752,
+      "byteSize": 441076,
+      "path": "/models/anatomy/reins.glb",
+      "parts": [
+        "FMA7204",
+        "FMA7205"
+      ],
+      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+    },
+    {
+      "slug": "vessie",
+      "fmaId": "FMA15900",
+      "label": "Urinary bladder",
+      "color": "#e9d6a8",
+      "facesAfter": 4016,
+      "facesBefore": 4016,
+      "byteSize": 81900,
+      "path": "/models/anatomy/vessie.glb",
+      "parts": [
+        "FMA15900"
+      ],
+      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+    },
+    {
+      "slug": "oeil",
+      "fmaId": "FMA12513",
+      "label": "Eyeball",
+      "color": "#7ee0d2",
+      "facesAfter": 16330,
+      "facesBefore": 16330,
+      "byteSize": 328220,
+      "path": "/models/anatomy/oeil.glb",
+      "parts": [
+        "FMA12513"
+      ],
+      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+    },
+    {
+      "slug": "pancreas",
+      "fmaId": "FMA7198",
+      "label": "Pancreas",
+      "color": "#e9b87b",
+      "facesAfter": 11414,
+      "facesBefore": 11414,
+      "byteSize": 229904,
+      "path": "/models/anatomy/pancreas.glb",
+      "parts": [
+        "FMA7198nsn"
+      ],
+      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+    },
+    {
+      "slug": "vesicule",
+      "fmaId": "FMA7202",
+      "label": "Gallbladder",
+      "color": "#2c8d4e",
+      "facesAfter": 10000,
+      "facesBefore": 13846,
+      "byteSize": 201040,
+      "path": "/models/anatomy/vesicule.glb",
+      "parts": [
+        "FMA7202"
+      ],
+      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+    },
+    {
+      "slug": "trachee",
+      "fmaId": "FMA7394",
+      "label": "Trachea",
+      "color": "#9af2e4",
+      "facesAfter": 13870,
+      "facesBefore": 13870,
+      "byteSize": 279012,
+      "path": "/models/anatomy/trachee.glb",
+      "parts": [
+        "FMA7394"
+      ],
+      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+    },
+    {
+      "slug": "oesophage",
+      "fmaId": "FMA7131",
+      "label": "Esophagus",
+      "color": "#d99268",
+      "facesAfter": 2642,
+      "facesBefore": 2642,
+      "byteSize": 54416,
+      "path": "/models/anatomy/oesophage.glb",
+      "parts": [
+        "FMA7131"
+      ],
+      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+    },
+    {
+      "slug": "diaphragme",
+      "fmaId": "FMA13295",
+      "label": "Diaphragm",
+      "color": "#a83c3c",
+      "facesAfter": 35000,
+      "facesBefore": 210666,
+      "byteSize": 700988,
+      "path": "/models/anatomy/diaphragme.glb",
+      "parts": [
+        "FMA13295"
+      ],
+      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+    },
+    {
+      "slug": "femur-d",
+      "fmaId": "FMA24474",
+      "label": "Right femur",
+      "color": "#e9e2cf",
+      "facesAfter": 12990,
+      "facesBefore": 12990,
+      "byteSize": 261384,
+      "path": "/models/anatomy/femur-d.glb",
+      "parts": [
+        "FMA24474"
+      ],
+      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+    },
+    {
+      "slug": "femur-g",
+      "fmaId": "FMA24475",
+      "label": "Left femur",
+      "color": "#e9e2cf",
+      "facesAfter": 13202,
+      "facesBefore": 13202,
+      "byteSize": 265620,
+      "path": "/models/anatomy/femur-g.glb",
+      "parts": [
+        "FMA24475"
+      ],
+      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+    },
+    {
+      "slug": "tibia-d",
+      "fmaId": "FMA24477",
+      "label": "Right tibia",
+      "color": "#e9e2cf",
+      "facesAfter": 6850,
+      "facesBefore": 6850,
+      "byteSize": 138580,
+      "path": "/models/anatomy/tibia-d.glb",
+      "parts": [
+        "FMA24477"
+      ],
+      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+    },
+    {
+      "slug": "tibia-g",
+      "fmaId": "FMA24478",
+      "label": "Left tibia",
+      "color": "#e9e2cf",
+      "facesAfter": 6822,
+      "facesBefore": 6822,
+      "byteSize": 138024,
+      "path": "/models/anatomy/tibia-g.glb",
+      "parts": [
+        "FMA24478"
+      ],
+      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+    },
+    {
+      "slug": "humerus-d",
+      "fmaId": "FMA23130",
+      "label": "Right humerus",
+      "color": "#e9e2cf",
+      "facesAfter": 16268,
+      "facesBefore": 16268,
+      "byteSize": 326948,
+      "path": "/models/anatomy/humerus-d.glb",
+      "parts": [
+        "FMA23130"
+      ],
+      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+    },
+    {
+      "slug": "humerus-g",
+      "fmaId": "FMA23131",
+      "label": "Left humerus",
+      "color": "#e9e2cf",
+      "facesAfter": 16492,
+      "facesBefore": 16492,
+      "byteSize": 331428,
+      "path": "/models/anatomy/humerus-g.glb",
+      "parts": [
+        "FMA23131"
+      ],
+      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+    },
+    {
+      "slug": "scapula-d",
+      "fmaId": "FMA13395",
+      "label": "Right scapula",
+      "color": "#e9e2cf",
+      "facesAfter": 25000,
+      "facesBefore": 113256,
+      "byteSize": 501052,
+      "path": "/models/anatomy/scapula-d.glb",
+      "parts": [
+        "FMA13395"
+      ],
+      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+    },
+    {
+      "slug": "scapula-g",
+      "fmaId": "FMA13396",
+      "label": "Left scapula",
+      "color": "#e9e2cf",
+      "facesAfter": 25000,
+      "facesBefore": 121816,
+      "byteSize": 501052,
+      "path": "/models/anatomy/scapula-g.glb",
+      "parts": [
+        "FMA13396"
+      ],
+      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+    },
+    {
+      "slug": "sacrum",
+      "fmaId": "FMA16202",
+      "label": "Sacrum",
+      "color": "#e9e2cf",
+      "facesAfter": 20000,
+      "facesBefore": 44416,
+      "byteSize": 400796,
+      "path": "/models/anatomy/sacrum.glb",
+      "parts": [
+        "FMA16202"
+      ],
+      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+    },
+    {
+      "slug": "mandibule",
+      "fmaId": "FMA52748",
+      "label": "Mandible",
+      "color": "#e9e2cf",
+      "facesAfter": 20000,
+      "facesBefore": 21658,
+      "byteSize": 401052,
+      "path": "/models/anatomy/mandibule.glb",
+      "parts": [
+        "FMA52748"
+      ],
+      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+    },
+    {
+      "slug": "sternum",
+      "fmaId": "FMA7487",
+      "label": "Body of sternum",
+      "color": "#e9e2cf",
+      "facesAfter": 15000,
+      "facesBefore": 19916,
+      "byteSize": 300984,
+      "path": "/models/anatomy/sternum.glb",
+      "parts": [
+        "FMA7487"
+      ],
+      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+    },
+    {
+      "slug": "thyroide",
+      "fmaId": "FMA55099",
+      "label": "Thyroid cartilage",
+      "color": "#e9c46a",
+      "facesAfter": 15000,
+      "facesBefore": 23146,
+      "byteSize": 301048,
+      "path": "/models/anatomy/thyroide.glb",
+      "parts": [
+        "FMA55099"
+      ],
+      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+    },
+    {
+      "slug": "vertebres",
+      "fmaId": "FMA13076",
+      "label": "Lumbar vertebrae",
+      "color": "#e9e2cf",
+      "facesAfter": 40000,
+      "facesBefore": 67350,
+      "byteSize": 801020,
+      "path": "/models/anatomy/vertebres.glb",
+      "parts": [
+        "FMA13076",
+        "FMA13075",
+        "FMA13074",
+        "FMA13073",
+        "FMA13072"
+      ],
+      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+    }
+  ]
+}
