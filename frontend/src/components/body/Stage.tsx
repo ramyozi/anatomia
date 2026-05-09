@@ -18,13 +18,18 @@ interface Props {
 }
 
 /**
- * Reusable scene staging — three-light setup with HDRI environment, plus
- * accent point lights in cyan / coral / violet to give the anatomy its
- * "scientific render" rim glow.
+ * Reusable scene staging tuned for an anatomical-viewer feel:
+ *
+ * - HDRI for soft fill light and reflections.
+ * - One bright key light from upper-front for the silhouette read.
+ * - One cool fill from the opposite side to keep the shadow side legible
+ *   (matches medical imaging conventions where deep shadows hide structure).
+ * - Three subtle coloured point lights act as rim accents and give the
+ *   "scientific render" look without making the anatomy cartoonish.
  */
 export function Stage({
-  ambient = 0.32,
-  envIntensity = 0.7,
+  ambient = 0.18,
+  envIntensity = 0.55,
   preset = 'studio',
   accents = true,
 }: Props) {
@@ -33,19 +38,19 @@ export function Stage({
       <Environment preset={preset} background={false} environmentIntensity={envIntensity} />
       <ambientLight intensity={ambient} />
       <directionalLight
-        position={[3, 5, 4]}
-        intensity={1.4}
-        color="#9af2e4"
+        position={[2, 4, 4]}
+        intensity={1.85}
+        color="#fff5e8"
         castShadow
-        shadow-mapSize={[1024, 1024]}
+        shadow-mapSize={[2048, 2048]}
       />
-      <directionalLight position={[-4, -2, 3]} intensity={0.45} color="#ff9a9a" />
-      <directionalLight position={[0, -3, -3]} intensity={0.25} color="#c4a4ff" />
+      <directionalLight position={[-3, 1, 3]} intensity={0.55} color="#9ec8ff" />
+      <directionalLight position={[0, -4, -2]} intensity={0.18} color="#c4a4ff" />
       {accents && (
         <>
-          <pointLight position={[0, 0.5, 2.5]} intensity={1.6} color="#7ee0d2" distance={6} />
-          <pointLight position={[-2, -1, 1.5]} intensity={0.7} color="#a78bfa" distance={5} />
-          <pointLight position={[2, -1, 1]} intensity={0.5} color="#ff8b8b" distance={5} />
+          <pointLight position={[0.2, 0.6, 2.4]} intensity={1.0} color="#7ee0d2" distance={5} decay={1.4} />
+          <pointLight position={[-2.2, -0.8, 1.2]} intensity={0.55} color="#a78bfa" distance={5} decay={1.6} />
+          <pointLight position={[2.2, -0.8, 0.8]} intensity={0.4} color="#ff8b8b" distance={5} decay={1.6} />
         </>
       )}
     </>

@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { ChevronRight, Layers3, Filter, Bone, Heart } from 'lucide-react'
 import { AnatomicalScene } from '@/components/anatomy/AnatomicalScene'
+import { SceneDebug } from '@/components/anatomy/SceneDebug'
 import { listAnatomyModels } from '@/components/anatomy/AnatomyModel'
 import { api } from '@/lib/api'
 import type { OrganSummary } from '@/types'
@@ -147,8 +148,10 @@ export function BodyExplorerPage() {
               focused={hovered}
               showOrgans={showOrgans}
               showSkeleton={showSkeleton}
+              onRegionHover={setHovered}
             />
           </Suspense>
+          <SceneDebug id="body" />
           <OrbitControls
             enablePan={false}
             minDistance={1.5}
