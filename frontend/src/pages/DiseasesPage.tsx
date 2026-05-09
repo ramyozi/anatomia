@@ -31,10 +31,16 @@ const SEVERITIES: { v: Severity | 'all'; label: string }[] = [
   { v: 'critical', label: 'Critiques' },
 ]
 
+type SortKey = 'name' | 'prevalence' | 'severity'
+
+const PAGE_SIZE = 24
+
 export function DiseasesPage() {
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState('Toutes')
   const [severity, setSeverity] = useState<Severity | 'all'>('all')
+  const [sort, setSort] = useState<SortKey>('prevalence')
+  const [page, setPage] = useState(0)
   const compare = useCompare()
 
   const { data } = useQuery({
@@ -43,7 +49,7 @@ export function DiseasesPage() {
   })
 
   const filtered = useMemo(() => {
-    return (data ?? []).filter(d => {
+    const base = (data ?? []).filter(d => {
       if (category !== 'Toutes' && d.category !== category) return false
       if (severity !== 'all' && d.severity !== severity) return false
       if (
@@ -54,7 +60,20 @@ export function DiseasesPage() {
         return false
       return true
     })
-  }, [data, query, category, severity])
+    const order = { critical: 0, severe: 1, moderate: 2, mild: 3 } as const
+    if (sort === 'name') return base.sort((a, b) => a.name.localeCompare(b.name))
+    if (sort === 'severity')
+      return base.sort((a, b) => order[a.severity] - order[b.severity])
+    return base.sort(
+      (a, b) => (b.prevalencePer100k ?? 0) - (a.prevalencePer100k ?? 0),
+    )
+  }, [data, query, category, severity, sort])
+
+  const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
+  const visible = useMemo(
+    () => filtered.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE),
+    [filtered, page],
+  )
 
   return (
     <div className="max-w-[1400px] mx-auto px-6 py-10">
@@ -129,13 +148,32 @@ export function DiseasesPage() {
         </div>
       </div>
 
-      <div className="text-xs text-ink-dim mb-3">
-        {filtered.length} résultat{filtered.length > 1 ? 's' : ''}
+      <div className="flex items-center justify-between flex-wrap gap-3 mb-3">
+        <div className="text-xs text-ink-dim">
+          {filtered.length} résultat{filtered.length > 1 ? 's' : ''}
+        </div>
+        <div className="flex items-center gap-1.5 text-xs">
+          <span className="text-ink-dim">Tri :</span>
+          {(['prevalence', 'severity', 'name'] as SortKey[]).map(k => (
+            <button
+              key={k}
+              onClick={() => setSort(k)}
+              className={cn(
+                'px-2.5 py-1 rounded-md border transition-colors',
+                sort === k
+                  ? 'border-accent/50 bg-accent/10 text-accent'
+                  : 'border-line/60 text-ink-mute hover:text-ink hover:border-line',
+              )}
+            >
+              {k === 'prevalence' ? 'Prévalence' : k === 'severity' ? 'Sévérité' : 'Nom'}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Grid */}
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-        {filtered.map((d, i) => {
+        {visible.map((d, i) => {
           const inCompare = compare.slugs.includes(d.slug)
           return (
             <motion.div
@@ -199,6 +237,28 @@ export function DiseasesPage() {
       {filtered.length === 0 && data && (
         <div className="text-center py-20 text-ink-mute">
           Aucune maladie ne correspond à ces filtres.
+        </div>
+      )}
+
+      {filtered.length > PAGE_SIZE && (
+        <div className="flex items-center justify-center gap-1.5 mt-8">
+          <button
+            onClick={() => setPage(p => Math.max(0, p - 1))}
+            disabled={page === 0}
+            className="px-3 py-1.5 rounded-md border border-line/60 text-xs text-ink-mute hover:text-ink hover:border-line disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            ← Précédent
+          </button>
+          <div className="text-xs text-ink-mute px-3">
+            Page {page + 1} / {pageCount}
+          </div>
+          <button
+            onClick={() => setPage(p => Math.min(pageCount - 1, p + 1))}
+            disabled={page >= pageCount - 1}
+            className="px-3 py-1.5 rounded-md border border-line/60 text-xs text-ink-mute hover:text-ink hover:border-line disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            Suivant →
+          </button>
         </div>
       )}
     </div>

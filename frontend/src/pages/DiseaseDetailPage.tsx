@@ -98,6 +98,26 @@ export function DiseaseDetailPage() {
           {data.description}
         </p>
 
+        {(data.epidemiology as any).wikipedia_summary && (
+          <div className="mt-5 panel-soft p-4 max-w-3xl text-sm text-ink-mute leading-relaxed">
+            <div className="text-[10px] uppercase tracking-wider text-ink-dim mb-1.5 flex items-center gap-2">
+              <span className="chip text-[9px]">wikipedia</span>
+              Résumé encyclopédique
+            </div>
+            {(data.epidemiology as any).wikipedia_summary}
+            {(data.epidemiology as any).wikipedia_url && (
+              <a
+                href={(data.epidemiology as any).wikipedia_url}
+                target="_blank"
+                rel="noopener"
+                className="block mt-2 text-accent hover:underline text-xs"
+              >
+                Lire l'article complet →
+              </a>
+            )}
+          </div>
+        )}
+
         {/* Quick stats */}
         <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-px bg-line/40 rounded-lg overflow-hidden">
           <Stat
