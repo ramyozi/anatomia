@@ -1,13 +1,13 @@
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import { ANATOMICAL_GL_SETTINGS, Stage } from '@/components/body/Stage'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { ChevronRight, Layers3, Filter, Bone, Heart, Activity } from 'lucide-react'
-import { AnatomicalBody } from '@/components/body/AnatomicalBody'
-import { ORGAN_3D_POSITIONS } from '@/data/organPositions'
+import { ChevronRight, Layers3, Filter, Bone, Heart } from 'lucide-react'
+import { AnatomicalScene } from '@/components/anatomy/AnatomicalScene'
+import { listAnatomyModels } from '@/components/anatomy/AnatomyModel'
 import { api } from '@/lib/api'
 import type { OrganSummary } from '@/types'
 import { cn } from '@/lib/cn'
@@ -26,9 +26,8 @@ const SYSTEMS = [
 export function BodyExplorerPage() {
   const [hovered, setHovered] = useState<string | null>(null)
   const [system, setSystem] = useState('all')
-  const [showSkin, setShowSkin] = useState(true)
-  const [showSkeleton, setShowSkeleton] = useState(false)
-  const [showMuscles, setShowMuscles] = useState(false)
+  const [showOrgans, setShowOrgans] = useState(true)
+  const [showSkeleton, setShowSkeleton] = useState(true)
   const navigate = useNavigate()
 
   const { data: organs } = useQuery({
@@ -137,47 +136,40 @@ export function BodyExplorerPage() {
       {/* 3D viewport */}
       <div className="relative bg-[radial-gradient(circle_at_50%_30%,rgba(126,224,210,0.14),transparent_70%)]">
         <Canvas
-          camera={{ position: [0, 0.5, 4.6], fov: 38 }}
+          camera={{ position: [0, 0.1, 3.2], fov: 38 }}
           gl={ANATOMICAL_GL_SETTINGS}
           dpr={[1, 2]}
         >
           <Stage preset="studio" />
-          <AnatomicalBody
-            interactive
-            highlightedSlug={hovered ?? undefined}
-            onHover={setHovered}
-            showSkin={showSkin}
-            showSkeleton={showSkeleton}
-            showMuscles={showMuscles}
-          />
+          <Suspense fallback={null}>
+            <AnatomicalScene
+              focused={hovered}
+              showOrgans={showOrgans}
+              showSkeleton={showSkeleton}
+            />
+          </Suspense>
           <OrbitControls
             enablePan={false}
-            minDistance={3}
-            maxDistance={7}
-            maxPolarAngle={Math.PI / 1.5}
+            minDistance={1.5}
+            maxDistance={6}
+            maxPolarAngle={Math.PI / 1.4}
             minPolarAngle={Math.PI / 3}
             enableDamping
             dampingFactor={0.08}
           />
         </Canvas>
 
-        <div className="absolute top-4 left-4 chip">
-          {ORGAN_3D_POSITIONS.length} repères anatomiques
+        <div className="absolute top-4 left-4 chip-accent text-[10px]">
+          {listAnatomyModels().length} modèles BodyParts3D
         </div>
 
         {/* Layer toggles */}
         <div className="absolute top-4 right-4 panel-soft p-1.5 flex gap-1">
           <LayerToggle
-            active={showSkin}
-            onClick={() => setShowSkin(s => !s)}
-            icon={<Activity className="w-3.5 h-3.5" />}
-            label="Peau"
-          />
-          <LayerToggle
-            active={showMuscles}
-            onClick={() => setShowMuscles(s => !s)}
+            active={showOrgans}
+            onClick={() => setShowOrgans(s => !s)}
             icon={<Heart className="w-3.5 h-3.5" />}
-            label="Muscles"
+            label="Organes"
           />
           <LayerToggle
             active={showSkeleton}
@@ -197,7 +189,7 @@ export function BodyExplorerPage() {
             >
               <div className="w-2 h-2 rounded-full bg-accent animate-pulseSoft" />
               <span className="font-display text-ink">
-                {ORGAN_3D_POSITIONS.find(o => o.slug === hovered)?.name}
+                {hovered}
               </span>
               <button
                 onClick={() => navigate(`/corps/${hovered}`)}
