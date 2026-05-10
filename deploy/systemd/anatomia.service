@@ -1,0 +1,34 @@
+[Unit]
+Description=Anatomia (frontend + FastAPI backend via docker compose)
+Documentation=https://github.com/ramyozi/anatomia
+Requires=docker.service
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+
+# Adjust this path to match where the repo is checked out on the VPS.
+WorkingDirectory=/srv/anatomia
+
+# Read /srv/anatomia/.env for SECRET_KEY / CORS_ORIGINS / DATABASE_URL.
+EnvironmentFile=/srv/anatomia/.env
+
+# Bring the stack up. We pull first so a rolling deploy doesn't go
+# stale if the host has been rebooted but the local cache is older
+# than ``main``.
+ExecStartPre=/usr/bin/docker compose -f docker-compose.prod.yml pull --ignore-pull-failures
+ExecStart=/usr/bin/docker compose -f docker-compose.prod.yml up -d --build --remove-orphans
+ExecStop=/usr/bin/docker compose -f docker-compose.prod.yml down
+
+# systemctl reload anatomia → tail logs in journal
+ExecReload=/usr/bin/docker compose -f docker-compose.prod.yml restart
+
+# If docker compose itself fails to start, retry a few times.
+Restart=on-failure
+RestartSec=10
+TimeoutStartSec=300
+
+[Install]
+WantedBy=multi-user.target

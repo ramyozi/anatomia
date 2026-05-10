@@ -12,16 +12,21 @@ Plateforme interactive — corps humain en 3D, maladies, santé mondiale.
 ## Lancer
 
 ```bash
-# Tout-en-un
-docker compose up --build
-
-# Ou en local
+# Dev local (deux terminaux)
 make front     # Vite sur :5173
 make back      # FastAPI sur :8000
 make seed      # remplit la DB
+
+# Dev avec Docker (mêmes images que prod, ports exposés)
+docker compose up --build
 ```
 
 Front : http://localhost:5173 — API : http://localhost:8000/docs
+
+## Production
+
+Voir [`DEPLOYMENT.md`](DEPLOYMENT.md) — script `deploy/scripts/bootstrap-vps.sh`
+qui installe Docker + nginx + Let's Encrypt + systemd en un coup.
 
 ## Structure
 
