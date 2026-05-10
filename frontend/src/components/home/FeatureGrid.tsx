@@ -17,7 +17,7 @@ const FEATURES = [
   {
     icon: <Activity className="w-4 h-4" />,
     title: 'Maladies vivantes',
-    desc: 'Symptômes, causes, traitements, prévalence — chaque fiche est sourcée et reliée à ses organes.',
+    desc: 'Symptômes, causes, traitements, prévalence. Chaque fiche est sourcée et reliée à ses organes.',
   },
   {
     icon: <MapPinned className="w-4 h-4" />,
@@ -37,7 +37,7 @@ const FEATURES = [
   {
     icon: <GraduationCap className="w-4 h-4" />,
     title: 'Pédagogique',
-    desc: 'Glossaire médical, quiz d\'anatomie, comparaisons de maladies — apprends en explorant.',
+    desc: 'Glossaire médical, quiz d\'anatomie, comparaisons de maladies. Apprends en explorant.',
   },
 ]
 

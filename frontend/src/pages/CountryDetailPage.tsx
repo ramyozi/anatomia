@@ -1,4 +1,4 @@
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, Navigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
 import { ExternalLink } from 'lucide-react'
@@ -6,15 +6,35 @@ import { api } from '@/lib/api'
 import type { CountryDetail } from '@/types'
 import { Breadcrumbs } from '@/components/nav/Breadcrumbs'
 import { BarChart } from '@/components/visuals/BarChart'
+import { toIso3, isValidIso3 } from '@/lib/iso3'
 
 export function CountryDetailPage() {
   const { countryCode } = useParams<{ countryCode: string }>()
+  // Accept either a canonical alpha-3 already or a numeric/lowercase
+  // legacy value (eg an old bookmark with /monde/012). Normalise once
+  // here so the API call always uses the canonical key.
+  const iso3 = toIso3(countryCode)
 
-  const { data, isLoading } = useQuery({
-    queryKey: ['country', countryCode],
-    queryFn: () => api.get<CountryDetail>(`/countries/${countryCode}`),
-    enabled: !!countryCode,
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['country', iso3],
+    queryFn: () => api.get<CountryDetail>(`/countries/${iso3}`),
+    enabled: !!iso3,
+    retry: 0,
   })
+
+  // Param shape is wrong (eg "012", "fr", garbage): bounce to the atlas
+  // rather than spin forever.
+  if (!iso3 || !isValidIso3(iso3))
+    return <Navigate to="/monde" replace />
+
+  // Backend doesn't know this country (eg a small territory present on
+  // the map but absent from our 48-country dataset): bounce too.
+  if (isError) return <Navigate to="/monde" replace />
+
+  // Legacy URL hit with a numeric code: rewrite to the canonical alpha-3
+  // so the user's location bar stays clean and refreshes work.
+  if (countryCode !== iso3)
+    return <Navigate to={`/monde/${iso3}`} replace />
 
   if (isLoading || !data)
     return <div className="p-12 text-center text-ink-mute">Chargement...</div>

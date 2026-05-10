@@ -44,7 +44,7 @@ export function CompareDiseasesPage() {
       value: d =>
         d.prevalencePer100k != null
           ? d.prevalencePer100k.toLocaleString('fr')
-          : '—',
+          : '-',
     },
     {
       label: 'Cas mondiaux',
@@ -52,7 +52,7 @@ export function CompareDiseasesPage() {
     },
     {
       label: 'Décès / an',
-      value: d => d.epidemiology.yearlyDeaths?.toLocaleString('fr') ?? '—',
+      value: d => d.epidemiology.yearlyDeaths?.toLocaleString('fr') ?? '-',
     },
     { label: 'Organes touchés', value: d => d.organs.join(', ') },
     { label: 'Symptômes clés', value: d => d.symptoms.slice(0, 3).join(' · ') },

@@ -1,6 +1,7 @@
 import * as d3 from 'd3'
 import { feature } from 'topojson-client'
 import { useEffect, useRef, useState } from 'react'
+import { toIso3 } from '@/lib/iso3'
 
 // We don't ship @types/geojson; d3-geo is happy with any object that
 // satisfies its loose ExtendedFeature shape, so we keep this lax.
@@ -95,11 +96,16 @@ export function WorldChoropleth({
       <svg width={size.w} height={size.h}>
         <g>
           {geo.features.map((f, i) => {
-            const code = (f.properties as { iso_a3?: string; name?: string })?.iso_a3 ??
-              (f as unknown as { id: string }).id
-            const v = valueByCode.get(code)
+            // world-atlas exposes the M49 numeric code as feature.id and
+            // doesn't carry iso_a3 in properties. Translate to the
+            // canonical alpha-3 the rest of the app uses everywhere
+            // (routes, API, store keys).
+            const rawId = (f.properties as { iso_a3?: string })?.iso_a3 ??
+              (f as unknown as { id?: string | number }).id
+            const code = toIso3(rawId)
+            const v = code ? valueByCode.get(code) : undefined
             const fill = v != null ? color(v) : '#0e1822'
-            const isSelected = selectedCode === code
+            const isSelected = code != null && selectedCode === code
             return (
               <path
                 key={i}
@@ -107,19 +113,29 @@ export function WorldChoropleth({
                 fill={fill}
                 stroke={isSelected ? '#9af2e4' : '#1f2735'}
                 strokeWidth={isSelected ? 1.5 : 0.4}
-                className="transition-all cursor-pointer hover:stroke-accent"
+                className={
+                  code
+                    ? 'transition-all cursor-pointer hover:stroke-accent'
+                    : 'transition-all cursor-default opacity-60'
+                }
                 onMouseMove={e => {
                   const rect = wrapRef.current?.getBoundingClientRect()
                   setHover({
-                    code,
-                    name: (f.properties as { name?: string })?.name ?? code,
+                    code: code ?? '',
+                    name: (f.properties as { name?: string })?.name ?? code ?? '',
                     value: v,
                     x: e.clientX - (rect?.left ?? 0),
                     y: e.clientY - (rect?.top ?? 0),
                   })
                 }}
                 onMouseLeave={() => setHover(null)}
-                onClick={() => onSelect?.(code)}
+                onClick={() => {
+                  // Strict guard: only emit valid alpha-3 codes. If the
+                  // lookup failed (rare territories absent from the
+                  // table), swallow the click rather than navigate to a
+                  // broken route.
+                  if (code) onSelect?.(code)
+                }}
               />
             )
           })}

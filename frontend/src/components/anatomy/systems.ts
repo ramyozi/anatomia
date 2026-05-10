@@ -67,7 +67,7 @@ export const SYSTEMS: Record<Exclude<SystemKey, 'all'>, SystemDef> = {
     accentColor: '#efe7d4',
     camera: { position: [0, 0, 3.4], lookAt: [0, 0, 0] },
     description:
-      'Charpente osseuse — colonne, cage thoracique, ceintures, membres. Fournit soutien, protection et hématopoïèse.',
+      'Charpente osseuse : colonne, cage thoracique, ceintures, membres. Fournit soutien, protection et hématopoïèse.',
   },
   nervous: {
     key: 'nervous',
@@ -85,7 +85,7 @@ export const SYSTEMS: Record<Exclude<SystemKey, 'all'>, SystemDef> = {
     accentColor: '#ff8b8b',
     camera: { position: [0, 0.32, 1.3], lookAt: [0, 0.32, 0] },
     description:
-      'Cœur et grandes structures cardiaques. Le réseau vasculaire complet n\'est pas inclus dans BodyParts3D — seul le cœur est représenté.',
+      'Cœur et grandes structures cardiaques. Le réseau vasculaire complet n\'est pas inclus dans BodyParts3D : seul le cœur est représenté.',
   },
   respiratory: {
     key: 'respiratory',
@@ -121,7 +121,7 @@ export const SYSTEMS: Record<Exclude<SystemKey, 'all'>, SystemDef> = {
     accentColor: '#e9c46a',
     camera: { position: [0, 0.55, 1.0], lookAt: [0, 0.55, 0] },
     description:
-      'Glandes endocrines visibles dans BodyParts3D — ici limité au cartilage thyroïde de référence.',
+      'Glandes endocrines visibles dans BodyParts3D, ici limité au cartilage thyroïde de référence.',
   },
   sensory: {
     key: 'sensory',
@@ -130,7 +130,7 @@ export const SYSTEMS: Record<Exclude<SystemKey, 'all'>, SystemDef> = {
     accentColor: '#7ee0d2',
     camera: { position: [0, 0.85, 0.9], lookAt: [0, 0.85, 0] },
     description:
-      'Organes sensoriels disponibles — œil et structures associées.',
+      'Organes sensoriels disponibles : œil et structures associées.',
   },
 }
 

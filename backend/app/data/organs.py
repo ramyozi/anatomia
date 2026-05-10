@@ -61,7 +61,7 @@ ORGANS: list[dict[str, Any]] = [
             ("ventricules", "Ventricules cérébraux", "Cavités contenant le liquide céphalo-rachidien."),
         ],
         "sources": [
-            ("Brain — Wikipedia", "https://en.wikipedia.org/wiki/Brain", "wikipedia"),
+            ("Brain, Wikipedia", "https://en.wikipedia.org/wiki/Brain", "wikipedia"),
             ("NIH Brain Basics", "https://www.ninds.nih.gov/health-information/public-education/brain-basics", "nih"),
         ],
     },
@@ -73,7 +73,7 @@ ORGANS: list[dict[str, Any]] = [
         "description": (
             "Le cœur est un muscle creux d'environ 300 g qui se contracte sans relâche pour propulser "
             "le sang à travers la circulation pulmonaire et systémique. Il est constitué de quatre "
-            "cavités — deux oreillettes et deux ventricules — séparées par des valves qui imposent un "
+            "cavités, deux oreillettes et deux ventricules, séparées par des valves qui imposent un "
             "sens unique au flux sanguin."
         ),
         "functions": [
@@ -97,12 +97,12 @@ ORGANS: list[dict[str, Any]] = [
             ("oreillette-g", "Oreillette gauche", "Reçoit le sang oxygéné des veines pulmonaires."),
             ("ventricule-d", "Ventricule droit", "Pompe le sang vers les poumons via l'artère pulmonaire."),
             ("ventricule-g", "Ventricule gauche", "Cavité la plus puissante, propulse le sang dans tout l'organisme."),
-            ("valves", "Valves cardiaques", "Mitrale, tricuspide, aortique, pulmonaire — imposent le sens du flux."),
+            ("valves", "Valves cardiaques", "Mitrale, tricuspide, aortique, pulmonaire, imposent le sens du flux."),
             ("noeud-sinusal", "Nœud sino-atrial", "Pacemaker naturel, déclenche le battement à 60-100 bpm."),
         ],
         "sources": [
-            ("Heart — Wikipedia", "https://en.wikipedia.org/wiki/Heart", "wikipedia"),
-            ("WHO — Cardiovascular diseases", "https://www.who.int/health-topics/cardiovascular-diseases", "who"),
+            ("Heart, Wikipedia", "https://en.wikipedia.org/wiki/Heart", "wikipedia"),
+            ("WHO, Cardiovascular diseases", "https://www.who.int/health-topics/cardiovascular-diseases", "who"),
         ],
     },
     {
@@ -139,8 +139,8 @@ ORGANS: list[dict[str, Any]] = [
             ("plevre", "Plèvre", "Membrane séreuse qui enveloppe chaque poumon."),
         ],
         "sources": [
-            ("Lung — Wikipedia", "https://en.wikipedia.org/wiki/Lung", "wikipedia"),
-            ("CDC — Lung diseases", "https://www.cdc.gov/lung-cancer/", "cdc"),
+            ("Lung, Wikipedia", "https://en.wikipedia.org/wiki/Lung", "wikipedia"),
+            ("CDC, Lung diseases", "https://www.cdc.gov/lung-cancer/", "cdc"),
         ],
     },
     {
@@ -175,7 +175,7 @@ ORGANS: list[dict[str, Any]] = [
             ("vesicule-biliaire", "Vésicule biliaire", "Stocke et concentre la bile entre les repas."),
         ],
         "sources": [
-            ("Liver — Wikipedia", "https://en.wikipedia.org/wiki/Liver", "wikipedia"),
+            ("Liver, Wikipedia", "https://en.wikipedia.org/wiki/Liver", "wikipedia"),
         ],
     },
     {
@@ -211,8 +211,8 @@ ORGANS: list[dict[str, Any]] = [
             ("tube-collecteur", "Tube collecteur", "Concentre l'urine et l'achemine vers les uretères."),
         ],
         "sources": [
-            ("Kidney — Wikipedia", "https://en.wikipedia.org/wiki/Kidney", "wikipedia"),
-            ("NIH — Kidney Disease", "https://www.niddk.nih.gov/health-information/kidney-disease", "nih"),
+            ("Kidney, Wikipedia", "https://en.wikipedia.org/wiki/Kidney", "wikipedia"),
+            ("NIH, Kidney Disease", "https://www.niddk.nih.gov/health-information/kidney-disease", "nih"),
         ],
     },
     {
@@ -245,7 +245,7 @@ ORGANS: list[dict[str, Any]] = [
             ("pylore", "Pylore", "Sphincter contrôlant le passage vers le duodénum."),
         ],
         "sources": [
-            ("Stomach — Wikipedia", "https://en.wikipedia.org/wiki/Stomach", "wikipedia"),
+            ("Stomach, Wikipedia", "https://en.wikipedia.org/wiki/Stomach", "wikipedia"),
         ],
     },
     {
@@ -280,7 +280,7 @@ ORGANS: list[dict[str, Any]] = [
             ("rectum", "Rectum", "Stockage des selles avant défécation."),
         ],
         "sources": [
-            ("Small intestine — Wikipedia", "https://en.wikipedia.org/wiki/Small_intestine", "wikipedia"),
+            ("Small intestine, Wikipedia", "https://en.wikipedia.org/wiki/Small_intestine", "wikipedia"),
         ],
     },
     {
@@ -310,7 +310,7 @@ ORGANS: list[dict[str, Any]] = [
             ("ilots", "Îlots de Langerhans", "Cellules endocrines (α, β, δ) productrices d'hormones."),
         ],
         "sources": [
-            ("Pancreas — Wikipedia", "https://en.wikipedia.org/wiki/Pancreas", "wikipedia"),
+            ("Pancreas, Wikipedia", "https://en.wikipedia.org/wiki/Pancreas", "wikipedia"),
         ],
     },
     {
@@ -344,7 +344,7 @@ ORGANS: list[dict[str, Any]] = [
             ("hypoderme", "Hypoderme", "Tissu adipeux sous-cutané, isolation thermique."),
         ],
         "sources": [
-            ("Skin — Wikipedia", "https://en.wikipedia.org/wiki/Skin", "wikipedia"),
+            ("Skin, Wikipedia", "https://en.wikipedia.org/wiki/Skin", "wikipedia"),
         ],
     },
     {
@@ -377,7 +377,7 @@ ORGANS: list[dict[str, Any]] = [
             ("nerf-optique", "Nerf optique", "Achemine l'information visuelle au cerveau."),
         ],
         "sources": [
-            ("Human eye — Wikipedia", "https://en.wikipedia.org/wiki/Human_eye", "wikipedia"),
+            ("Human eye, Wikipedia", "https://en.wikipedia.org/wiki/Human_eye", "wikipedia"),
         ],
     },
     {
@@ -403,7 +403,7 @@ ORGANS: list[dict[str, Any]] = [
         },
         "sub_organs": [],
         "sources": [
-            ("Thyroid — Wikipedia", "https://en.wikipedia.org/wiki/Thyroid", "wikipedia"),
+            ("Thyroid, Wikipedia", "https://en.wikipedia.org/wiki/Thyroid", "wikipedia"),
         ],
     },
     {
@@ -428,7 +428,7 @@ ORGANS: list[dict[str, Any]] = [
         },
         "sub_organs": [],
         "sources": [
-            ("Spleen — Wikipedia", "https://en.wikipedia.org/wiki/Spleen", "wikipedia"),
+            ("Spleen, Wikipedia", "https://en.wikipedia.org/wiki/Spleen", "wikipedia"),
         ],
     },
     {
@@ -452,7 +452,7 @@ ORGANS: list[dict[str, Any]] = [
         },
         "sub_organs": [],
         "sources": [
-            ("Urinary bladder — Wikipedia", "https://en.wikipedia.org/wiki/Urinary_bladder", "wikipedia"),
+            ("Urinary bladder, Wikipedia", "https://en.wikipedia.org/wiki/Urinary_bladder", "wikipedia"),
         ],
     },
     {
@@ -501,8 +501,8 @@ ORGANS: list[dict[str, Any]] = [
             ("etrier", "Étrier", "Plus petit os du corps, oreille moyenne (≈ 3 mm)."),
         ],
         "sources": [
-            ("Skeleton — Wikipedia", "https://en.wikipedia.org/wiki/Human_skeleton", "wikipedia"),
-            ("NIH — Bone biology", "https://www.bones.nih.gov/health-info/bone/bone-health/what-is-bone", "nih"),
+            ("Skeleton, Wikipedia", "https://en.wikipedia.org/wiki/Human_skeleton", "wikipedia"),
+            ("NIH, Bone biology", "https://www.bones.nih.gov/health-info/bone/bone-health/what-is-bone", "nih"),
         ],
     },
     {
@@ -547,7 +547,7 @@ ORGANS: list[dict[str, Any]] = [
             ("diaphragme", "Diaphragme", "Muscle respiratoire principal."),
         ],
         "sources": [
-            ("Muscle — Wikipedia", "https://en.wikipedia.org/wiki/Muscle", "wikipedia"),
+            ("Muscle, Wikipedia", "https://en.wikipedia.org/wiki/Muscle", "wikipedia"),
         ],
     },
     {
@@ -581,7 +581,7 @@ ORGANS: list[dict[str, Any]] = [
             ("queue-cheval", "Queue de cheval", "Faisceau de racines nerveuses lombaires et sacrées."),
         ],
         "sources": [
-            ("Spinal cord — Wikipedia", "https://en.wikipedia.org/wiki/Spinal_cord", "wikipedia"),
+            ("Spinal cord, Wikipedia", "https://en.wikipedia.org/wiki/Spinal_cord", "wikipedia"),
         ],
     },
     {
@@ -617,7 +617,7 @@ ORGANS: list[dict[str, Any]] = [
             ("nerf-femoral", "Nerf fémoral", "Innervation du quadriceps et de la peau antérieure de la cuisse."),
         ],
         "sources": [
-            ("Peripheral nervous system — Wikipedia", "https://en.wikipedia.org/wiki/Peripheral_nervous_system", "wikipedia"),
+            ("Peripheral nervous system, Wikipedia", "https://en.wikipedia.org/wiki/Peripheral_nervous_system", "wikipedia"),
         ],
     },
     {
@@ -655,7 +655,7 @@ ORGANS: list[dict[str, Any]] = [
             ("capillaires", "Capillaires", "Réseau d'échange tissulaire le plus fin."),
         ],
         "sources": [
-            ("Blood vessel — Wikipedia", "https://en.wikipedia.org/wiki/Blood_vessel", "wikipedia"),
+            ("Blood vessel, Wikipedia", "https://en.wikipedia.org/wiki/Blood_vessel", "wikipedia"),
         ],
     },
     {
@@ -688,7 +688,7 @@ ORGANS: list[dict[str, Any]] = [
             ("dents-sagesse", "Dents de sagesse", "3e molaires, éruption tardive (17-25 ans)."),
         ],
         "sources": [
-            ("Tooth — Wikipedia", "https://en.wikipedia.org/wiki/Tooth", "wikipedia"),
+            ("Tooth, Wikipedia", "https://en.wikipedia.org/wiki/Tooth", "wikipedia"),
         ],
     },
     {
@@ -725,7 +725,7 @@ ORGANS: list[dict[str, Any]] = [
             ("canaux-semicirculaires", "Canaux semi-circulaires", "Trois canaux orthogonaux, détectent les rotations."),
         ],
         "sources": [
-            ("Ear — Wikipedia", "https://en.wikipedia.org/wiki/Ear", "wikipedia"),
+            ("Ear, Wikipedia", "https://en.wikipedia.org/wiki/Ear", "wikipedia"),
         ],
     },
 ]

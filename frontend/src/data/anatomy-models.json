@@ -16,7 +16,7 @@
       "parts": [
         "FMA7274"
       ],
-      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+      "license": "CC BY-SA 2.1 JP / BodyParts3D, DBCLS"
     },
     {
       "slug": "cervelet",
@@ -31,7 +31,7 @@
       "parts": [
         "FMA67944"
       ],
-      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+      "license": "CC BY-SA 2.1 JP / BodyParts3D, DBCLS"
     },
     {
       "slug": "hippocampe",
@@ -47,7 +47,7 @@
         "FMA72713",
         "FMA72714"
       ],
-      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+      "license": "CC BY-SA 2.1 JP / BodyParts3D, DBCLS"
     },
     {
       "slug": "thalamus",
@@ -63,7 +63,7 @@
         "FMA258714",
         "FMA258716"
       ],
-      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+      "license": "CC BY-SA 2.1 JP / BodyParts3D, DBCLS"
     },
     {
       "slug": "hypothalamus",
@@ -78,7 +78,7 @@
       "parts": [
         "FMA62008nsn"
       ],
-      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+      "license": "CC BY-SA 2.1 JP / BodyParts3D, DBCLS"
     },
     {
       "slug": "midbrain",
@@ -93,7 +93,7 @@
       "parts": [
         "FMA61993nsn"
       ],
-      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+      "license": "CC BY-SA 2.1 JP / BodyParts3D, DBCLS"
     },
     {
       "slug": "poumons",
@@ -112,7 +112,7 @@
         "FMA7370",
         "FMA7371"
       ],
-      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+      "license": "CC BY-SA 2.1 JP / BodyParts3D, DBCLS"
     },
     {
       "slug": "foie",
@@ -127,7 +127,7 @@
       "parts": [
         "FMA7197"
       ],
-      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+      "license": "CC BY-SA 2.1 JP / BodyParts3D, DBCLS"
     },
     {
       "slug": "estomac",
@@ -142,7 +142,7 @@
       "parts": [
         "FMA7148"
       ],
-      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+      "license": "CC BY-SA 2.1 JP / BodyParts3D, DBCLS"
     },
     {
       "slug": "rate",
@@ -157,7 +157,7 @@
       "parts": [
         "FMA7196"
       ],
-      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+      "license": "CC BY-SA 2.1 JP / BodyParts3D, DBCLS"
     },
     {
       "slug": "reins",
@@ -173,7 +173,7 @@
         "FMA7204",
         "FMA7205"
       ],
-      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+      "license": "CC BY-SA 2.1 JP / BodyParts3D, DBCLS"
     },
     {
       "slug": "vessie",
@@ -188,7 +188,7 @@
       "parts": [
         "FMA15900"
       ],
-      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+      "license": "CC BY-SA 2.1 JP / BodyParts3D, DBCLS"
     },
     {
       "slug": "oeil",
@@ -203,7 +203,7 @@
       "parts": [
         "FMA12513"
       ],
-      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+      "license": "CC BY-SA 2.1 JP / BodyParts3D, DBCLS"
     },
     {
       "slug": "pancreas",
@@ -218,7 +218,7 @@
       "parts": [
         "FMA7198nsn"
       ],
-      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+      "license": "CC BY-SA 2.1 JP / BodyParts3D, DBCLS"
     },
     {
       "slug": "vesicule",
@@ -233,7 +233,7 @@
       "parts": [
         "FMA7202"
       ],
-      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+      "license": "CC BY-SA 2.1 JP / BodyParts3D, DBCLS"
     },
     {
       "slug": "trachee",
@@ -248,7 +248,7 @@
       "parts": [
         "FMA7394"
       ],
-      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+      "license": "CC BY-SA 2.1 JP / BodyParts3D, DBCLS"
     },
     {
       "slug": "oesophage",
@@ -263,7 +263,7 @@
       "parts": [
         "FMA7131"
       ],
-      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+      "license": "CC BY-SA 2.1 JP / BodyParts3D, DBCLS"
     },
     {
       "slug": "diaphragme",
@@ -278,7 +278,7 @@
       "parts": [
         "FMA13295"
       ],
-      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+      "license": "CC BY-SA 2.1 JP / BodyParts3D, DBCLS"
     },
     {
       "slug": "femur-d",
@@ -293,7 +293,7 @@
       "parts": [
         "FMA24474"
       ],
-      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+      "license": "CC BY-SA 2.1 JP / BodyParts3D, DBCLS"
     },
     {
       "slug": "femur-g",
@@ -308,7 +308,7 @@
       "parts": [
         "FMA24475"
       ],
-      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+      "license": "CC BY-SA 2.1 JP / BodyParts3D, DBCLS"
     },
     {
       "slug": "tibia-d",
@@ -323,7 +323,7 @@
       "parts": [
         "FMA24477"
       ],
-      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+      "license": "CC BY-SA 2.1 JP / BodyParts3D, DBCLS"
     },
     {
       "slug": "tibia-g",
@@ -338,7 +338,7 @@
       "parts": [
         "FMA24478"
       ],
-      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+      "license": "CC BY-SA 2.1 JP / BodyParts3D, DBCLS"
     },
     {
       "slug": "humerus-d",
@@ -353,7 +353,7 @@
       "parts": [
         "FMA23130"
       ],
-      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+      "license": "CC BY-SA 2.1 JP / BodyParts3D, DBCLS"
     },
     {
       "slug": "humerus-g",
@@ -368,7 +368,7 @@
       "parts": [
         "FMA23131"
       ],
-      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+      "license": "CC BY-SA 2.1 JP / BodyParts3D, DBCLS"
     },
     {
       "slug": "scapula-d",
@@ -383,7 +383,7 @@
       "parts": [
         "FMA13395"
       ],
-      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+      "license": "CC BY-SA 2.1 JP / BodyParts3D, DBCLS"
     },
     {
       "slug": "scapula-g",
@@ -398,7 +398,7 @@
       "parts": [
         "FMA13396"
       ],
-      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+      "license": "CC BY-SA 2.1 JP / BodyParts3D, DBCLS"
     },
     {
       "slug": "sacrum",
@@ -413,7 +413,7 @@
       "parts": [
         "FMA16202"
       ],
-      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+      "license": "CC BY-SA 2.1 JP / BodyParts3D, DBCLS"
     },
     {
       "slug": "mandibule",
@@ -428,7 +428,7 @@
       "parts": [
         "FMA52748"
       ],
-      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+      "license": "CC BY-SA 2.1 JP / BodyParts3D, DBCLS"
     },
     {
       "slug": "sternum",
@@ -443,7 +443,7 @@
       "parts": [
         "FMA7487"
       ],
-      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+      "license": "CC BY-SA 2.1 JP / BodyParts3D, DBCLS"
     },
     {
       "slug": "thyroide",
@@ -458,7 +458,7 @@
       "parts": [
         "FMA55099"
       ],
-      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+      "license": "CC BY-SA 2.1 JP / BodyParts3D, DBCLS"
     },
     {
       "slug": "vertebres",
@@ -477,7 +477,7 @@
         "FMA13073",
         "FMA13072"
       ],
-      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+      "license": "CC BY-SA 2.1 JP / BodyParts3D, DBCLS"
     },
     {
       "slug": "cerveau",
@@ -565,7 +565,7 @@
           "facesBefore": 46834
         }
       ],
-      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+      "license": "CC BY-SA 2.1 JP / BodyParts3D, DBCLS"
     },
     {
       "slug": "thorax",
@@ -645,7 +645,7 @@
           "facesBefore": 210666
         }
       ],
-      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+      "license": "CC BY-SA 2.1 JP / BodyParts3D, DBCLS"
     },
     {
       "slug": "abdomen",
@@ -733,7 +733,7 @@
           "facesBefore": 2642
         }
       ],
-      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+      "license": "CC BY-SA 2.1 JP / BodyParts3D, DBCLS"
     },
     {
       "slug": "squelette",
@@ -877,7 +877,7 @@
           "facesBefore": 17282
         }
       ],
-      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+      "license": "CC BY-SA 2.1 JP / BodyParts3D, DBCLS"
     },
     {
       "slug": "human-body",
@@ -1253,7 +1253,7 @@
           "facesBefore": 17282
         }
       ],
-      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+      "license": "CC BY-SA 2.1 JP / BodyParts3D, DBCLS"
     }
   ]
 }

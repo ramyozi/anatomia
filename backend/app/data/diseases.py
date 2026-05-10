@@ -73,8 +73,8 @@ DISEASES: list[dict[str, Any]] = [
         ],
         "timeline_base": (1990, 7_500_000, 0.012),
         "sources": [
-            ("WHO — Cardiovascular diseases", "https://www.who.int/health-topics/cardiovascular-diseases", "who"),
-            ("Myocardial infarction — Wikipedia", "https://en.wikipedia.org/wiki/Myocardial_infarction", "wikipedia"),
+            ("WHO, Cardiovascular diseases", "https://www.who.int/health-topics/cardiovascular-diseases", "who"),
+            ("Myocardial infarction, Wikipedia", "https://en.wikipedia.org/wiki/Myocardial_infarction", "wikipedia"),
         ],
     },
     {
@@ -142,8 +142,8 @@ DISEASES: list[dict[str, Any]] = [
         ],
         "timeline_base": (1990, 150_000_000, 0.045),
         "sources": [
-            ("WHO — Diabetes", "https://www.who.int/health-topics/diabetes", "who"),
-            ("Type 2 diabetes — Wikipedia", "https://en.wikipedia.org/wiki/Type_2_diabetes", "wikipedia"),
+            ("WHO, Diabetes", "https://www.who.int/health-topics/diabetes", "who"),
+            ("Type 2 diabetes, Wikipedia", "https://en.wikipedia.org/wiki/Type_2_diabetes", "wikipedia"),
         ],
     },
     {
@@ -153,7 +153,7 @@ DISEASES: list[dict[str, Any]] = [
         "description": (
             "La maladie d'Alzheimer est la cause la plus fréquente de démence. Elle se caractérise "
             "par l'accumulation de plaques β-amyloïdes et de dégénérescences neurofibrillaires (tau), "
-            "responsables d'une atrophie cérébrale progressive — débutant typiquement par l'hippocampe."
+            "responsables d'une atrophie cérébrale progressive, débutant typiquement par l'hippocampe."
         ),
         "severity": "severe",
         "category": "Neurologique",
@@ -213,8 +213,8 @@ DISEASES: list[dict[str, Any]] = [
         ],
         "timeline_base": (1990, 14_000_000, 0.055),
         "sources": [
-            ("WHO — Dementia", "https://www.who.int/news-room/fact-sheets/detail/dementia", "who"),
-            ("Alzheimer — Wikipedia", "https://en.wikipedia.org/wiki/Alzheimer%27s_disease", "wikipedia"),
+            ("WHO, Dementia", "https://www.who.int/news-room/fact-sheets/detail/dementia", "who"),
+            ("Alzheimer, Wikipedia", "https://en.wikipedia.org/wiki/Alzheimer%27s_disease", "wikipedia"),
         ],
     },
     {
@@ -274,14 +274,14 @@ DISEASES: list[dict[str, Any]] = [
         ],
         "timeline_base": (1990, 235_000_000, 0.011),
         "sources": [
-            ("WHO — Asthma", "https://www.who.int/news-room/fact-sheets/detail/asthma", "who"),
-            ("CDC — Asthma", "https://www.cdc.gov/asthma/", "cdc"),
+            ("WHO, Asthma", "https://www.who.int/news-room/fact-sheets/detail/asthma", "who"),
+            ("CDC, Asthma", "https://www.cdc.gov/asthma/", "cdc"),
         ],
     },
     {
         "slug": "bpco",
         "name": "BPCO",
-        "short_description": "Bronchopneumopathie chronique obstructive — obstruction bronchique progressive et peu réversible.",
+        "short_description": "Bronchopneumopathie chronique obstructive, obstruction bronchique progressive et peu réversible.",
         "description": (
             "La bronchopneumopathie chronique obstructive (BPCO) regroupe la bronchite chronique et "
             "l'emphysème. Le tabagisme est la cause principale (80 % des cas). L'obstruction est peu "
@@ -331,7 +331,7 @@ DISEASES: list[dict[str, Any]] = [
         },
         "timeline_base": (1990, 2_800_000, 0.012),
         "sources": [
-            ("WHO — COPD", "https://www.who.int/news-room/fact-sheets/detail/chronic-obstructive-pulmonary-disease-(copd)", "who"),
+            ("WHO, COPD", "https://www.who.int/news-room/fact-sheets/detail/chronic-obstructive-pulmonary-disease-(copd)", "who"),
         ],
     },
     {
@@ -393,7 +393,7 @@ DISEASES: list[dict[str, Any]] = [
         ],
         "timeline_base": (1990, 900_000, 0.024),
         "sources": [
-            ("WHO — Lung cancer", "https://www.who.int/news-room/fact-sheets/detail/lung-cancer", "who"),
+            ("WHO, Lung cancer", "https://www.who.int/news-room/fact-sheets/detail/lung-cancer", "who"),
         ],
     },
     {
@@ -457,7 +457,7 @@ DISEASES: list[dict[str, Any]] = [
         ],
         "timeline_base": (1990, 5_400_000, 0.011),
         "sources": [
-            ("WHO — Stroke", "https://www.who.int/health-topics/stroke", "who"),
+            ("WHO, Stroke", "https://www.who.int/health-topics/stroke", "who"),
         ],
     },
     {
@@ -515,7 +515,7 @@ DISEASES: list[dict[str, Any]] = [
         },
         "timeline_base": (1990, 600_000_000, 0.022),
         "sources": [
-            ("WHO — Hypertension", "https://www.who.int/news-room/fact-sheets/detail/hypertension", "who"),
+            ("WHO, Hypertension", "https://www.who.int/news-room/fact-sheets/detail/hypertension", "who"),
         ],
     },
     {
@@ -576,7 +576,7 @@ DISEASES: list[dict[str, Any]] = [
         ],
         "timeline_base": (1990, 8_500_000, -0.005),
         "sources": [
-            ("WHO — Tuberculosis", "https://www.who.int/news-room/fact-sheets/detail/tuberculosis", "who"),
+            ("WHO, Tuberculosis", "https://www.who.int/news-room/fact-sheets/detail/tuberculosis", "who"),
         ],
     },
     {
@@ -637,7 +637,7 @@ DISEASES: list[dict[str, Any]] = [
         ],
         "timeline_base": (2020, 100_000_000, 0.10),
         "sources": [
-            ("WHO — COVID-19", "https://www.who.int/health-topics/coronavirus", "who"),
+            ("WHO, COVID-19", "https://www.who.int/health-topics/coronavirus", "who"),
         ],
     },
     {
@@ -698,7 +698,7 @@ DISEASES: list[dict[str, Any]] = [
         },
         "timeline_base": (1990, 180_000_000, 0.013),
         "sources": [
-            ("WHO — Depression", "https://www.who.int/news-room/fact-sheets/detail/depression", "who"),
+            ("WHO, Depression", "https://www.who.int/news-room/fact-sheets/detail/depression", "who"),
         ],
     },
     {
@@ -754,7 +754,7 @@ DISEASES: list[dict[str, Any]] = [
         },
         "timeline_base": (1990, 200_000_000, 0.05),
         "sources": [
-            ("WHO — Obesity", "https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight", "who"),
+            ("WHO, Obesity", "https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight", "who"),
         ],
     },
     {
@@ -816,7 +816,7 @@ DISEASES: list[dict[str, Any]] = [
         ],
         "timeline_base": (2000, 240_000_000, -0.005),
         "sources": [
-            ("WHO — Malaria", "https://www.who.int/news-room/fact-sheets/detail/malaria", "who"),
+            ("WHO, Malaria", "https://www.who.int/news-room/fact-sheets/detail/malaria", "who"),
         ],
     },
     {
@@ -873,7 +873,7 @@ DISEASES: list[dict[str, Any]] = [
         ],
         "timeline_base": (1990, 8_000_000, 0.018),
         "sources": [
-            ("WHO — HIV", "https://www.who.int/news-room/fact-sheets/detail/hiv-aids", "who"),
+            ("WHO, HIV", "https://www.who.int/news-room/fact-sheets/detail/hiv-aids", "who"),
         ],
     },
     {
@@ -925,7 +925,7 @@ DISEASES: list[dict[str, Any]] = [
         },
         "timeline_base": (1990, 800_000_000, 0.005),
         "sources": [
-            ("WHO — Influenza", "https://www.who.int/teams/global-influenza-programme", "who"),
+            ("WHO, Influenza", "https://www.who.int/teams/global-influenza-programme", "who"),
         ],
     },
     {
@@ -985,7 +985,7 @@ DISEASES: list[dict[str, Any]] = [
         ],
         "timeline_base": (1990, 2_500_000, 0.04),
         "sources": [
-            ("WHO — Parkinson", "https://www.who.int/news-room/fact-sheets/detail/parkinson-disease", "who"),
+            ("WHO, Parkinson", "https://www.who.int/news-room/fact-sheets/detail/parkinson-disease", "who"),
         ],
     },
     {
@@ -1042,7 +1042,7 @@ DISEASES: list[dict[str, Any]] = [
         },
         "timeline_base": (1990, 380_000_000, 0.024),
         "sources": [
-            ("Kidney disease — Wikipedia", "https://en.wikipedia.org/wiki/Chronic_kidney_disease", "wikipedia"),
+            ("Kidney disease, Wikipedia", "https://en.wikipedia.org/wiki/Chronic_kidney_disease", "wikipedia"),
         ],
     },
     {
@@ -1092,7 +1092,7 @@ DISEASES: list[dict[str, Any]] = [
         },
         "timeline_base": (1990, 350_000_000, -0.003),
         "sources": [
-            ("WHO — Hepatitis B", "https://www.who.int/news-room/fact-sheets/detail/hepatitis-b", "who"),
+            ("WHO, Hepatitis B", "https://www.who.int/news-room/fact-sheets/detail/hepatitis-b", "who"),
         ],
     },
     {
@@ -1150,7 +1150,7 @@ DISEASES: list[dict[str, Any]] = [
         },
         "timeline_base": (1990, 3_400_000, 0.025),
         "sources": [
-            ("WHO — Breast cancer", "https://www.who.int/news-room/fact-sheets/detail/breast-cancer", "who"),
+            ("WHO, Breast cancer", "https://www.who.int/news-room/fact-sheets/detail/breast-cancer", "who"),
         ],
     },
     {
@@ -1207,7 +1207,7 @@ DISEASES: list[dict[str, Any]] = [
         },
         "timeline_base": (1990, 200_000_000, 0.013),
         "sources": [
-            ("WHO — Mental health", "https://www.who.int/news-room/fact-sheets/detail/mental-disorders", "who"),
+            ("WHO, Mental health", "https://www.who.int/news-room/fact-sheets/detail/mental-disorders", "who"),
         ],
     },
     {
@@ -1272,7 +1272,7 @@ DISEASES: list[dict[str, Any]] = [
         ],
         "timeline_base": (1990, 1_800_000, 0.018),
         "sources": [
-            ("WHO — Multiple sclerosis", "https://www.who.int/news-room/fact-sheets/detail/multiple-sclerosis", "who"),
+            ("WHO, Multiple sclerosis", "https://www.who.int/news-room/fact-sheets/detail/multiple-sclerosis", "who"),
         ],
     },
     {
@@ -1327,7 +1327,7 @@ DISEASES: list[dict[str, Any]] = [
         },
         "timeline_base": (1990, 12_000_000, 0.015),
         "sources": [
-            ("Rheumatoid arthritis — Wikipedia", "https://en.wikipedia.org/wiki/Rheumatoid_arthritis", "wikipedia"),
+            ("Rheumatoid arthritis, Wikipedia", "https://en.wikipedia.org/wiki/Rheumatoid_arthritis", "wikipedia"),
         ],
     },
     {
@@ -1382,13 +1382,13 @@ DISEASES: list[dict[str, Any]] = [
         },
         "timeline_base": (1990, 2_800_000, 0.02),
         "sources": [
-            ("Lupus — Wikipedia", "https://en.wikipedia.org/wiki/Systemic_lupus_erythematosus", "wikipedia"),
+            ("Lupus, Wikipedia", "https://en.wikipedia.org/wiki/Systemic_lupus_erythematosus", "wikipedia"),
         ],
     },
     {
         "slug": "sla",
         "name": "Sclérose latérale amyotrophique",
-        "short_description": "Maladie de Charcot — dégénérescence progressive des motoneurones, létale.",
+        "short_description": "Maladie de Charcot, dégénérescence progressive des motoneurones, létale.",
         "description": (
             "La SLA est une maladie neurodégénérative dégradant les motoneurones supérieurs et "
             "inférieurs. Elle entraîne une paralysie progressive. La survie médiane est de 3 à "
@@ -1442,7 +1442,7 @@ DISEASES: list[dict[str, Any]] = [
         ],
         "timeline_base": (1990, 280_000, 0.014),
         "sources": [
-            ("ALS — Wikipedia", "https://en.wikipedia.org/wiki/Amyotrophic_lateral_sclerosis", "wikipedia"),
+            ("ALS, Wikipedia", "https://en.wikipedia.org/wiki/Amyotrophic_lateral_sclerosis", "wikipedia"),
         ],
     },
     {
@@ -1497,7 +1497,7 @@ DISEASES: list[dict[str, Any]] = [
         },
         "timeline_base": (1990, 38_000_000, 0.008),
         "sources": [
-            ("WHO — Epilepsy", "https://www.who.int/news-room/fact-sheets/detail/epilepsy", "who"),
+            ("WHO, Epilepsy", "https://www.who.int/news-room/fact-sheets/detail/epilepsy", "who"),
         ],
     },
     {
@@ -1554,7 +1554,7 @@ DISEASES: list[dict[str, Any]] = [
         },
         "timeline_base": (1990, 750_000_000, 0.013),
         "sources": [
-            ("WHO — Headache disorders", "https://www.who.int/news-room/fact-sheets/detail/headache-disorders", "who"),
+            ("WHO, Headache disorders", "https://www.who.int/news-room/fact-sheets/detail/headache-disorders", "who"),
         ],
     },
     {
@@ -1609,7 +1609,7 @@ DISEASES: list[dict[str, Any]] = [
         },
         "timeline_base": (1990, 25_000_000, 0.025),
         "sources": [
-            ("Atrial fibrillation — Wikipedia", "https://en.wikipedia.org/wiki/Atrial_fibrillation", "wikipedia"),
+            ("Atrial fibrillation, Wikipedia", "https://en.wikipedia.org/wiki/Atrial_fibrillation", "wikipedia"),
         ],
     },
     {
@@ -1665,7 +1665,7 @@ DISEASES: list[dict[str, Any]] = [
         },
         "timeline_base": (1990, 32_000_000, 0.022),
         "sources": [
-            ("Heart failure — Wikipedia", "https://en.wikipedia.org/wiki/Heart_failure", "wikipedia"),
+            ("Heart failure, Wikipedia", "https://en.wikipedia.org/wiki/Heart_failure", "wikipedia"),
         ],
     },
     {
@@ -1723,7 +1723,7 @@ DISEASES: list[dict[str, Any]] = [
         },
         "timeline_base": (1990, 850_000, 0.024),
         "sources": [
-            ("WHO — Colorectal cancer", "https://www.who.int/news-room/fact-sheets/detail/colorectal-cancer", "who"),
+            ("WHO, Colorectal cancer", "https://www.who.int/news-room/fact-sheets/detail/colorectal-cancer", "who"),
         ],
     },
     {
@@ -1783,7 +1783,7 @@ DISEASES: list[dict[str, Any]] = [
         ],
         "timeline_base": (1990, 200_000, 0.022),
         "sources": [
-            ("Leukemia — Wikipedia", "https://en.wikipedia.org/wiki/Leukemia", "wikipedia"),
+            ("Leukemia, Wikipedia", "https://en.wikipedia.org/wiki/Leukemia", "wikipedia"),
         ],
     },
     {
@@ -1841,7 +1841,7 @@ DISEASES: list[dict[str, Any]] = [
         ],
         "timeline_base": (1990, 4_500_000, 0.024),
         "sources": [
-            ("WHO — Sickle cell disease", "https://www.who.int/news-room/fact-sheets/detail/sickle-cell-disease", "who"),
+            ("WHO, Sickle cell disease", "https://www.who.int/news-room/fact-sheets/detail/sickle-cell-disease", "who"),
         ],
     },
     {
@@ -1892,7 +1892,7 @@ DISEASES: list[dict[str, Any]] = [
         },
         "timeline_base": (1990, 70_000, 0.012),
         "sources": [
-            ("Cystic fibrosis — Wikipedia", "https://en.wikipedia.org/wiki/Cystic_fibrosis", "wikipedia"),
+            ("Cystic fibrosis, Wikipedia", "https://en.wikipedia.org/wiki/Cystic_fibrosis", "wikipedia"),
         ],
     },
     {
@@ -1944,7 +1944,7 @@ DISEASES: list[dict[str, Any]] = [
         },
         "timeline_base": (1990, 600_000, 0.025),
         "sources": [
-            ("Prostate cancer — Wikipedia", "https://en.wikipedia.org/wiki/Prostate_cancer", "wikipedia"),
+            ("Prostate cancer, Wikipedia", "https://en.wikipedia.org/wiki/Prostate_cancer", "wikipedia"),
         ],
     },
     {
@@ -1993,7 +1993,7 @@ DISEASES: list[dict[str, Any]] = [
         },
         "timeline_base": (1990, 38_000_000, 0.024),
         "sources": [
-            ("Glaucoma — Wikipedia", "https://en.wikipedia.org/wiki/Glaucoma", "wikipedia"),
+            ("Glaucoma, Wikipedia", "https://en.wikipedia.org/wiki/Glaucoma", "wikipedia"),
         ],
     },
     {
@@ -2047,7 +2047,7 @@ DISEASES: list[dict[str, Any]] = [
         },
         "timeline_base": (1990, 16_000_000, 0.013),
         "sources": [
-            ("WHO — Schizophrenia", "https://www.who.int/news-room/fact-sheets/detail/schizophrenia", "who"),
+            ("WHO, Schizophrenia", "https://www.who.int/news-room/fact-sheets/detail/schizophrenia", "who"),
         ],
     },
     {
@@ -2098,7 +2098,7 @@ DISEASES: list[dict[str, Any]] = [
         },
         "timeline_base": (1990, 25_000_000, 0.014),
         "sources": [
-            ("WHO — Bipolar disorder", "https://www.who.int/news-room/fact-sheets/detail/mental-disorders", "who"),
+            ("WHO, Bipolar disorder", "https://www.who.int/news-room/fact-sheets/detail/mental-disorders", "who"),
         ],
     },
     {
@@ -2151,7 +2151,7 @@ DISEASES: list[dict[str, Any]] = [
         },
         "timeline_base": (1990, 1_500_000_000, -0.005),
         "sources": [
-            ("WHO — Anaemia", "https://www.who.int/health-topics/anaemia", "who"),
+            ("WHO, Anaemia", "https://www.who.int/health-topics/anaemia", "who"),
         ],
     },
     {
@@ -2208,7 +2208,7 @@ DISEASES: list[dict[str, Any]] = [
         },
         "timeline_base": (1990, 90_000_000, 0.024),
         "sources": [
-            ("Osteoporosis — Wikipedia", "https://en.wikipedia.org/wiki/Osteoporosis", "wikipedia"),
+            ("Osteoporosis, Wikipedia", "https://en.wikipedia.org/wiki/Osteoporosis", "wikipedia"),
         ],
     },
     {
@@ -2265,7 +2265,7 @@ DISEASES: list[dict[str, Any]] = [
         },
         "timeline_base": (1990, 280_000_000, 0.024),
         "sources": [
-            ("Osteoarthritis — Wikipedia", "https://en.wikipedia.org/wiki/Osteoarthritis", "wikipedia"),
+            ("Osteoarthritis, Wikipedia", "https://en.wikipedia.org/wiki/Osteoarthritis", "wikipedia"),
         ],
     },
     {
@@ -2317,7 +2317,7 @@ DISEASES: list[dict[str, Any]] = [
         },
         "timeline_base": (1990, 1_900_000, 0.04),
         "sources": [
-            ("Crohn's disease — Wikipedia", "https://en.wikipedia.org/wiki/Crohn%27s_disease", "wikipedia"),
+            ("Crohn's disease, Wikipedia", "https://en.wikipedia.org/wiki/Crohn%27s_disease", "wikipedia"),
         ],
     },
     {
@@ -2368,7 +2368,7 @@ DISEASES: list[dict[str, Any]] = [
         },
         "timeline_base": (1990, 18_000_000, 0.028),
         "sources": [
-            ("Hashimoto's thyroiditis — Wikipedia", "https://en.wikipedia.org/wiki/Hashimoto%27s_thyroiditis", "wikipedia"),
+            ("Hashimoto's thyroiditis, Wikipedia", "https://en.wikipedia.org/wiki/Hashimoto%27s_thyroiditis", "wikipedia"),
         ],
     },
     {
@@ -2419,7 +2419,7 @@ DISEASES: list[dict[str, Any]] = [
         },
         "timeline_base": (1990, 4_500_000, 0.022),
         "sources": [
-            ("Type 1 diabetes — Wikipedia", "https://en.wikipedia.org/wiki/Type_1_diabetes", "wikipedia"),
+            ("Type 1 diabetes, Wikipedia", "https://en.wikipedia.org/wiki/Type_1_diabetes", "wikipedia"),
         ],
     },
     {
@@ -2472,7 +2472,7 @@ DISEASES: list[dict[str, Any]] = [
         ],
         "timeline_base": (1990, 35_000_000, -0.04),
         "sources": [
-            ("WHO — Measles", "https://www.who.int/news-room/fact-sheets/detail/measles", "who"),
+            ("WHO, Measles", "https://www.who.int/news-room/fact-sheets/detail/measles", "who"),
         ],
     },
     {
@@ -2520,7 +2520,7 @@ DISEASES: list[dict[str, Any]] = [
         },
         "timeline_base": (1990, 240_000, 0.026),
         "sources": [
-            ("Vascular parkinsonism — Wikipedia", "https://en.wikipedia.org/wiki/Vascular_parkinsonism", "wikipedia"),
+            ("Vascular parkinsonism, Wikipedia", "https://en.wikipedia.org/wiki/Vascular_parkinsonism", "wikipedia"),
         ],
     },
     {
@@ -2573,7 +2573,7 @@ DISEASES: list[dict[str, Any]] = [
         },
         "timeline_base": (1990, 300_000, 0.035),
         "sources": [
-            ("WHO — Liver cancer", "https://www.who.int/news-room/fact-sheets/detail/liver-cancer", "who"),
+            ("WHO, Liver cancer", "https://www.who.int/news-room/fact-sheets/detail/liver-cancer", "who"),
         ],
     },
     {
@@ -2623,7 +2623,7 @@ DISEASES: list[dict[str, Any]] = [
         },
         "timeline_base": (1990, 180_000_000, 0.018),
         "sources": [
-            ("ADHD — Wikipedia", "https://en.wikipedia.org/wiki/Attention_deficit_hyperactivity_disorder", "wikipedia"),
+            ("ADHD, Wikipedia", "https://en.wikipedia.org/wiki/Attention_deficit_hyperactivity_disorder", "wikipedia"),
         ],
     },
     {
@@ -2673,7 +2673,7 @@ DISEASES: list[dict[str, Any]] = [
         },
         "timeline_base": (1990, 8_000_000, 0.06),
         "sources": [
-            ("WHO — Autism", "https://www.who.int/news-room/fact-sheets/detail/autism-spectrum-disorders", "who"),
+            ("WHO, Autism", "https://www.who.int/news-room/fact-sheets/detail/autism-spectrum-disorders", "who"),
         ],
     },
 ]

@@ -56,7 +56,7 @@ export function BodyExplorerPage() {
           </div>
           <h2 className="heading text-2xl">Corps humain</h2>
           <p className="text-sm text-ink-mute mt-1">
-            Modèle BodyParts3D — un seul jeu de coordonnées partagé entre
+            Modèle BodyParts3D, un seul jeu de coordonnées partagé entre
             tous les systèmes.
           </p>
         </div>
@@ -198,7 +198,7 @@ export function BodyExplorerPage() {
             Source des modèles
           </div>
           <p className="text-xs text-ink-mute leading-relaxed">
-            BodyParts3D / Anatomography — DBCLS, Japon. Licence
+            BodyParts3D / Anatomography, DBCLS, Japon. Licence
             CC BY-SA 2.1 JP. Modèles téléchargés depuis le miroir
             Kevin-Mattheus-Moerman puis convertis en GLB indexés via FMA.
           </p>

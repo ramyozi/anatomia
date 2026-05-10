@@ -95,7 +95,7 @@ export function HomePage() {
           to="/maladies"
           icon={<Microscope className="w-5 h-5" />}
           title="Bibliothèque de maladies"
-          desc="Symptômes, causes, traitements, prévalence — sourcés et annotés. De l'asthme à la maladie de Lyme."
+          desc="Symptômes, causes, traitements, prévalence. Chaque fiche est sourcée et annotée, de l'asthme à la maladie de Lyme."
           accent="coral"
         />
         <Pillar
