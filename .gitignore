@@ -62,3 +62,7 @@ data/
 .cache/
 
 .vercel
+
+# API-call scratchpads (Render / Vercel deploy automation)
+scripts/.render-*.json
+scripts/.vercel-*.json

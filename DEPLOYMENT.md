@@ -1,5 +1,86 @@
 # Anatomia — Production deployment
 
+The live stack runs on **Vercel** (frontend) + **Render** (backend) +
+**Sentry** (monitoring). The Ubuntu VPS recipe further below is kept as
+an alternative for self-hosting.
+
+## Live URLs
+
+| Surface  | URL                                            |
+|----------|------------------------------------------------|
+| Frontend | https://anatomia.ramzibenmansour.com           |
+| Backend  | https://anatomia-api.onrender.com              |
+| Health   | https://anatomia-api.onrender.com/api/health   |
+| Sentry   | https://ramzibenmansour.sentry.io/projects/anatomia-backend/ |
+
+## Topology (managed PaaS)
+
+```
+       browser
+          │
+          ▼
+  ┌───────────────────┐         /api/*  Vercel rewrite (server-side)
+  │  Vercel — Vite SPA│ ──────────────────────────────────────────┐
+  │  anatomia.        │                                            │
+  │  ramzibenmansour. │   static  /models/*.glb  /assets/*         │
+  │  com              │ ◄─── immutable cache 1y / 30d              │
+  └───────────────────┘                                            ▼
+                                                ┌──────────────────────┐
+                                                │ Render — FastAPI     │
+                                                │ Docker, Frankfurt    │
+                                                │ anatomia-api.        │
+                                                │ onrender.com         │
+                                                └─────┬────────────────┘
+                                                      │
+                                                      ▼
+                                          /app/anatomia.db (520 KB)
+                                          baked into image — re-seeds
+                                          deterministically on cold start
+```
+
+Render's free plan ships **no persistent disk**, so the SQLite catalogue
+is built into the Docker image (see `backend/Dockerfile` +
+`backend/docker-entrypoint.sh`). The data is read-only in practice
+(organs / diseases / countries / glossary), so this is intentional.
+Upgrading to Starter + Disk: uncomment the `disk` block in `render.yaml`
+and set `DATABASE_URL=sqlite:////data/anatomia.db` — the entrypoint will
+auto-copy the baked-in seed to the disk on first boot.
+
+## Redeploy
+
+| Surface  | Trigger                                                 |
+|----------|---------------------------------------------------------|
+| Backend  | push to `main` (Render `autoDeploy: yes`)               |
+| Frontend | push to `main` (Vercel auto-deploys)                    |
+| Env vars | Render dashboard → service → Environment → save → redeploy auto-triggers |
+
+## Provisioning recap (one-time)
+
+1. **Render service** — `POST /v1/services` with the body in
+   `render.yaml`. The CLI-friendly equivalent is `curl -X POST
+   https://api.render.com/v1/services -H "Authorization: Bearer $RENDER_API_KEY"
+   -d @scripts/.render-create.json` (gitignored).
+2. **Env vars** — `PUT /v1/services/<id>/env-vars` with the full list
+   (`CORS_ORIGINS`, `SENTRY_DSN`, `SECRET_KEY` generated locally with
+   `python -c "import secrets;print(secrets.token_urlsafe(48))"`).
+3. **Vercel domain** — `anatomia.ramzibenmansour.com` is attached to the
+   `anatomia` project; SSO protection turned off via
+   `PATCH /v9/projects/anatomia -d '{"ssoProtection":null}'`.
+4. **Sentry** — DSNs minted from the
+   `ramzibenmansour/anatomia-backend` and `…/anatomia-frontend`
+   projects. Backend reads `SENTRY_DSN`; frontend reads
+   `VITE_SENTRY_DSN` at build time.
+
+## Cold-start latency
+
+Free Render Web Services sleep after 15 min of inactivity. First request
+after a sleep takes ~30 s while the container wakes up; subsequent
+requests are <300 ms p50 from Frankfurt to FR users.
+
+---
+
+# Alternative: self-hosted VPS
+
 Self-contained guide to bring the Vite + FastAPI stack online on an
 Ubuntu 24.04 VPS, with HTTPS via Let's Encrypt and a bind-mounted
 SQLite database that survives container rebuilds.
