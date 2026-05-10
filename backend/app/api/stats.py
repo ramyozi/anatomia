@@ -5,7 +5,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.db import get_db
-from app.models import Country, Disease, DiseaseTimelinePoint
+from app.models import Country, CountryDiseasePrevalence, Disease, DiseaseTimelinePoint, Organ
 
 router = APIRouter()
 
@@ -57,6 +57,59 @@ def global_stats(db: Session = Depends(get_db)) -> dict:
         for y in range(1980, 2025)
     ]
 
+    # Top diseases by prevalence (per 100k)
+    top_prevalence = sorted(
+        [
+            {
+                "label": d.name,
+                "value": float(d.prevalence_per_100k or 0),
+                "category": d.category,
+            }
+            for d in diseases
+            if d.prevalence_per_100k
+        ],
+        key=lambda x: -x["value"],
+    )[:10]
+
+    # Organs / diseases counted per anatomical system. We count both how
+    # many ORGANS belong to a system and how many DISEASES touch at least
+    # one organ from that system — gives a quick read on which system is
+    # both the most populated and the most clinically loaded.
+    organs = db.execute(select(Organ)).scalars().all()
+    organ_to_system = {o.slug: o.system for o in organs}
+    organs_per_system = Counter(o.system for o in organs if o.system)
+    diseases_per_system: Counter[str] = Counter()
+    for d in diseases:
+        sys_for_d = {organ_to_system[s] for s in (d.organs or []) if s in organ_to_system}
+        for s in sys_for_d:
+            diseases_per_system[s] += 1
+    system_breakdown = [
+        {
+            "system": s,
+            "organs": organs_per_system.get(s, 0),
+            "diseases": diseases_per_system.get(s, 0),
+        }
+        for s in sorted(set(organs_per_system) | set(diseases_per_system))
+    ]
+
+    # Country burden = sum of all per-100k prevalences. Useful for the
+    # heatmap on the stats dashboard.
+    prev_rows = db.execute(select(CountryDiseasePrevalence)).scalars().all()
+    burden_by_country: dict[str, float] = defaultdict(float)
+    for p in prev_rows:
+        burden_by_country[p.country_code] += p.per_100k
+    country_burden = [
+        {"countryCode": c, "per100k": round(v, 1)}
+        for c, v in sorted(burden_by_country.items(), key=lambda x: -x[1])
+    ]
+
+    # Severity distribution
+    severity_counter = Counter(d.severity for d in diseases if d.severity)
+    severity_breakdown = [
+        {"label": k, "value": v}
+        for k, v in severity_counter.most_common()
+    ]
+
     return {
         "totalDiseasesTracked": len(diseases),
         "totalCountries": len(countries),
@@ -65,5 +118,9 @@ def global_stats(db: Session = Depends(get_db)) -> dict:
         "diseaseByCategory": by_cat,
         "burdenTimeline": burden_timeline,
         "topKillers": top_killers,
+        "topPrevalence": top_prevalence,
         "vaccinationCoverage": vaccination,
+        "systemBreakdown": system_breakdown,
+        "countryBurden": country_burden,
+        "severityBreakdown": severity_breakdown,
     }

@@ -37,10 +37,17 @@ def seed_if_empty(session: Session) -> None:
 
 
 def seed_all(session: Session) -> None:
+    # Flush between steps because the session uses autoflush=False, so
+    # later steps (eg seed_country_prevalences) won't see the rows
+    # added by earlier steps unless we flush explicitly.
     seed_organs(session)
+    session.flush()
     seed_diseases(session)
+    session.flush()
     seed_countries(session)
+    session.flush()
     seed_glossary(session)
+    session.flush()
     seed_country_prevalences(session)
     session.commit()
 

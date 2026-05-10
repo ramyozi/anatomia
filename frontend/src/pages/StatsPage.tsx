@@ -5,6 +5,7 @@ import { api } from '@/lib/api'
 import { TimelineChart } from '@/components/visuals/TimelineChart'
 import { BarChart } from '@/components/visuals/BarChart'
 import { CountUp } from '@/components/visuals/CountUp'
+import { WorldChoropleth } from '@/components/map/WorldChoropleth'
 
 interface GlobalStats {
   totalDiseasesTracked: number
@@ -15,6 +16,31 @@ interface GlobalStats {
   burdenTimeline: { year: number; cases: number }[]
   topKillers: { label: string; value: number }[]
   vaccinationCoverage: { year: number; cases: number }[]
+  topPrevalence?: { label: string; value: number; category: string }[]
+  systemBreakdown?: { system: string; organs: number; diseases: number }[]
+  countryBurden?: { countryCode: string; per100k: number }[]
+  severityBreakdown?: { label: string; value: number }[]
+}
+
+const SYSTEM_LABEL: Record<string, string> = {
+  nervous: 'Nerveux',
+  cardiovascular: 'Cardiovasculaire',
+  respiratory: 'Respiratoire',
+  digestive: 'Digestif',
+  urinary: 'Urinaire',
+  endocrine: 'Endocrinien',
+  sensory: 'Sensoriel',
+  lymphatic: 'Lymphatique',
+  skeletal: 'Squelettique',
+  muscular: 'Musculaire',
+  integumentary: 'Tégumentaire',
+}
+
+const SEVERITY_LABEL: Record<string, string> = {
+  mild: 'Légère',
+  moderate: 'Modérée',
+  severe: 'Sévère',
+  critical: 'Critique',
 }
 
 export function StatsPage() {
@@ -85,6 +111,59 @@ export function StatsPage() {
         <Section title="Causes de mortalité" subtitle="Décès annuels estimés">
           <BarChart data={data.topKillers} color="#ff6b6b" />
         </Section>
+
+        {data.topPrevalence && data.topPrevalence.length > 0 && (
+          <Section
+            title="Top maladies par prévalence"
+            subtitle="Cas pour 100 000 habitants (estimations)"
+          >
+            <BarChart
+              data={data.topPrevalence.map(p => ({ label: p.label, value: p.value }))}
+              color="#9af2e4"
+            />
+          </Section>
+        )}
+
+        {data.systemBreakdown && data.systemBreakdown.length > 0 && (
+          <Section
+            title="Charge par système anatomique"
+            subtitle="Maladies répertoriées qui touchent au moins un organe du système"
+          >
+            <BarChart
+              data={data.systemBreakdown.map(s => ({
+                label: SYSTEM_LABEL[s.system] ?? s.system,
+                value: s.diseases,
+              }))}
+              color="#c4a4ff"
+            />
+          </Section>
+        )}
+
+        {data.severityBreakdown && data.severityBreakdown.length > 0 && (
+          <Section
+            title="Distribution par sévérité"
+            subtitle="Répartition du catalogue par niveau de gravité clinique"
+          >
+            <BarChart
+              data={data.severityBreakdown.map(s => ({
+                label: SEVERITY_LABEL[s.label] ?? s.label,
+                value: s.value,
+              }))}
+              color="#e9c46a"
+            />
+          </Section>
+        )}
+
+        {data.countryBurden && data.countryBurden.length > 0 && (
+          <Section
+            title="Fardeau cumulé par pays"
+            subtitle="Somme des prévalences (toutes maladies confondues)"
+          >
+            <div className="h-[300px] -mx-2">
+              <WorldChoropleth data={data.countryBurden} />
+            </div>
+          </Section>
+        )}
       </div>
     </div>
   )
