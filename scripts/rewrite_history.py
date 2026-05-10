@@ -48,9 +48,10 @@ def list_commits() -> list[Commit]:
     out = git("rev-list", "--all", "--topo-order", "--reverse", "--format=%H|%P|%s")
     commits: list[Commit] = []
     for block in out.split("commit ")[1:]:
-        # rev-list with --format prints "commit <sha>\n%H|%P|%s"
-        line = block.strip().splitlines()[1]
-        sha, parents, subject = line.split("|", 2)
+        lines = block.strip().splitlines()
+        if len(lines) < 2:
+            continue  # last block may be empty
+        sha, parents, subject = lines[1].split("|", 2)
         commits.append(Commit(sha=sha, parents=parents.split() if parents else [], subject=subject))
     return commits
 
