@@ -147,10 +147,11 @@ export function BodyExplorerPage() {
             onRegionHover={setHovered}
             onRegionClick={setSelected}
             fadeRest={fadeRest}
-            tweenCamera
+            tweenCamera={false}
           />
           <SceneDebug id="body" />
           <OrbitControls
+            makeDefault
             enablePan={false}
             minDistance={1.2}
             maxDistance={6}

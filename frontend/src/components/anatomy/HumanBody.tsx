@@ -77,18 +77,21 @@ function Inner({
       const mesh = obj as THREE.Mesh
       const name = mesh.name || mesh.parent?.name || 'unknown'
       const baseColor = new THREE.Color(colorForRegion(name))
+      // Strip vertex colours from the geometry — trimesh writes them per
+      // vertex but they shadow our per-region tint when the GLTFLoader
+      // auto-enables ``vertexColors`` on the material. We also recompute
+      // smooth normals so the lighting actually responds.
+      const geom = mesh.geometry as THREE.BufferGeometry
+      if (geom.getAttribute('color')) geom.deleteAttribute('color')
+      if (!geom.getAttribute('normal')) geom.computeVertexNormals()
       const material = new THREE.MeshStandardMaterial({
         color: baseColor,
         vertexColors: false,
         metalness: 0,
-        roughness: 0.62,
-        emissive: baseColor.clone(),
-        emissiveIntensity: 0.06,
-        // Only flip transparency on when we actually need it (fadeRest);
-        // we mutate ``transparent`` and ``opacity`` per-frame.
+        roughness: 0.85,
         transparent: false,
         opacity: 1,
-        side: THREE.FrontSide,
+        side: THREE.DoubleSide,
       })
       mesh.material = material
       mesh.castShadow = true
@@ -99,20 +102,39 @@ function Inner({
     return out
   }, [gltfScene])
 
-  // Tween-target storage for the camera.
+  // Tween-target storage for the camera. We deliberately re-target the
+  // camera ONLY when the system actually changes (not on the first mount
+  // or when the user hovered a region) — that keeps the user's manual
+  // zoom / rotation intact while still pulling the view towards the
+  // right anatomical area when they pick a different system.
   const camTarget = useRef({ position: new THREE.Vector3(), lookAt: new THREE.Vector3() })
+  const isFirstMount = useRef(true)
+  const tweenActive = useRef(false)
+  const tweenStarted = useRef(0)
   useEffect(() => {
     const t = cameraTarget(system)
     camTarget.current.position.copy(t.position)
     camTarget.current.lookAt.copy(t.lookAt)
-  }, [system])
+    if (isFirstMount.current) {
+      // On first mount, snap directly so the model isn't off-screen
+      // for the first second.
+      camera.position.copy(t.position)
+      camera.lookAt(t.lookAt)
+      isFirstMount.current = false
+      return
+    }
+    tweenActive.current = true
+    tweenStarted.current = performance.now()
+  }, [system, camera])
 
   useFrame((_, dt) => {
     if (!groupRef.current) return
     if (autoRotate) groupRef.current.rotation.y += dt * 0.18
 
     // Apply system filter (visibility / opacity). Re-run every frame is
-    // dirt cheap (~45 meshes, just boolean / number assignments).
+    // dirt cheap (~45 meshes, just boolean / number assignments). The
+    // highlighted region gets a brighter color tint so the user sees
+    // which one is targeted without us touching the lighting setup.
     for (const r of regions) {
       const inSystem = regionMatchesSystem(r.name, system)
       const isHighlighted = r.name === highlighted
@@ -121,22 +143,30 @@ function Inner({
         r.material.transparent = false
         r.material.depthWrite = true
         r.material.opacity = 1
-        r.material.emissiveIntensity = isHighlighted ? 0.45 : 0.06
+        r.material.emissive = isHighlighted
+          ? new THREE.Color(r.material.color).multiplyScalar(0.5)
+          : new THREE.Color(0, 0, 0)
+        r.material.emissiveIntensity = isHighlighted ? 1 : 0
       } else if (fadeRest) {
         r.mesh.visible = true
         r.material.transparent = true
         r.material.depthWrite = false
         r.material.opacity = 0.05
-        r.material.emissiveIntensity = 0.02
+        r.material.emissiveIntensity = 0
       } else {
         r.mesh.visible = false
       }
     }
 
-    // Tween camera towards the active system's framing.
-    if (tweenCamera) {
-      camera.position.lerp(camTarget.current.position, dt * 1.6)
-      camera.lookAt(camTarget.current.lookAt)
+    // Only pull the camera while the tween is "live" (i.e. just after a
+    // system change) and stop after the user starts dragging — we don't
+    // want OrbitControls and our lerp fighting forever. We also bail
+    // out as soon as we're close enough to the target.
+    if (tweenCamera && tweenActive.current) {
+      camera.position.lerp(camTarget.current.position, dt * 2.2)
+      const dist = camera.position.distanceTo(camTarget.current.position)
+      const elapsedMs = performance.now() - tweenStarted.current
+      if (dist < 0.02 || elapsedMs > 1200) tweenActive.current = false
     }
   })
 

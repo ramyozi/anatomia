@@ -59,15 +59,17 @@ export function Stage({
 }
 
 /**
- * Renderer settings shared across all canvases. We use a clear color
- * that matches the "medical" UI panel so the canvas blends seamlessly
- * instead of showing a black box.
+ * Renderer settings shared across all canvases. We deliberately use a
+ * neutral tone mapping (Linear) and a gentle exposure to keep the
+ * anatomical colours readable — ACES Filmic crushes mid-greys towards
+ * black on lambert-like surfaces, which made the bones look almost
+ * pitch black against the medical-grey backdrop.
  */
 export const ANATOMICAL_GL_SETTINGS = {
   antialias: true,
   alpha: true,
   powerPreference: 'high-performance' as const,
-  toneMapping: THREE.ACESFilmicToneMapping,
-  toneMappingExposure: 1.15,
+  toneMapping: THREE.NoToneMapping,
+  toneMappingExposure: 1.0,
   outputColorSpace: THREE.SRGBColorSpace,
 }

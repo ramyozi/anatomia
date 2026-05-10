@@ -259,11 +259,12 @@ export function SystemsPage() {
             <HumanBody
               system={SYSTEM_KEY_FROM_SLUG[def.slug] ?? 'all'}
               fadeRest={false}
-              tweenCamera
+              tweenCamera={false}
             />
           </Suspense>
           <SceneDebug id={`system-${def.slug}`} />
           <OrbitControls
+            makeDefault
             enablePan={false}
             minDistance={1.4}
             maxDistance={6}
