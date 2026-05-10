@@ -113,6 +113,11 @@ DAYS: list[tuple[int, list[tuple[int, int]], str]] = [
           (14, 52), (15, 32), (16, 18), (17, 4), (18, 12), (19, 38), (20, 22),
           (21, 8)],
      "bp3d-fix"),
+    # day 12 — Fri May 22: anatomical systems consolidation (single GLB +
+    # systems registry + working filter)
+    (12, [(9, 18), (9, 56), (10, 32), (11, 8), (11, 44), (13, 36), (14, 18),
+          (14, 58), (15, 42), (16, 28), (17, 14), (18, 32), (19, 48), (21, 4)],
+     "systems"),
 ]
 
 START_DATE = datetime(2026, 5, 10, tzinfo=timezone.utc)
