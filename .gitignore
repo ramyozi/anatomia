@@ -52,6 +52,11 @@ redis_data/
 # Source assets (BodyParts3D upstream STL repo, ~1.8 GB)
 assets-source/
 
+# Production runtime data
+.env
+data/
+!data/.gitkeep
+
 # Divers
 *.bak
 .cache/

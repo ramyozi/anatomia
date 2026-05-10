@@ -1,7 +1,9 @@
+import logging
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
 
 from app.api import (
     admin,
@@ -18,10 +20,21 @@ from app.config import get_settings
 from app.db import init_db
 
 
+log = logging.getLogger("anatomia")
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):  # noqa: ARG001
+    settings = get_settings()
+    logging.basicConfig(
+        level=logging.INFO if settings.app_env == "production" else logging.DEBUG,
+        format="%(asctime)s %(levelname)s %(name)s %(message)s",
+    )
+    log.info("anatomia starting up (env=%s)", settings.app_env)
     init_db()
+    log.info("database initialized")
     yield
+    log.info("anatomia shutting down")
 
 
 def create_app() -> FastAPI:
@@ -39,6 +52,9 @@ def create_app() -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
+    # Compress JSON responses past 1 KB — saves a lot on /diseases,
+    # /stats, /organs which return larger payloads.
+    app.add_middleware(GZipMiddleware, minimum_size=1024)
 
     app.include_router(organs.router, prefix="/api/organs", tags=["organs"])
     app.include_router(diseases.router, prefix="/api/diseases", tags=["diseases"])

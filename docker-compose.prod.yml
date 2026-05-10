@@ -1,0 +1,84 @@
+# Production compose file for Anatomia.
+#
+# - SQLite database is bind-mounted from ./data/anatomia.db so it
+#   survives container rebuilds.
+# - Frontend nginx terminates HTTP on port 80 inside the network and is
+#   itself reverse-proxied by the host's nginx + Let's Encrypt (see
+#   DEPLOYMENT.md). Both services restart automatically.
+# - Healthchecks ensure ``frontend`` only marks ready once the SPA is
+#   reachable; ``backend`` once ``/api/health`` answers.
+#
+# Bring up:    docker compose -f docker-compose.prod.yml up -d --build
+# Tear down:   docker compose -f docker-compose.prod.yml down
+# Tail logs:   docker compose -f docker-compose.prod.yml logs -f
+
+name: anatomia
+
+services:
+  backend:
+    container_name: anatomia-backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      APP_ENV: production
+      APP_HOST: 0.0.0.0
+      APP_PORT: 8000
+      DATABASE_URL: ${DATABASE_URL:-sqlite:////data/anatomia.db}
+      CORS_ORIGINS: ${CORS_ORIGINS:-https://anatomia.example.com}
+      SECRET_KEY: ${SECRET_KEY:?Define SECRET_KEY in .env}
+    volumes:
+      # Bind-mount the SQLite file so it lives on the host and survives
+      # container rebuilds. The parent ``data`` directory is created on
+      # first run by the deploy script.
+      - ./data:/data
+    expose:
+      - "8000"
+    # No host port exposed: the frontend nginx is the only ingress.
+    networks:
+      - anatomia-net
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  frontend:
+    container_name: anatomia-frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+    # The host's nginx (Let's Encrypt-managed) is expected to upstream
+    # to 127.0.0.1:8080 — keep this port stable so the host config
+    # doesn't change between deploys.
+    ports:
+      - "127.0.0.1:8080:80"
+    networks:
+      - anatomia-net
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+networks:
+  anatomia-net:
+    name: anatomia-net
+    driver: bridge

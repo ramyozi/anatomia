@@ -1,5 +1,10 @@
 node_modules
 dist
 .vite
-.env*
+.cache
+.env
+.env.*
 *.log
+.eslintrc.cjs
+Dockerfile
+.dockerignore
