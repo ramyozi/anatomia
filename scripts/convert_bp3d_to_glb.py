@@ -100,16 +100,19 @@ COMPOSITES: list[CompositeSpec] = [
     CompositeSpec(
         slug="cerveau",
         label="Brain (cerebellum + midbrain + thalami + hippocampi)",
+        # Anatomically-tuned palette: shades of pinkish-gray for cortical
+        # tissue, slight color differentiation for sub-cortical regions.
+        # No saturated rainbow.
         parts=[
-            ("cervelet",    "FMA67944",  "#caa3c7"),  # cerebellum
-            ("midbrain",    "FMA61993nsn","#a78bfa"),  # midbrain (no-skin-name suffix)
-            ("thalamus-d",  "FMA258714", "#9af2e4"),  # right thalamus
-            ("thalamus-g",  "FMA258716", "#9af2e4"),  # left thalamus
-            ("hippocampe-d","FMA72713",  "#e8c1ff"),  # right hippocampus
-            ("hippocampe-g","FMA72714",  "#e8c1ff"),  # left hippocampus
-            ("hypothalamus","FMA62008nsn","#fbbf77"), # hypothalamus
-            ("fornix",      "FMA61970",  "#caa3c7"),  # commissure of fornix
-            ("peduncle",    "FMA62394",  "#a78bfa"),  # peduncle of midbrain
+            ("cervelet",    "FMA67944",  "#c2a09a"),  # cerebellum — pinkish gray
+            ("midbrain",    "FMA61993nsn","#b48f8a"),  # midbrain — slightly darker
+            ("thalamus-d",  "FMA258714", "#d8b4a8"),  # right thalamus — warm tan
+            ("thalamus-g",  "FMA258716", "#d8b4a8"),  # left thalamus
+            ("hippocampe-d","FMA72713",  "#a98273"),  # right hippocampus — deeper
+            ("hippocampe-g","FMA72714",  "#a98273"),  # left hippocampus
+            ("hypothalamus","FMA62008nsn","#cea38f"), # hypothalamus
+            ("fornix",      "FMA61970",  "#bfa090"),  # commissure of fornix
+            ("peduncle",    "FMA62394",  "#b89084"),  # peduncle of midbrain
         ],
         target_triangles_per_part=14_000,
     ),
@@ -148,24 +151,90 @@ COMPOSITES: list[CompositeSpec] = [
         slug="squelette",
         label="Skeleton (axial + appendicular major bones)",
         parts=[
-            ("scapula-r",   "FMA13395",  "#e9e2cf"),
-            ("scapula-l",   "FMA13396",  "#e9e2cf"),
-            ("humerus-r",   "FMA23130",  "#e9e2cf"),
-            ("humerus-l",   "FMA23131",  "#e9e2cf"),
-            ("femur-r",     "FMA24474",  "#e9e2cf"),
-            ("femur-l",     "FMA24475",  "#e9e2cf"),
-            ("tibia-r",     "FMA24477",  "#e9e2cf"),
-            ("tibia-l",     "FMA24478",  "#e9e2cf"),
-            ("sacrum",      "FMA16202",  "#e9e2cf"),
-            ("mandible",    "FMA52748",  "#e9e2cf"),
-            ("sternum",     "FMA7487",   "#e9e2cf"),
-            ("vertebra-l1", "FMA13072",  "#e9e2cf"),
-            ("vertebra-l2", "FMA13073",  "#e9e2cf"),
-            ("vertebra-l3", "FMA13074",  "#e9e2cf"),
-            ("vertebra-l4", "FMA13075",  "#e9e2cf"),
-            ("vertebra-l5", "FMA13076",  "#e9e2cf"),
+            ("scapula-r",   "FMA13395",  "#efe7d4"),
+            ("scapula-l",   "FMA13396",  "#efe7d4"),
+            ("humerus-r",   "FMA23130",  "#efe7d4"),
+            ("humerus-l",   "FMA23131",  "#efe7d4"),
+            ("femur-r",     "FMA24474",  "#efe7d4"),
+            ("femur-l",     "FMA24475",  "#efe7d4"),
+            ("tibia-r",     "FMA24477",  "#efe7d4"),
+            ("tibia-l",     "FMA24478",  "#efe7d4"),
+            ("sacrum",      "FMA16202",  "#efe7d4"),
+            ("mandible",    "FMA52748",  "#efe7d4"),
+            ("sternum",     "FMA7487",   "#efe7d4"),
+            ("vertebra-l1", "FMA13072",  "#efe7d4"),
+            ("vertebra-l2", "FMA13073",  "#efe7d4"),
+            ("vertebra-l3", "FMA13074",  "#efe7d4"),
+            ("vertebra-l4", "FMA13075",  "#efe7d4"),
+            ("vertebra-l5", "FMA13076",  "#efe7d4"),
         ],
         target_triangles_per_part=10_000,
+    ),
+    # The single source of truth for the whole-body view: every BP3D
+    # primitive we ship, kept in BodyParts3D's native frame so they line up
+    # anatomically. The whole assembly is normalized as ONE block at the
+    # end, so the scale is unique across all parts. The frontend filters
+    # which regions are visible per system, instead of stacking GLBs.
+    CompositeSpec(
+        slug="human-body",
+        label="Whole-body anatomical assembly (all primitives in native frame)",
+        parts=[
+            # nervous (system="nervous")
+            ("brain__cerebellum",    "FMA67944",   "#c2a09a"),
+            ("brain__midbrain",      "FMA61993nsn","#b48f8a"),
+            ("brain__thalamus-r",    "FMA258714",  "#d8b4a8"),
+            ("brain__thalamus-l",    "FMA258716",  "#d8b4a8"),
+            ("brain__hippocampus-r", "FMA72713",   "#a98273"),
+            ("brain__hippocampus-l", "FMA72714",   "#a98273"),
+            ("brain__hypothalamus",  "FMA62008nsn","#cea38f"),
+            ("brain__fornix",        "FMA61970",   "#bfa090"),
+            ("brain__peduncle",      "FMA62394",   "#b89084"),
+            ("nervous__spinal-canal","FMA78497",   "#c4a4ff"),
+            # cardiovascular
+            ("cardio__heart",        "FMA7274",    "#a83c3c"),
+            # respiratory
+            ("respi__trachea",       "FMA7394",    "#7eb3b7"),
+            ("respi__lung-up-r",     "FMA7333",    "#bf8590"),
+            ("respi__lung-mid-r",    "FMA7383",    "#b87c87"),
+            ("respi__lung-low-r",    "FMA7337",    "#a06b76"),
+            ("respi__lung-up-l",     "FMA7370",    "#bf8590"),
+            ("respi__lung-low-l",    "FMA7371",    "#a06b76"),
+            ("respi__diaphragm",     "FMA13295",   "#aa4c4c"),
+            # digestive
+            ("digestive__esophagus", "FMA7131",    "#c89274"),
+            ("digestive__stomach",   "FMA7148",    "#c47a4a"),
+            ("digestive__liver",     "FMA7197",    "#7a3a2a"),
+            ("digestive__gallbladder","FMA7202",   "#5a8a4a"),
+            ("digestive__pancreas",  "FMA7198nsn", "#d6a878"),
+            ("digestive__spleen",    "FMA7196",    "#7a3447"),
+            # urinary
+            ("urinary__kidney-r",    "FMA7204",    "#7a3a3a"),
+            ("urinary__kidney-l",    "FMA7205",    "#7a3a3a"),
+            ("urinary__bladder",     "FMA15900",   "#cfb78c"),
+            # endocrine
+            ("endocrine__thyroid-cart","FMA55099", "#e0bf8a"),
+            # sensory
+            ("sensory__eye",         "FMA12513",   "#9ab8b8"),
+            # skeletal — we keep them under skeletal.* so the system filter
+            # picks them up cleanly via the prefix.
+            ("skeletal__scapula-r",  "FMA13395",   "#efe7d4"),
+            ("skeletal__scapula-l",  "FMA13396",   "#efe7d4"),
+            ("skeletal__humerus-r",  "FMA23130",   "#efe7d4"),
+            ("skeletal__humerus-l",  "FMA23131",   "#efe7d4"),
+            ("skeletal__femur-r",    "FMA24474",   "#efe7d4"),
+            ("skeletal__femur-l",    "FMA24475",   "#efe7d4"),
+            ("skeletal__tibia-r",    "FMA24477",   "#efe7d4"),
+            ("skeletal__tibia-l",    "FMA24478",   "#efe7d4"),
+            ("skeletal__sacrum",     "FMA16202",   "#efe7d4"),
+            ("skeletal__mandible",   "FMA52748",   "#efe7d4"),
+            ("skeletal__sternum",    "FMA7487",    "#efe7d4"),
+            ("skeletal__vertebra-l1","FMA13072",   "#efe7d4"),
+            ("skeletal__vertebra-l2","FMA13073",   "#efe7d4"),
+            ("skeletal__vertebra-l3","FMA13074",   "#efe7d4"),
+            ("skeletal__vertebra-l4","FMA13075",   "#efe7d4"),
+            ("skeletal__vertebra-l5","FMA13076",   "#efe7d4"),
+        ],
+        target_triangles_per_part=8_000,
     ),
 ]
 
