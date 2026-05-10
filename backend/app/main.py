@@ -23,6 +23,33 @@ from app.db import init_db
 log = logging.getLogger("anatomia")
 
 
+def _init_sentry(settings) -> None:  # noqa: ANN001
+    """Boot Sentry only when a DSN is set — silent no-op otherwise."""
+    if not settings.sentry_dsn:
+        log.info("sentry disabled (no SENTRY_DSN)")
+        return
+    try:
+        import sentry_sdk
+        from sentry_sdk.integrations.fastapi import FastApiIntegration
+        from sentry_sdk.integrations.starlette import StarletteIntegration
+
+        sentry_sdk.init(
+            dsn=settings.sentry_dsn,
+            environment=settings.sentry_environment or settings.app_env,
+            release=settings.sentry_release or None,
+            traces_sample_rate=settings.sentry_traces_sample_rate,
+            send_default_pii=False,
+            integrations=[StarletteIntegration(), FastApiIntegration()],
+        )
+        log.info(
+            "sentry initialized (env=%s, sample=%s)",
+            settings.sentry_environment or settings.app_env,
+            settings.sentry_traces_sample_rate,
+        )
+    except Exception as exc:  # noqa: BLE001
+        log.warning("sentry init failed: %s", exc)
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):  # noqa: ARG001
     settings = get_settings()
@@ -31,6 +58,7 @@ async def lifespan(app: FastAPI):  # noqa: ARG001
         format="%(asctime)s %(levelname)s %(name)s %(message)s",
     )
     log.info("anatomia starting up (env=%s)", settings.app_env)
+    _init_sentry(settings)
     init_db()
     log.info("database initialized")
     yield

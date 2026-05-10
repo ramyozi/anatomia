@@ -1,0 +1,57 @@
+# Render Blueprint (Infrastructure-as-code) for the Anatomia backend.
+#
+# Deploy:
+#   1. Connect this repository in https://dashboard.render.com (Blueprints
+#      → New Blueprint → pick the repo + this file).
+#   2. Render bakes the FastAPI image from backend/Dockerfile, mounts a
+#      1 GB persistent disk at /data so SQLite survives redeploys, and
+#      exposes the service publicly on https://anatomia-api.onrender.com.
+#
+# Notes on the free tier:
+#   - Render Disks are only available on paid plans (Starter +). On the
+#     free Web Service the container's filesystem is ephemeral but the
+#     seed runs on every cold start, so the DB is regenerated from
+#     ``backend/app/data/`` deterministically — no data loss for the
+#     read-only catalogue we ship.
+#   - Free Web Services sleep after 15 min of inactivity; the first
+#     request after a sleep takes ~30 s to wake up.
+
+services:
+  - type: web
+    name: anatomia-api
+    runtime: docker
+    plan: free            # bump to "starter" if you attach a Disk
+    region: frankfurt     # closest free region to FR users
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    autoDeploy: true
+    healthCheckPath: /api/health
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_HOST
+        value: 0.0.0.0
+      - key: APP_PORT
+        value: "8000"
+      - key: DATABASE_URL
+        # On the free tier (no disk), keep the DB inside the working dir.
+        # When upgrading to a paid plan + Disk, change this to
+        #   sqlite:////data/anatomia.db
+        # and uncomment the ``disk`` block below.
+        value: sqlite:///./anatomia.db
+      - key: CORS_ORIGINS
+        # Set to your production frontend origin(s) after the first deploy.
+        sync: false
+      - key: SECRET_KEY
+        generateValue: true
+      - key: SENTRY_DSN
+        sync: false
+      - key: SENTRY_ENVIRONMENT
+        value: production
+      - key: SENTRY_TRACES_SAMPLE_RATE
+        value: "0.1"
+    # Uncomment when moving to a paid plan with persistent storage.
+    # disk:
+    #   name: anatomia-data
+    #   mountPath: /data
+    #   sizeGB: 1

@@ -13,6 +13,10 @@ class Settings(BaseSettings):
     database_url: str = "sqlite:///./anatomia.db"
     cors_origins: str = "http://localhost:5173,http://localhost:4173"
     secret_key: str = "dev-secret"
+    sentry_dsn: str = ""
+    sentry_environment: str = ""
+    sentry_release: str = ""
+    sentry_traces_sample_rate: float = 0.1
 
     @property
     def cors_origin_list(self) -> list[str]:

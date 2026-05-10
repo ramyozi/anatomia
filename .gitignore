@@ -60,3 +60,5 @@ data/
 # Divers
 *.bak
 .cache/
+
+.vercel
