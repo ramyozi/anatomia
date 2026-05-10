@@ -42,7 +42,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PIP_NO_CACHE_DIR=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
     APP_ENV=production \
-    DATABASE_URL=sqlite:////data/anatomia.db
+    DATABASE_URL=sqlite:///./anatomia.db
 
 WORKDIR /app
 
@@ -59,10 +59,18 @@ RUN pip install --no-index --find-links /wheels -r requirements.txt \
  && rm -rf /wheels
 
 COPY app ./app
+# Ship the pre-seeded SQLite catalogue with the image so a cold start on
+# the free tier (no persistent disk) already has all organs / diseases /
+# countries / glossary loaded. The .dockerignore explicitly allows
+# anatomia.db through.
+COPY anatomia.db ./anatomia.db
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
-# Persistent SQLite database lives under /data; the entrypoint script
-# bootstraps it on first run if the file doesn't exist yet.
-RUN mkdir -p /data && chown -R anatomia:anatomia /app /data
+# Persistent SQLite database can live under /data when a Disk is attached
+# (paid plan); the entrypoint copies the baked-in seed there on first run.
+RUN mkdir -p /data \
+ && chmod +x /usr/local/bin/docker-entrypoint.sh \
+ && chown -R anatomia:anatomia /app /data
 
 USER anatomia
 
@@ -71,6 +79,7 @@ EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
   CMD curl -fsS http://127.0.0.1:8000/api/health || exit 1
 
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 CMD ["uvicorn", "app.main:app", \
      "--host", "0.0.0.0", \
      "--port", "8000", \

@@ -40,8 +40,9 @@ services:
         # and uncomment the ``disk`` block below.
         value: sqlite:///./anatomia.db
       - key: CORS_ORIGINS
-        # Set to your production frontend origin(s) after the first deploy.
-        sync: false
+        # Comma-separated list of origins that may call this API.
+        # Override in the dashboard if you add more Vercel preview origins.
+        value: "https://anatomia.ramzibenmansour.com,https://anatomia.ramzibenmansour.fr,http://localhost:5173"
       - key: SECRET_KEY
         generateValue: true
       - key: SENTRY_DSN

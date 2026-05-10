@@ -7,8 +7,10 @@ venv
 .pytest_cache
 .mypy_cache
 .ruff_cache
-*.db
 *.db-journal
+# Keep the seeded production DB inside the image so cold starts have data
+# even when no persistent disk is attached.
+!anatomia.db
 .env
 .env.*
 tests
