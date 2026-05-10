@@ -19,7 +19,7 @@ export function SceneDebug({ id }: { id: string }) {
     const win = window as unknown as { __anatomia_debug?: DebugApi }
     if (!win.__anatomia_debug) win.__anatomia_debug = {}
     win.__anatomia_debug[id] = () => {
-      const meshes: { name: string; faces: number; vis: boolean }[] = []
+      const meshes: { name: string; faces: number; vis: boolean; color?: string; opacity?: number }[] = []
       let totalBox = new THREE.Box3()
       let any = false
       scene.traverse(obj => {
@@ -28,7 +28,14 @@ export function SceneDebug({ id }: { id: string }) {
         const geom = m.geometry as THREE.BufferGeometry
         const idx = geom.getIndex()
         const faces = idx ? idx.count / 3 : (geom.getAttribute('position')?.count ?? 0) / 3
-        meshes.push({ name: m.name || obj.parent?.name || 'mesh', faces, vis: m.visible })
+        const mat = m.material as THREE.MeshPhysicalMaterial
+        meshes.push({
+          name: m.name || obj.parent?.name || 'mesh',
+          faces,
+          vis: m.visible,
+          color: mat?.color?.getHexString?.(),
+          opacity: mat?.opacity,
+        })
         const box = new THREE.Box3().setFromObject(m)
         if (any) totalBox.union(box)
         else {
@@ -45,7 +52,8 @@ export function SceneDebug({ id }: { id: string }) {
       return {
         id,
         meshCount: meshes.length,
-        meshes: meshes.slice(0, 8),
+        visibleCount: meshes.filter(m => m.vis).length,
+        meshes: meshes.slice(0, 64),
         worldBox: any
           ? {
               min: totalBox.min.toArray().map(n => +n.toFixed(3)),
