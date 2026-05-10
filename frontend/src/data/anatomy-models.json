@@ -504,63 +504,63 @@
         {
           "regionSlug": "cervelet",
           "fmaId": "FMA67944",
-          "color": "#caa3c7",
+          "color": "#c2a09a",
           "facesAfter": 14000,
           "facesBefore": 238506
         },
         {
           "regionSlug": "midbrain",
           "fmaId": "FMA61993nsn",
-          "color": "#a78bfa",
+          "color": "#b48f8a",
           "facesAfter": 14000,
           "facesBefore": 56314
         },
         {
           "regionSlug": "thalamus-d",
           "fmaId": "FMA258714",
-          "color": "#9af2e4",
+          "color": "#d8b4a8",
           "facesAfter": 3298,
           "facesBefore": 3298
         },
         {
           "regionSlug": "thalamus-g",
           "fmaId": "FMA258716",
-          "color": "#9af2e4",
+          "color": "#d8b4a8",
           "facesAfter": 7396,
           "facesBefore": 7396
         },
         {
           "regionSlug": "hippocampe-d",
           "fmaId": "FMA72713",
-          "color": "#e8c1ff",
+          "color": "#a98273",
           "facesAfter": 4452,
           "facesBefore": 4452
         },
         {
           "regionSlug": "hippocampe-g",
           "fmaId": "FMA72714",
-          "color": "#e8c1ff",
+          "color": "#a98273",
           "facesAfter": 4280,
           "facesBefore": 4280
         },
         {
           "regionSlug": "hypothalamus",
           "fmaId": "FMA62008nsn",
-          "color": "#fbbf77",
+          "color": "#cea38f",
           "facesAfter": 14000,
           "facesBefore": 17690
         },
         {
           "regionSlug": "fornix",
           "fmaId": "FMA61970",
-          "color": "#caa3c7",
+          "color": "#bfa090",
           "facesAfter": 14000,
           "facesBefore": 46164
         },
         {
           "regionSlug": "peduncle",
           "fmaId": "FMA62394",
-          "color": "#a78bfa",
+          "color": "#b89084",
           "facesAfter": 14000,
           "facesBefore": 46834
         }
@@ -767,113 +767,489 @@
         {
           "regionSlug": "scapula-r",
           "fmaId": "FMA13395",
-          "color": "#e9e2cf",
+          "color": "#efe7d4",
           "facesAfter": 10000,
           "facesBefore": 113256
         },
         {
           "regionSlug": "scapula-l",
           "fmaId": "FMA13396",
-          "color": "#e9e2cf",
+          "color": "#efe7d4",
           "facesAfter": 10000,
           "facesBefore": 121816
         },
         {
           "regionSlug": "humerus-r",
           "fmaId": "FMA23130",
-          "color": "#e9e2cf",
+          "color": "#efe7d4",
           "facesAfter": 10000,
           "facesBefore": 16268
         },
         {
           "regionSlug": "humerus-l",
           "fmaId": "FMA23131",
-          "color": "#e9e2cf",
+          "color": "#efe7d4",
           "facesAfter": 10000,
           "facesBefore": 16492
         },
         {
           "regionSlug": "femur-r",
           "fmaId": "FMA24474",
-          "color": "#e9e2cf",
+          "color": "#efe7d4",
           "facesAfter": 10000,
           "facesBefore": 12990
         },
         {
           "regionSlug": "femur-l",
           "fmaId": "FMA24475",
-          "color": "#e9e2cf",
+          "color": "#efe7d4",
           "facesAfter": 10000,
           "facesBefore": 13202
         },
         {
           "regionSlug": "tibia-r",
           "fmaId": "FMA24477",
-          "color": "#e9e2cf",
+          "color": "#efe7d4",
           "facesAfter": 6850,
           "facesBefore": 6850
         },
         {
           "regionSlug": "tibia-l",
           "fmaId": "FMA24478",
-          "color": "#e9e2cf",
+          "color": "#efe7d4",
           "facesAfter": 6822,
           "facesBefore": 6822
         },
         {
           "regionSlug": "sacrum",
           "fmaId": "FMA16202",
-          "color": "#e9e2cf",
+          "color": "#efe7d4",
           "facesAfter": 10000,
           "facesBefore": 44416
         },
         {
           "regionSlug": "mandible",
           "fmaId": "FMA52748",
-          "color": "#e9e2cf",
+          "color": "#efe7d4",
           "facesAfter": 10000,
           "facesBefore": 21658
         },
         {
           "regionSlug": "sternum",
           "fmaId": "FMA7487",
-          "color": "#e9e2cf",
+          "color": "#efe7d4",
           "facesAfter": 10000,
           "facesBefore": 19916
         },
         {
           "regionSlug": "vertebra-l1",
           "fmaId": "FMA13072",
-          "color": "#e9e2cf",
+          "color": "#efe7d4",
           "facesAfter": 10000,
           "facesBefore": 12946
         },
         {
           "regionSlug": "vertebra-l2",
           "fmaId": "FMA13073",
-          "color": "#e9e2cf",
+          "color": "#efe7d4",
           "facesAfter": 6946,
           "facesBefore": 6946
         },
         {
           "regionSlug": "vertebra-l3",
           "fmaId": "FMA13074",
-          "color": "#e9e2cf",
+          "color": "#efe7d4",
           "facesAfter": 10000,
           "facesBefore": 14750
         },
         {
           "regionSlug": "vertebra-l4",
           "fmaId": "FMA13075",
-          "color": "#e9e2cf",
+          "color": "#efe7d4",
           "facesAfter": 10000,
           "facesBefore": 15426
         },
         {
           "regionSlug": "vertebra-l5",
           "fmaId": "FMA13076",
-          "color": "#e9e2cf",
+          "color": "#efe7d4",
           "facesAfter": 10000,
+          "facesBefore": 17282
+        }
+      ],
+      "license": "CC BY-SA 2.1 JP — BodyParts3D, DBCLS"
+    },
+    {
+      "slug": "human-body",
+      "kind": "composite",
+      "fmaId": "composite",
+      "label": "Whole-body anatomical assembly (all primitives in native frame)",
+      "color": "#7ee0d2",
+      "facesAfter": 329864,
+      "facesBefore": 1786630,
+      "byteSize": 6467000,
+      "path": "/models/anatomy/human-body.glb",
+      "parts": [
+        "FMA67944",
+        "FMA61993nsn",
+        "FMA258714",
+        "FMA258716",
+        "FMA72713",
+        "FMA72714",
+        "FMA62008nsn",
+        "FMA61970",
+        "FMA62394",
+        "FMA78497",
+        "FMA7274",
+        "FMA7394",
+        "FMA7333",
+        "FMA7383",
+        "FMA7337",
+        "FMA7370",
+        "FMA7371",
+        "FMA13295",
+        "FMA7131",
+        "FMA7148",
+        "FMA7197",
+        "FMA7202",
+        "FMA7198nsn",
+        "FMA7196",
+        "FMA7204",
+        "FMA7205",
+        "FMA15900",
+        "FMA55099",
+        "FMA12513",
+        "FMA13395",
+        "FMA13396",
+        "FMA23130",
+        "FMA23131",
+        "FMA24474",
+        "FMA24475",
+        "FMA24477",
+        "FMA24478",
+        "FMA16202",
+        "FMA52748",
+        "FMA7487",
+        "FMA13072",
+        "FMA13073",
+        "FMA13074",
+        "FMA13075",
+        "FMA13076"
+      ],
+      "regions": [
+        {
+          "regionSlug": "brain__cerebellum",
+          "fmaId": "FMA67944",
+          "color": "#c2a09a",
+          "facesAfter": 8000,
+          "facesBefore": 238506
+        },
+        {
+          "regionSlug": "brain__midbrain",
+          "fmaId": "FMA61993nsn",
+          "color": "#b48f8a",
+          "facesAfter": 8000,
+          "facesBefore": 56314
+        },
+        {
+          "regionSlug": "brain__thalamus-r",
+          "fmaId": "FMA258714",
+          "color": "#d8b4a8",
+          "facesAfter": 3298,
+          "facesBefore": 3298
+        },
+        {
+          "regionSlug": "brain__thalamus-l",
+          "fmaId": "FMA258716",
+          "color": "#d8b4a8",
+          "facesAfter": 7396,
+          "facesBefore": 7396
+        },
+        {
+          "regionSlug": "brain__hippocampus-r",
+          "fmaId": "FMA72713",
+          "color": "#a98273",
+          "facesAfter": 4452,
+          "facesBefore": 4452
+        },
+        {
+          "regionSlug": "brain__hippocampus-l",
+          "fmaId": "FMA72714",
+          "color": "#a98273",
+          "facesAfter": 4280,
+          "facesBefore": 4280
+        },
+        {
+          "regionSlug": "brain__hypothalamus",
+          "fmaId": "FMA62008nsn",
+          "color": "#cea38f",
+          "facesAfter": 8000,
+          "facesBefore": 17690
+        },
+        {
+          "regionSlug": "brain__fornix",
+          "fmaId": "FMA61970",
+          "color": "#bfa090",
+          "facesAfter": 8000,
+          "facesBefore": 46164
+        },
+        {
+          "regionSlug": "brain__peduncle",
+          "fmaId": "FMA62394",
+          "color": "#b89084",
+          "facesAfter": 8000,
+          "facesBefore": 46834
+        },
+        {
+          "regionSlug": "nervous__spinal-canal",
+          "fmaId": "FMA78497",
+          "color": "#c4a4ff",
+          "facesAfter": 3162,
+          "facesBefore": 3162
+        },
+        {
+          "regionSlug": "cardio__heart",
+          "fmaId": "FMA7274",
+          "color": "#a83c3c",
+          "facesAfter": 8000,
+          "facesBefore": 331592
+        },
+        {
+          "regionSlug": "respi__trachea",
+          "fmaId": "FMA7394",
+          "color": "#7eb3b7",
+          "facesAfter": 8000,
+          "facesBefore": 13870
+        },
+        {
+          "regionSlug": "respi__lung-up-r",
+          "fmaId": "FMA7333",
+          "color": "#bf8590",
+          "facesAfter": 8000,
+          "facesBefore": 30398
+        },
+        {
+          "regionSlug": "respi__lung-mid-r",
+          "fmaId": "FMA7383",
+          "color": "#b87c87",
+          "facesAfter": 8000,
+          "facesBefore": 23478
+        },
+        {
+          "regionSlug": "respi__lung-low-r",
+          "fmaId": "FMA7337",
+          "color": "#a06b76",
+          "facesAfter": 8000,
+          "facesBefore": 65592
+        },
+        {
+          "regionSlug": "respi__lung-up-l",
+          "fmaId": "FMA7370",
+          "color": "#bf8590",
+          "facesAfter": 8000,
+          "facesBefore": 40652
+        },
+        {
+          "regionSlug": "respi__lung-low-l",
+          "fmaId": "FMA7371",
+          "color": "#a06b76",
+          "facesAfter": 8000,
+          "facesBefore": 44288
+        },
+        {
+          "regionSlug": "respi__diaphragm",
+          "fmaId": "FMA13295",
+          "color": "#aa4c4c",
+          "facesAfter": 8000,
+          "facesBefore": 210666
+        },
+        {
+          "regionSlug": "digestive__esophagus",
+          "fmaId": "FMA7131",
+          "color": "#c89274",
+          "facesAfter": 2642,
+          "facesBefore": 2642
+        },
+        {
+          "regionSlug": "digestive__stomach",
+          "fmaId": "FMA7148",
+          "color": "#c47a4a",
+          "facesAfter": 8000,
+          "facesBefore": 9384
+        },
+        {
+          "regionSlug": "digestive__liver",
+          "fmaId": "FMA7197",
+          "color": "#7a3a2a",
+          "facesAfter": 8000,
+          "facesBefore": 19416
+        },
+        {
+          "regionSlug": "digestive__gallbladder",
+          "fmaId": "FMA7202",
+          "color": "#5a8a4a",
+          "facesAfter": 8000,
+          "facesBefore": 13846
+        },
+        {
+          "regionSlug": "digestive__pancreas",
+          "fmaId": "FMA7198nsn",
+          "color": "#d6a878",
+          "facesAfter": 8000,
+          "facesBefore": 11414
+        },
+        {
+          "regionSlug": "digestive__spleen",
+          "fmaId": "FMA7196",
+          "color": "#7a3447",
+          "facesAfter": 8000,
+          "facesBefore": 9016
+        },
+        {
+          "regionSlug": "urinary__kidney-r",
+          "fmaId": "FMA7204",
+          "color": "#7a3a3a",
+          "facesAfter": 8000,
+          "facesBefore": 12394
+        },
+        {
+          "regionSlug": "urinary__kidney-l",
+          "fmaId": "FMA7205",
+          "color": "#7a3a3a",
+          "facesAfter": 8000,
+          "facesBefore": 15358
+        },
+        {
+          "regionSlug": "urinary__bladder",
+          "fmaId": "FMA15900",
+          "color": "#cfb78c",
+          "facesAfter": 4016,
+          "facesBefore": 4016
+        },
+        {
+          "regionSlug": "endocrine__thyroid-cart",
+          "fmaId": "FMA55099",
+          "color": "#e0bf8a",
+          "facesAfter": 8000,
+          "facesBefore": 23146
+        },
+        {
+          "regionSlug": "sensory__eye",
+          "fmaId": "FMA12513",
+          "color": "#9ab8b8",
+          "facesAfter": 8000,
+          "facesBefore": 16330
+        },
+        {
+          "regionSlug": "skeletal__scapula-r",
+          "fmaId": "FMA13395",
+          "color": "#efe7d4",
+          "facesAfter": 8000,
+          "facesBefore": 113256
+        },
+        {
+          "regionSlug": "skeletal__scapula-l",
+          "fmaId": "FMA13396",
+          "color": "#efe7d4",
+          "facesAfter": 8000,
+          "facesBefore": 121816
+        },
+        {
+          "regionSlug": "skeletal__humerus-r",
+          "fmaId": "FMA23130",
+          "color": "#efe7d4",
+          "facesAfter": 8000,
+          "facesBefore": 16268
+        },
+        {
+          "regionSlug": "skeletal__humerus-l",
+          "fmaId": "FMA23131",
+          "color": "#efe7d4",
+          "facesAfter": 8000,
+          "facesBefore": 16492
+        },
+        {
+          "regionSlug": "skeletal__femur-r",
+          "fmaId": "FMA24474",
+          "color": "#efe7d4",
+          "facesAfter": 8000,
+          "facesBefore": 12990
+        },
+        {
+          "regionSlug": "skeletal__femur-l",
+          "fmaId": "FMA24475",
+          "color": "#efe7d4",
+          "facesAfter": 8000,
+          "facesBefore": 13202
+        },
+        {
+          "regionSlug": "skeletal__tibia-r",
+          "fmaId": "FMA24477",
+          "color": "#efe7d4",
+          "facesAfter": 6850,
+          "facesBefore": 6850
+        },
+        {
+          "regionSlug": "skeletal__tibia-l",
+          "fmaId": "FMA24478",
+          "color": "#efe7d4",
+          "facesAfter": 6822,
+          "facesBefore": 6822
+        },
+        {
+          "regionSlug": "skeletal__sacrum",
+          "fmaId": "FMA16202",
+          "color": "#efe7d4",
+          "facesAfter": 8000,
+          "facesBefore": 44416
+        },
+        {
+          "regionSlug": "skeletal__mandible",
+          "fmaId": "FMA52748",
+          "color": "#efe7d4",
+          "facesAfter": 8000,
+          "facesBefore": 21658
+        },
+        {
+          "regionSlug": "skeletal__sternum",
+          "fmaId": "FMA7487",
+          "color": "#efe7d4",
+          "facesAfter": 8000,
+          "facesBefore": 19916
+        },
+        {
+          "regionSlug": "skeletal__vertebra-l1",
+          "fmaId": "FMA13072",
+          "color": "#efe7d4",
+          "facesAfter": 8000,
+          "facesBefore": 12946
+        },
+        {
+          "regionSlug": "skeletal__vertebra-l2",
+          "fmaId": "FMA13073",
+          "color": "#efe7d4",
+          "facesAfter": 6946,
+          "facesBefore": 6946
+        },
+        {
+          "regionSlug": "skeletal__vertebra-l3",
+          "fmaId": "FMA13074",
+          "color": "#efe7d4",
+          "facesAfter": 8000,
+          "facesBefore": 14750
+        },
+        {
+          "regionSlug": "skeletal__vertebra-l4",
+          "fmaId": "FMA13075",
+          "color": "#efe7d4",
+          "facesAfter": 8000,
+          "facesBefore": 15426
+        },
+        {
+          "regionSlug": "skeletal__vertebra-l5",
+          "fmaId": "FMA13076",
+          "color": "#efe7d4",
+          "facesAfter": 8000,
           "facesBefore": 17282
         }
       ],
