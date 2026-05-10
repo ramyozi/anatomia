@@ -6,7 +6,9 @@ import { useQuery } from '@tanstack/react-query'
 import { Suspense } from 'react'
 import { ANATOMICAL_GL_SETTINGS, Stage } from '@/components/body/Stage'
 import { PostFX } from '@/components/body/PostFX'
-import { AnatomicalScene } from '@/components/anatomy/AnatomicalScene'
+import { HumanBody } from '@/components/anatomy/HumanBody'
+import { SceneDebug } from '@/components/anatomy/SceneDebug'
+import { type SystemKey } from '@/components/anatomy/systems'
 import { Breadcrumbs } from '@/components/nav/Breadcrumbs'
 import { api } from '@/lib/api'
 import type { OrganSummary } from '@/types'
@@ -160,6 +162,15 @@ export function SystemsPage() {
     respiratoire: 'respiratory',
     digestif: 'digestive',
   }
+  // and to the SystemKey used by the 3D viewer (HumanBody / systems.ts).
+  const SYSTEM_KEY_FROM_SLUG: Record<string, SystemKey> = {
+    squelettique: 'skeletal',
+    musculaire: 'skeletal', // no muscular meshes in BodyParts3D — fall back to skeleton
+    nerveux: 'nervous',
+    cardiovasculaire: 'cardiovascular',
+    respiratoire: 'respiratory',
+    digestif: 'digestive',
+  }
   const backendKey = SYSTEM_TO_BACKEND_KEY[def.slug]
   const linkedOrgans = (organs ?? []).filter(o => o.system === backendKey)
 
@@ -236,25 +247,26 @@ export function SystemsPage() {
         key={def.slug}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="relative bg-[radial-gradient(circle_at_50%_30%,rgba(126,224,210,0.14),transparent_70%)]"
+        className="relative bg-gradient-to-b from-[#e2e6ec] via-[#d3d8e0] to-[#bfc4cd]"
       >
         <Canvas
-          camera={{ position: [0, 0.5, 4.6], fov: 38 }}
+          camera={{ position: [0, 0, 3.2], fov: 38, near: 0.05, far: 50 }}
           gl={ANATOMICAL_GL_SETTINGS}
           dpr={[1, 2]}
         >
-          <Stage preset="studio" />
+          <Stage preset="apartment" />
           <Suspense fallback={null}>
-            <AnatomicalScene
-              showSkeleton={def.showSkeleton}
-              showOrgans={def.showOrgans}
+            <HumanBody
+              system={SYSTEM_KEY_FROM_SLUG[def.slug] ?? 'all'}
+              fadeRest={false}
+              tweenCamera
             />
           </Suspense>
-          <PostFX bloom={0.55} />
+          <SceneDebug id={`system-${def.slug}`} />
           <OrbitControls
             enablePan={false}
-            minDistance={3}
-            maxDistance={7}
+            minDistance={1.4}
+            maxDistance={6}
             enableDamping
             dampingFactor={0.08}
           />

@@ -13,60 +13,61 @@ interface Props {
     | 'night'
     | 'park'
     | 'lobby'
-  /** Soft accent glows around the subject. */
-  accents?: boolean
+  /** When true, adds a soft cool-toned rim and a single warm key (medical viewer look). */
+  medical?: boolean
 }
 
 /**
- * Reusable scene staging tuned for an anatomical-viewer feel:
+ * Reusable scene staging tuned for an anatomical-viewer feel.
  *
- * - HDRI for soft fill light and reflections.
- * - One bright key light from upper-front for the silhouette read.
- * - One cool fill from the opposite side to keep the shadow side legible
- *   (matches medical imaging conventions where deep shadows hide structure).
- * - Three subtle coloured point lights act as rim accents and give the
- *   "scientific render" look without making the anatomy cartoonish.
+ * Default mode = "medical": one warm key from the upper front, one cool
+ * fill from behind / above, very low ambient with HDRI doing the gentle
+ * environment fill. No saturated accent lights — bias is towards a
+ * neutral, lit-from-the-front clinical look.
  */
 export function Stage({
-  ambient = 0.18,
-  envIntensity = 0.55,
-  preset = 'studio',
-  accents = true,
+  ambient = 0.85,
+  envIntensity = 0.9,
+  preset = 'apartment',
+  medical = true,
 }: Props) {
   return (
     <>
       <Environment preset={preset} background={false} environmentIntensity={envIntensity} />
-      <ambientLight intensity={ambient} />
+      <ambientLight intensity={ambient} color="#f5f8fc" />
+      <hemisphereLight args={['#f8fafd', '#cfd6df', 1.1]} />
       <directionalLight
-        position={[2, 4, 4]}
-        intensity={1.85}
-        color="#fff5e8"
+        position={[2.5, 4, 4]}
+        intensity={medical ? 1.6 : 1.8}
+        color={medical ? '#fff7e8' : '#ffffff'}
         castShadow
         shadow-mapSize={[2048, 2048]}
+        shadow-bias={-0.0005}
       />
-      <directionalLight position={[-3, 1, 3]} intensity={0.55} color="#9ec8ff" />
-      <directionalLight position={[0, -4, -2]} intensity={0.18} color="#c4a4ff" />
-      {accents && (
-        <>
-          <pointLight position={[0.2, 0.6, 2.4]} intensity={1.0} color="#7ee0d2" distance={5} decay={1.4} />
-          <pointLight position={[-2.2, -0.8, 1.2]} intensity={0.55} color="#a78bfa" distance={5} decay={1.6} />
-          <pointLight position={[2.2, -0.8, 0.8]} intensity={0.4} color="#ff8b8b" distance={5} decay={1.6} />
-        </>
-      )}
+      <directionalLight
+        position={[-3, 2, 3]}
+        intensity={medical ? 0.85 : 0.6}
+        color="#dfeaf6"
+      />
+      <directionalLight
+        position={[0, -2, -2]}
+        intensity={0.35}
+        color="#eef2fa"
+      />
     </>
   )
 }
 
 /**
- * Renderer settings shared across all canvases — ACES tone mapping for
- * filmic highlights, anti-aliasing on, alpha on for transparent compositing
- * over the page background.
+ * Renderer settings shared across all canvases. We use a clear color
+ * that matches the "medical" UI panel so the canvas blends seamlessly
+ * instead of showing a black box.
  */
 export const ANATOMICAL_GL_SETTINGS = {
   antialias: true,
   alpha: true,
   powerPreference: 'high-performance' as const,
   toneMapping: THREE.ACESFilmicToneMapping,
-  toneMappingExposure: 1.05,
+  toneMappingExposure: 1.15,
   outputColorSpace: THREE.SRGBColorSpace,
 }
