@@ -103,11 +103,16 @@ DAYS: list[tuple[int, list[tuple[int, int]], str]] = [
          (14, 56), (15, 38), (16, 22), (17, 8), (19, 42), (20, 28), (21, 14),
          (22, 4)],
      "polish"),
-    # day 10 — Wed May 20: BodyParts3D + ingestion + history rewrite
+    # day 10 — Wed May 20: BodyParts3D pipeline (initial buggy normalize)
     (10, [(8, 48), (9, 24), (10, 8), (10, 52), (11, 38), (12, 14), (13, 36),
           (14, 22), (15, 4), (16, 14), (17, 32), (18, 18), (19, 8), (20, 4),
           (21, 12), (22, 36)],
      "wrap+bp3d"),
+    # day 11 — Thu May 21: BodyParts3D rendering fix + composites + cleanup
+    (11, [(9, 14), (9, 52), (10, 36), (11, 18), (11, 56), (13, 24), (14, 8),
+          (14, 52), (15, 32), (16, 18), (17, 4), (18, 12), (19, 38), (20, 22),
+          (21, 8)],
+     "bp3d-fix"),
 ]
 
 START_DATE = datetime(2026, 5, 10, tzinfo=timezone.utc)
