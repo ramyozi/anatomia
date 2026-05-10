@@ -14,11 +14,29 @@ interface QuizQuestion {
   topic: string
 }
 
+const TOPICS = [
+  { key: 'all', label: 'Tous les sujets' },
+  { key: 'Anatomie', label: 'Anatomie' },
+  { key: 'Pathologie', label: 'Pathologie' },
+  { key: 'Catégorie', label: 'Catégories' },
+  { key: 'Sévérité', label: 'Sévérité' },
+  { key: 'Symptômes', label: 'Symptômes' },
+  { key: 'Systèmes', label: 'Systèmes' },
+  { key: 'Glossaire', label: 'Glossaire' },
+] as const
+
+type TopicKey = (typeof TOPICS)[number]['key']
+
 export function QuizPage() {
   const [seed, setSeed] = useState(0)
+  const [topic, setTopic] = useState<TopicKey>('all')
   const { data } = useQuery({
-    queryKey: ['quiz', seed],
-    queryFn: () => api.get<QuizQuestion[]>('/quiz?n=8'),
+    queryKey: ['quiz', seed, topic],
+    queryFn: () => {
+      const url =
+        topic === 'all' ? '/quiz?n=10' : `/quiz?n=10&topic=${encodeURIComponent(topic)}`
+      return api.get<QuizQuestion[]>(url)
+    },
   })
   const [idx, setIdx] = useState(0)
   const [answers, setAnswers] = useState<Record<string, string>>({})
@@ -28,7 +46,7 @@ export function QuizPage() {
     setIdx(0)
     setAnswers({})
     setDone(false)
-  }, [seed])
+  }, [seed, topic])
 
   const current = data?.[idx]
   const score = useMemo(() => {
@@ -93,6 +111,24 @@ export function QuizPage() {
 
   return (
     <div className="max-w-2xl mx-auto px-6 py-12">
+      <div className="flex items-center justify-between flex-wrap gap-2 mb-4">
+        <div className="flex flex-wrap gap-1.5">
+          {TOPICS.map(t => (
+            <button
+              key={t.key}
+              onClick={() => setTopic(t.key)}
+              className={cn(
+                'px-2.5 py-1 rounded-md text-xs border transition-colors',
+                topic === t.key
+                  ? 'border-accent/50 bg-accent/10 text-accent'
+                  : 'border-line/60 text-ink-mute hover:text-ink hover:border-line',
+              )}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+      </div>
       <div className="flex items-center justify-between mb-3">
         <span className="text-xs uppercase tracking-[0.25em] text-accent">
           Quiz · {current.topic}
