@@ -34,11 +34,17 @@ RUN --mount=type=cache,id=pnpm,target=/root/.local/share/pnpm/store \
 ############################
 FROM node:22-alpine AS build
 
+# CI=true stops pnpm from prompting for an interactive node_modules
+# purge (ERR_PNPM_ABORTED_REMOVE_MODULES_DIR_NO_TTY) inside the build.
 ENV NODE_ENV=production \
-    VITE_API_BASE_URL=/api
+    VITE_API_BASE_URL=/api \
+    CI=true
 
 WORKDIR /app
-RUN corepack enable
+# Pin the SAME pnpm as the deps stage. Without an explicit prepare,
+# corepack would fetch the latest pnpm (11.x); a pnpm-11 run against a
+# node_modules tree created by pnpm-9 triggers a full purge + reinstall.
+RUN corepack enable && corepack prepare pnpm@9.12.2 --activate
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN pnpm build
