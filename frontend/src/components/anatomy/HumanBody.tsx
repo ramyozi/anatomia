@@ -10,7 +10,7 @@ import {
   regionMatchesSystem,
 } from './systems'
 
-const MODEL_PATH = '/models/anatomy/human-body.glb'
+export const MODEL_PATH = '/models/anatomy/human-body.glb'
 
 interface Region {
   name: string

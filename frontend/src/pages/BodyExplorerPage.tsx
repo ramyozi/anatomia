@@ -11,6 +11,8 @@ import {
 } from 'lucide-react'
 import { ANATOMICAL_GL_SETTINGS, Stage } from '@/components/body/Stage'
 import { HumanBody, KNOWN_REGIONS } from '@/components/anatomy/HumanBody'
+import { CameraRig } from '@/components/anatomy/CameraRig'
+import { CameraControlsOverlay } from '@/components/anatomy/CameraControlsOverlay'
 import { SceneDebug } from '@/components/anatomy/SceneDebug'
 import {
   type SystemKey,
@@ -149,20 +151,31 @@ export function BodyExplorerPage() {
             fadeRest={fadeRest}
             tweenCamera={false}
           />
+          {/* Intelligent auto-focus: re-frames the camera onto the real
+              bounding box of the selected system's meshes. */}
+          <CameraRig system={system} />
           <SceneDebug id="body" />
           <OrbitControls
             makeDefault
-            enablePan={false}
-            minDistance={1.2}
-            maxDistance={6}
+            enablePan
+            screenSpacePanning
+            zoomToCursor
+            // CameraRig narrows these per system; keep a wide fallback.
+            minDistance={0.1}
+            maxDistance={14}
             enableDamping
-            dampingFactor={0.08}
+            dampingFactor={0.09}
+            rotateSpeed={0.9}
+            zoomSpeed={0.9}
           />
         </Canvas>
 
         <div className="absolute top-4 left-4 chip-accent text-[10px]">
           {sysDef.label} · {visibleRegions.length} régions
         </div>
+
+        {/* Discrete camera controls (zoom / fit / reset). */}
+        <CameraControlsOverlay />
 
         <AnimatePresence>
           {focused && (
