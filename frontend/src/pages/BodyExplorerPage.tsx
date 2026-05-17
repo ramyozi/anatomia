@@ -131,10 +131,10 @@ export function BodyExplorerPage() {
         </ul>
       </aside>
 
-      {/* 3D viewport — medical-grade light backdrop with gentle vertical
-          gradient (cool grey at the top, slightly warmer at the bottom)
-          for clear silhouette readability. */}
-      <div className="relative bg-gradient-to-b from-[#e2e6ec] via-[#d3d8e0] to-[#bfc4cd]">
+      {/* 3D viewport — theme-aware neutral backdrop (.viewer-backdrop):
+          a light medical grey in light mode, a muted neutral in the dark
+          themes, while the model stays lit by the Stage rig. */}
+      <div className="relative viewer-backdrop">
         <Canvas
           camera={{ position: [0, 0, 3.6], fov: 38, near: 0.05, far: 50 }}
           gl={ANATOMICAL_GL_SETTINGS}
