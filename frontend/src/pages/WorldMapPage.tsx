@@ -6,8 +6,18 @@ import { Globe2, Filter } from 'lucide-react'
 import { api } from '@/lib/api'
 import type { CountrySummary, DiseaseSummary } from '@/types'
 import { WorldChoropleth } from '@/components/map/WorldChoropleth'
+import { MobileSheet } from '@/components/layout/MobileSheet'
 import { cn } from '@/lib/cn'
 
+/**
+ * World atlas page.
+ *
+ * Layout:
+ *  - Desktop (lg+): 3-column grid (filters | map | insights).
+ *  - Mobile: the choropleth map owns the screen; disease / continent
+ *    filters, the country list and the insights move into a collapsible
+ *    bottom sheet — the user lands straight on the map.
+ */
 export function WorldMapPage() {
   const navigate = useNavigate()
   const [diseaseSlug, setDiseaseSlug] = useState<string | null>(null)
@@ -36,83 +46,132 @@ export function WorldMapPage() {
     c => continent === 'Tous' || c.continent === continent,
   )
 
-  return (
-    <div className="flex flex-col lg:grid lg:grid-cols-[320px_1fr_320px] lg:h-[calc(100vh-4rem)] border-t border-line/60">
-      {/* Left controls */}
-      <aside className="border-b lg:border-b-0 lg:border-r border-line/60 bg-bg-soft/50 lg:overflow-y-auto p-5">
-        <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-ink-dim mb-2">
-          <Globe2 className="w-3.5 h-3.5" /> Atlas
-        </div>
-        <h2 className="heading text-2xl">Maladies dans le monde</h2>
-        <p className="text-sm text-ink-mute mt-1">
-          Choisis une maladie ou explore le fardeau global. Clique un pays pour
-          ouvrir sa fiche.
-        </p>
+  // Filters + country list — desktop left rail AND mobile sheet.
+  const controlsPanel = (
+    <div className="p-5">
+      <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-ink-dim mb-2">
+        <Globe2 className="w-3.5 h-3.5" /> Atlas
+      </div>
+      <h2 className="heading text-2xl">Maladies dans le monde</h2>
+      <p className="text-sm text-ink-mute mt-1">
+        Choisis une maladie ou explore le fardeau global. Clique un pays pour
+        ouvrir sa fiche.
+      </p>
 
-        <div className="mt-6">
-          <div className="flex items-center gap-1.5 text-xs text-ink-dim mb-2">
-            <Filter className="w-3 h-3" /> Maladie affichée
-          </div>
-          <select
-            value={diseaseSlug ?? ''}
-            onChange={e => setDiseaseSlug(e.target.value || null)}
-            className="w-full bg-bg-elev border border-line/70 rounded-md px-3 py-2 text-sm text-ink"
-          >
-            <option value="">Fardeau global (toutes confondues)</option>
-            {diseases?.map(d => (
-              <option key={d.slug} value={d.slug}>
-                {d.name}
-              </option>
-            ))}
-          </select>
+      <div className="mt-6">
+        <div className="flex items-center gap-1.5 text-xs text-ink-dim mb-2">
+          <Filter className="w-3 h-3" /> Maladie affichée
         </div>
+        <select
+          value={diseaseSlug ?? ''}
+          onChange={e => setDiseaseSlug(e.target.value || null)}
+          className="w-full bg-bg-elev border border-line/70 rounded-md px-3 min-h-[44px] text-sm text-ink"
+        >
+          <option value="">Fardeau global (toutes confondues)</option>
+          {diseases?.map(d => (
+            <option key={d.slug} value={d.slug}>
+              {d.name}
+            </option>
+          ))}
+        </select>
+      </div>
 
-        <div className="mt-5">
-          <div className="flex items-center gap-1.5 text-xs text-ink-dim mb-2">
-            Continent
-          </div>
-          <div className="flex flex-wrap gap-1.5">
-            {continents.map(c => (
+      <div className="mt-5">
+        <div className="flex items-center gap-1.5 text-xs text-ink-dim mb-2">
+          Continent
+        </div>
+        <div className="flex flex-wrap gap-1.5">
+          {continents.map(c => (
+            <button
+              key={c}
+              onClick={() => setContinent(c)}
+              className={cn(
+                'px-3 min-h-[36px] rounded-md text-xs border transition-colors',
+                continent === c
+                  ? 'border-accent/50 bg-accent/10 text-accent'
+                  : 'border-line/60 text-ink-mute hover:text-ink hover:border-line',
+              )}
+            >
+              {c}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-6">
+        <div className="text-xs uppercase tracking-wider text-ink-dim mb-2">
+          Pays référencés ({visibleCountries.length})
+        </div>
+        {/* No inner scroll — the sheet / aside is the single scroll area. */}
+        <ul className="space-y-0.5">
+          {visibleCountries.map(c => (
+            <li key={c.code}>
               <button
-                key={c}
-                onClick={() => setContinent(c)}
-                className={cn(
-                  'px-2.5 py-1 rounded-md text-xs border transition-colors',
-                  continent === c
-                    ? 'border-accent/50 bg-accent/10 text-accent'
-                    : 'border-line/60 text-ink-mute hover:text-ink hover:border-line',
-                )}
+                onClick={() => navigate(`/monde/${c.code}`)}
+                className="w-full flex items-center justify-between px-2 min-h-[40px] rounded hover:bg-bg-elev text-sm text-left"
               >
-                {c}
+                <span className="text-ink truncate">{c.name}</span>
+                <span className="text-[11px] text-ink-dim font-mono">
+                  {(c.population / 1e6).toFixed(1)}M
+                </span>
               </button>
-            ))}
-          </div>
-        </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  )
 
-        <div className="mt-6">
-          <div className="text-xs uppercase tracking-wider text-ink-dim mb-2">
-            Pays référencés ({visibleCountries.length})
-          </div>
-          <ul className="space-y-1 max-h-[40vh] overflow-y-auto pr-1">
-            {visibleCountries.map(c => (
-              <li key={c.code}>
-                <button
-                  onClick={() => navigate(`/monde/${c.code}`)}
-                  className="w-full flex items-center justify-between px-2 py-1.5 rounded hover:bg-bg-elev text-sm text-left"
-                >
-                  <span className="text-ink truncate">{c.name}</span>
-                  <span className="text-[11px] text-ink-dim font-mono">
-                    {(c.population / 1e6).toFixed(1)}M
-                  </span>
-                </button>
+  // Top-5 ranking + data note.
+  const insightsPanel = (
+    <div className="p-5">
+      <h3 className="font-display text-ink mb-3">Top 5 pays</h3>
+      <ol className="space-y-2">
+        {(distribution ?? [])
+          .slice()
+          .sort((a, b) => b.per100k - a.per100k)
+          .slice(0, 5)
+          .map((d, i) => {
+            const c = countries?.find(x => x.code === d.countryCode)
+            return (
+              <li
+                key={d.countryCode}
+                className="panel-soft p-3 flex items-center gap-3"
+              >
+                <span className="font-display text-2xl text-ink-dim w-6">
+                  {i + 1}
+                </span>
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm text-ink truncate">
+                    {c?.name ?? d.countryCode}
+                  </div>
+                  <div className="text-[11px] text-ink-dim">{c?.region}</div>
+                </div>
+                <div className="font-mono text-sm text-accent">
+                  {d.per100k.toLocaleString('fr')}
+                </div>
               </li>
-            ))}
-          </ul>
-        </div>
+            )
+          })}
+      </ol>
+
+      <div className="mt-6 panel-soft p-4 text-sm text-ink-mute">
+        <strong className="text-ink">À propos des données.</strong> Les valeurs
+        sont des estimations consolidées issues de WHO/GHO et OWID, exprimées
+        en cas pour 100 000 habitants.
+      </div>
+    </div>
+  )
+
+  return (
+    <div className="lg:grid lg:grid-cols-[320px_1fr_320px] lg:h-[calc(100vh-4rem)] border-t border-line/60">
+      {/* Desktop left controls */}
+      <aside className="hidden lg:block lg:overflow-y-auto border-r border-line/60 bg-bg-soft/50">
+        {controlsPanel}
       </aside>
 
-      {/* Map */}
-      <div className="relative h-[56vh] min-h-[300px] lg:h-auto bg-[radial-gradient(circle_at_50%_30%,rgba(126,224,210,0.08),transparent_70%)]">
+      {/* Map — owns the full screen on mobile, a grid cell on desktop. */}
+      <div className="relative h-[calc(100dvh-4rem)] lg:h-auto bg-[radial-gradient(circle_at_50%_30%,rgba(126,224,210,0.08),transparent_70%)]">
         {distribution && (
           <motion.div
             key={diseaseSlug ?? 'all'}
@@ -133,46 +192,19 @@ export function WorldMapPage() {
         </div>
       </div>
 
-      {/* Right insights */}
-      <aside className="border-t lg:border-t-0 lg:border-l border-line/60 bg-bg-soft/50 lg:overflow-y-auto p-5 safe-pb">
-        <h3 className="font-display text-ink mb-3">Top 5 pays</h3>
-        <ol className="space-y-2">
-          {(distribution ?? [])
-            .slice()
-            .sort((a, b) => b.per100k - a.per100k)
-            .slice(0, 5)
-            .map((d, i) => {
-              const c = countries?.find(x => x.code === d.countryCode)
-              return (
-                <li
-                  key={d.countryCode}
-                  className="panel-soft p-3 flex items-center gap-3"
-                >
-                  <span className="font-display text-2xl text-ink-dim w-6">
-                    {i + 1}
-                  </span>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-sm text-ink truncate">
-                      {c?.name ?? d.countryCode}
-                    </div>
-                    <div className="text-[11px] text-ink-dim">
-                      {c?.region}
-                    </div>
-                  </div>
-                  <div className="font-mono text-sm text-accent">
-                    {d.per100k.toLocaleString('fr')}
-                  </div>
-                </li>
-              )
-            })}
-        </ol>
-
-        <div className="mt-6 panel-soft p-4 text-sm text-ink-mute">
-          <strong className="text-ink">À propos des données.</strong> Les valeurs
-          sont des estimations consolidées issues de WHO/GHO et OWID, exprimées
-          en cas pour 100 000 habitants.
-        </div>
+      {/* Desktop right insights */}
+      <aside className="hidden lg:block lg:overflow-y-auto border-l border-line/60 bg-bg-soft/50">
+        {insightsPanel}
       </aside>
+
+      {/* Mobile: filters + country list + insights in a bottom sheet. */}
+      <MobileSheet
+        title="Filtres & pays"
+        badge={`${visibleCountries.length} pays`}
+      >
+        {controlsPanel}
+        <div className="border-t border-line/60">{insightsPanel}</div>
+      </MobileSheet>
     </div>
   )
 }
