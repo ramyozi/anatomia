@@ -110,7 +110,7 @@ export function MobileNav({ items }: { items: NavItem[] }) {
                   </button>
                 </div>
 
-                <nav className="flex-1 overflow-y-auto px-3 py-4">
+                <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-0.5">
                   {items.map((item) => (
                     <NavLink
                       key={item.to}
@@ -118,7 +118,7 @@ export function MobileNav({ items }: { items: NavItem[] }) {
                       end={item.to === '/'}
                       className={({ isActive }) =>
                         cn(
-                          'flex items-center px-4 min-h-[48px] rounded-lg text-[15px] transition-colors',
+                          'flex items-center px-4 min-h-[52px] rounded-lg text-base font-medium transition-colors',
                           isActive
                             ? 'bg-accent/10 text-accent border border-accent/30'
                             : 'text-ink-mute hover:text-ink hover:bg-bg-elev',

@@ -97,30 +97,32 @@ export function DiseasesPage() {
 
       {/* Filters */}
       <div className="panel p-4 mb-6">
-        <div className="flex items-center gap-2 mb-3">
-          <SearchIcon className="w-4 h-4 text-ink-mute" />
+        <div className="flex items-center gap-2 mb-3 min-h-[40px]">
+          <SearchIcon className="w-4 h-4 text-ink-mute flex-shrink-0" />
           <input
             value={query}
             onChange={e => setQuery(e.target.value)}
             placeholder="Filtrer par nom ou mot-clé..."
-            className="flex-1 bg-transparent outline-none text-ink placeholder:text-ink-dim text-sm"
+            className="flex-1 min-w-0 bg-transparent outline-none text-ink placeholder:text-ink-dim text-[15px]"
           />
           {query && (
             <button
               onClick={() => setQuery('')}
-              className="text-ink-dim hover:text-ink"
+              aria-label="Effacer la recherche"
+              className="grid place-items-center w-9 h-9 -mr-1.5 text-ink-dim hover:text-ink"
             >
-              <X className="w-3.5 h-3.5" />
+              <X className="w-4 h-4" />
             </button>
           )}
         </div>
-        <div className="flex flex-wrap gap-1.5 mb-2">
+        {/* Category filters — horizontally scrollable on small screens. */}
+        <div className="flex gap-2 mb-2 overflow-x-auto -mx-1 px-1 pb-1 sm:flex-wrap sm:overflow-visible">
           {CATEGORIES.map(c => (
             <button
               key={c}
               onClick={() => setCategory(c)}
               className={cn(
-                'px-2.5 py-1 rounded-md text-xs border transition-colors',
+                'inline-flex items-center flex-shrink-0 px-3 min-h-[38px] rounded-md text-[13px] border transition-colors',
                 category === c
                   ? 'border-accent/50 bg-accent/10 text-accent'
                   : 'border-line/60 text-ink-mute hover:text-ink hover:border-line',
@@ -130,13 +132,13 @@ export function DiseasesPage() {
             </button>
           ))}
         </div>
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex gap-2 overflow-x-auto -mx-1 px-1 pb-1 sm:flex-wrap sm:overflow-visible">
           {SEVERITIES.map(s => (
             <button
               key={s.v}
               onClick={() => setSeverity(s.v)}
               className={cn(
-                'px-2.5 py-1 rounded-md text-xs border transition-colors',
+                'inline-flex items-center flex-shrink-0 px-3 min-h-[38px] rounded-md text-[13px] border transition-colors',
                 severity === s.v
                   ? 'border-coral/50 bg-coral/10 text-coral'
                   : 'border-line/60 text-ink-mute hover:text-ink hover:border-line',
@@ -149,17 +151,17 @@ export function DiseasesPage() {
       </div>
 
       <div className="flex items-center justify-between flex-wrap gap-3 mb-3">
-        <div className="text-xs text-ink-dim">
+        <div className="text-[13px] text-ink-dim">
           {filtered.length} résultat{filtered.length > 1 ? 's' : ''}
         </div>
-        <div className="flex items-center gap-1.5 text-xs">
+        <div className="flex items-center gap-1.5 text-[13px]">
           <span className="text-ink-dim">Tri :</span>
           {(['prevalence', 'severity', 'name'] as SortKey[]).map(k => (
             <button
               key={k}
               onClick={() => setSort(k)}
               className={cn(
-                'px-2.5 py-1 rounded-md border transition-colors',
+                'inline-flex items-center px-3 min-h-[36px] rounded-md border transition-colors',
                 sort === k
                   ? 'border-accent/50 bg-accent/10 text-accent'
                   : 'border-line/60 text-ink-mute hover:text-ink hover:border-line',
@@ -192,14 +194,14 @@ export function DiseasesPage() {
                   <SeverityBadge severity={d.severity} />
                   <span className="chip text-[10px]">{d.category}</span>
                 </div>
-                <h3 className="font-display text-ink leading-tight line-clamp-2">
+                <h3 className="font-display text-ink text-[15px] leading-tight line-clamp-2">
                   {d.name}
                 </h3>
-                <p className="text-xs text-ink-mute mt-1.5 line-clamp-2">
+                <p className="text-[13px] text-ink-mute mt-1.5 line-clamp-2 leading-snug">
                   {d.shortDescription}
                 </p>
                 <div className="mt-3 flex items-end justify-between">
-                  <div className="text-[11px] text-ink-dim truncate flex-1 min-w-0">
+                  <div className="text-xs text-ink-dim truncate flex-1 min-w-0">
                     {d.organs.slice(0, 2).join(', ')}
                   </div>
                   {d.prevalencePer100k != null && (
@@ -241,21 +243,21 @@ export function DiseasesPage() {
       )}
 
       {filtered.length > PAGE_SIZE && (
-        <div className="flex items-center justify-center gap-1.5 mt-8">
+        <div className="flex items-center justify-center gap-2 mt-8">
           <button
             onClick={() => setPage(p => Math.max(0, p - 1))}
             disabled={page === 0}
-            className="px-3 py-1.5 rounded-md border border-line/60 text-xs text-ink-mute hover:text-ink hover:border-line disabled:opacity-40 disabled:cursor-not-allowed"
+            className="inline-flex items-center px-4 min-h-[40px] rounded-md border border-line/60 text-[13px] text-ink-mute hover:text-ink hover:border-line disabled:opacity-40 disabled:cursor-not-allowed"
           >
             ← Précédent
           </button>
-          <div className="text-xs text-ink-mute px-3">
+          <div className="text-[13px] text-ink-mute px-2">
             Page {page + 1} / {pageCount}
           </div>
           <button
             onClick={() => setPage(p => Math.min(pageCount - 1, p + 1))}
             disabled={page >= pageCount - 1}
-            className="px-3 py-1.5 rounded-md border border-line/60 text-xs text-ink-mute hover:text-ink hover:border-line disabled:opacity-40 disabled:cursor-not-allowed"
+            className="inline-flex items-center px-4 min-h-[40px] rounded-md border border-line/60 text-[13px] text-ink-mute hover:text-ink hover:border-line disabled:opacity-40 disabled:cursor-not-allowed"
           >
             Suivant →
           </button>

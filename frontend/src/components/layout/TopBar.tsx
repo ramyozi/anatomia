@@ -31,18 +31,19 @@ export function TopBar() {
             : 'bg-bg/70 backdrop-blur-xl border-b border-line/60',
         )}
       >
-        <div className="max-w-[1400px] mx-auto flex items-center gap-6 px-6 h-16">
+        {/* Bar height stays 4rem — pages depend on calc(100vh-4rem). */}
+        <div className="max-w-[1400px] mx-auto flex items-center gap-4 lg:gap-6 px-4 sm:px-6 h-16">
           <Link to="/" className="flex items-center gap-2.5 group">
             <motion.div
               initial={{ rotate: -10, scale: 0.9 }}
               animate={{ rotate: 0, scale: 1 }}
               transition={{ type: 'spring', stiffness: 200, damping: 15 }}
-              className="relative grid place-items-center w-8 h-8 rounded-lg bg-accent/10 border border-accent/30"
+              className="relative grid place-items-center w-9 h-9 rounded-lg bg-accent/10 border border-accent/30"
             >
-              <Activity className="w-4 h-4 text-accent" />
+              <Activity className="w-[18px] h-[18px] text-accent" />
               <span className="absolute inset-0 rounded-lg bg-accent/10 blur-md group-hover:blur-lg transition-all" />
             </motion.div>
-            <span className="font-display text-lg tracking-tight">
+            <span className="font-display text-xl tracking-tight">
               Anatomia
             </span>
             <span className="hidden md:inline text-[10px] uppercase tracking-[0.2em] text-ink-dim ml-1.5 mt-0.5">
@@ -50,14 +51,14 @@ export function TopBar() {
             </span>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-1 text-sm">
+          <nav className="hidden md:flex items-center gap-0.5 text-[15px]">
             {NAV.map(item => (
               <NavLink
                 key={item.to}
                 to={item.to}
                 className={({ isActive }) =>
                   cn(
-                    'relative px-3 py-1.5 rounded-md transition-colors',
+                    'relative inline-flex items-center px-3.5 min-h-[40px] rounded-md transition-colors',
                     isActive
                       ? 'text-ink'
                       : 'text-ink-mute hover:text-ink',

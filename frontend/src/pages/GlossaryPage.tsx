@@ -41,13 +41,13 @@ export function GlossaryPage() {
         Définitions courtes des termes utilisés sur les fiches.
       </p>
 
-      <div className="panel p-3 flex items-center gap-2 mb-6">
-        <Search className="w-4 h-4 text-ink-mute" />
+      <div className="panel px-3 flex items-center gap-2 mb-6 min-h-[48px]">
+        <Search className="w-4 h-4 text-ink-mute flex-shrink-0" />
         <input
           value={q}
           onChange={e => setQ(e.target.value)}
           placeholder="Filtrer le glossaire..."
-          className="flex-1 bg-transparent outline-none text-ink placeholder:text-ink-dim text-sm"
+          className="flex-1 min-w-0 bg-transparent outline-none text-ink placeholder:text-ink-dim text-[15px]"
         />
       </div>
 
@@ -66,8 +66,10 @@ export function GlossaryPage() {
                     key={e.slug}
                     className="panel p-4 scroll-mt-20"
                   >
-                    <dt className="font-display text-ink mb-1">{e.term}</dt>
-                    <dd className="text-sm text-ink-mute leading-relaxed">
+                    <dt className="font-display text-ink text-[15px] mb-1">
+                      {e.term}
+                    </dt>
+                    <dd className="text-[15px] text-ink-mute leading-relaxed">
                       {e.definition}
                     </dd>
                     {e.related && e.related.length > 0 && (

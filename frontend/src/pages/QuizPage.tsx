@@ -112,13 +112,14 @@ export function QuizPage() {
   return (
     <div className="max-w-2xl mx-auto px-6 py-12">
       <div className="flex items-center justify-between flex-wrap gap-2 mb-4">
-        <div className="flex flex-wrap gap-1.5">
+        {/* Topic filters — horizontally scrollable on small screens. */}
+        <div className="flex gap-2 overflow-x-auto -mx-1 px-1 pb-1 w-full sm:w-auto sm:flex-wrap sm:overflow-visible">
           {TOPICS.map(t => (
             <button
               key={t.key}
               onClick={() => setTopic(t.key)}
               className={cn(
-                'px-2.5 py-1 rounded-md text-xs border transition-colors',
+                'inline-flex items-center flex-shrink-0 px-3 min-h-[38px] rounded-md text-[13px] border transition-colors',
                 topic === t.key
                   ? 'border-accent/50 bg-accent/10 text-accent'
                   : 'border-line/60 text-ink-mute hover:text-ink hover:border-line',
