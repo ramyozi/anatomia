@@ -1,33 +1,43 @@
 /** @type {import('tailwindcss').Config} */
+
+// Colour tokens are driven by CSS custom properties so the whole UI can
+// switch theme (light / dark / dark-soft / system) at runtime without a
+// rebuild. Each variable holds a SPACE-SEPARATED RGB triplet (eg
+// "16 21 31") so Tailwind's ``<alpha-value>`` slot keeps every opacity
+// modifier working — ``bg-bg-panel/60``, ``border-line/70`` etc.
+//
+// The actual values per theme live in ``src/styles/globals.css``.
+const token = (name) => `rgb(var(${name}) / <alpha-value>)`
+
 export default {
   content: ['./index.html', './src/**/*.{ts,tsx}'],
   theme: {
     extend: {
       colors: {
         bg: {
-          DEFAULT: '#06080d',
-          soft: '#0b0f17',
-          panel: '#10151f',
-          elev: '#161c28',
+          DEFAULT: token('--c-bg'),
+          soft: token('--c-bg-soft'),
+          panel: token('--c-bg-panel'),
+          elev: token('--c-bg-elev'),
         },
         ink: {
-          DEFAULT: '#e8edf5',
-          mute: '#9aa3b2',
-          dim: '#5b6473',
+          DEFAULT: token('--c-ink'),
+          mute: token('--c-ink-mute'),
+          dim: token('--c-ink-dim'),
         },
         accent: {
-          DEFAULT: '#7ee0d2',
-          glow: '#9af2e4',
-          deep: '#2a8a7c',
+          DEFAULT: token('--c-accent'),
+          glow: token('--c-accent-glow'),
+          deep: token('--c-accent-deep'),
         },
         coral: {
-          DEFAULT: '#ff6b6b',
-          soft: '#ffa3a3',
+          DEFAULT: token('--c-coral'),
+          soft: token('--c-coral-soft'),
         },
         gold: {
-          DEFAULT: '#e9c46a',
+          DEFAULT: token('--c-gold'),
         },
-        line: '#1f2735',
+        line: token('--c-line'),
       },
       fontFamily: {
         sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
@@ -35,12 +45,13 @@ export default {
         mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
       },
       boxShadow: {
-        glow: '0 0 40px rgba(126, 224, 210, 0.18)',
-        panel: '0 1px 0 rgba(255,255,255,0.04) inset, 0 30px 60px -30px rgba(0,0,0,0.6)',
+        glow: '0 0 40px rgb(var(--c-accent) / 0.18)',
+        panel:
+          '0 1px 0 rgb(var(--c-shadow-inset) / 0.06) inset, 0 30px 60px -30px rgb(var(--c-shadow) / 0.6)',
       },
       backgroundImage: {
         'grid-fade':
-          'radial-gradient(circle at 50% 0%, rgba(126,224,210,0.08), transparent 60%)',
+          'radial-gradient(circle at 50% 0%, rgb(var(--c-accent) / 0.08), transparent 60%)',
         'noise':
           "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
       },
