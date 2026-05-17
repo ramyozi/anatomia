@@ -194,14 +194,14 @@ export function DiseasesPage() {
                   <SeverityBadge severity={d.severity} />
                   <span className="chip text-[10px]">{d.category}</span>
                 </div>
-                <h3 className="font-display text-ink leading-tight line-clamp-2">
+                <h3 className="font-display text-ink text-[15px] leading-tight line-clamp-2">
                   {d.name}
                 </h3>
-                <p className="text-xs text-ink-mute mt-1.5 line-clamp-2">
+                <p className="text-[13px] text-ink-mute mt-1.5 line-clamp-2 leading-snug">
                   {d.shortDescription}
                 </p>
                 <div className="mt-3 flex items-end justify-between">
-                  <div className="text-[11px] text-ink-dim truncate flex-1 min-w-0">
+                  <div className="text-xs text-ink-dim truncate flex-1 min-w-0">
                     {d.organs.slice(0, 2).join(', ')}
                   </div>
                   {d.prevalencePer100k != null && (

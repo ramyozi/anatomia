@@ -66,8 +66,10 @@ export function GlossaryPage() {
                     key={e.slug}
                     className="panel p-4 scroll-mt-20"
                   >
-                    <dt className="font-display text-ink mb-1">{e.term}</dt>
-                    <dd className="text-sm text-ink-mute leading-relaxed">
+                    <dt className="font-display text-ink text-[15px] mb-1">
+                      {e.term}
+                    </dt>
+                    <dd className="text-[15px] text-ink-mute leading-relaxed">
                       {e.definition}
                     </dd>
                     {e.related && e.related.length > 0 && (
