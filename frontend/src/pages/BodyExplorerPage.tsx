@@ -39,7 +39,7 @@ export function BodyExplorerPage() {
   const [system, setSystem] = useState<SystemKey>('all')
   const [hovered, setHovered] = useState<string | null>(null)
   const [selected, setSelected] = useState<string | null>(null)
-  const [fadeRest, setFadeRest] = useState(false)
+  const [fadeRest, setFadeRest] = useState(true)
 
   const systems = listSystems()
 
@@ -231,8 +231,9 @@ export function BodyExplorerPage() {
           {sysDef.label} · {visibleRegions.length} régions
         </div>
 
-        {/* Camera controls — lifted above the mobile sheet peek bar. */}
-        <CameraControlsOverlay className="right-3 bottom-[4.75rem] lg:bottom-3" />
+        {/* Camera controls — top-right of the viewer (clear of the model
+            and of the mobile bottom sheet). */}
+        <CameraControlsOverlay className="right-3 top-3" />
 
         <AnimatePresence>
           {focused && (
