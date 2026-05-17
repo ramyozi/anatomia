@@ -175,8 +175,8 @@ export function SystemsPage() {
   const linkedOrgans = (organs ?? []).filter(o => o.system === backendKey)
 
   return (
-    <div className="grid lg:grid-cols-[360px_1fr] h-[calc(100vh-4rem)] border-t border-line/60">
-      <aside className="border-r border-line/60 bg-bg-soft/50 overflow-y-auto p-6">
+    <div className="flex flex-col-reverse lg:grid lg:grid-cols-[360px_1fr] lg:h-[calc(100vh-4rem)] border-t border-line/60">
+      <aside className="border-t lg:border-t-0 lg:border-r border-line/60 bg-bg-soft/50 lg:overflow-y-auto p-6 safe-pb">
         <Breadcrumbs
           items={[
             { to: '/corps', label: 'Corps' },
@@ -247,7 +247,7 @@ export function SystemsPage() {
         key={def.slug}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="relative viewer-backdrop"
+        className="relative viewer-backdrop h-[58vh] min-h-[320px] lg:h-auto"
       >
         <Canvas
           camera={{ position: [0, 0, 3.2], fov: 38, near: 0.05, far: 50 }}

@@ -37,9 +37,9 @@ export function WorldMapPage() {
   )
 
   return (
-    <div className="grid lg:grid-cols-[320px_1fr_320px] h-[calc(100vh-4rem)] border-t border-line/60">
+    <div className="flex flex-col lg:grid lg:grid-cols-[320px_1fr_320px] lg:h-[calc(100vh-4rem)] border-t border-line/60">
       {/* Left controls */}
-      <aside className="border-r border-line/60 bg-bg-soft/50 overflow-y-auto p-5">
+      <aside className="border-b lg:border-b-0 lg:border-r border-line/60 bg-bg-soft/50 lg:overflow-y-auto p-5">
         <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-ink-dim mb-2">
           <Globe2 className="w-3.5 h-3.5" /> Atlas
         </div>
@@ -112,7 +112,7 @@ export function WorldMapPage() {
       </aside>
 
       {/* Map */}
-      <div className="relative bg-[radial-gradient(circle_at_50%_30%,rgba(126,224,210,0.08),transparent_70%)]">
+      <div className="relative h-[56vh] min-h-[300px] lg:h-auto bg-[radial-gradient(circle_at_50%_30%,rgba(126,224,210,0.08),transparent_70%)]">
         {distribution && (
           <motion.div
             key={diseaseSlug ?? 'all'}
@@ -134,7 +134,7 @@ export function WorldMapPage() {
       </div>
 
       {/* Right insights */}
-      <aside className="border-l border-line/60 bg-bg-soft/50 overflow-y-auto p-5">
+      <aside className="border-t lg:border-t-0 lg:border-l border-line/60 bg-bg-soft/50 lg:overflow-y-auto p-5 safe-pb">
         <h3 className="font-display text-ink mb-3">Top 5 pays</h3>
         <ol className="space-y-2">
           {(distribution ?? [])

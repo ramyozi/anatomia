@@ -144,8 +144,30 @@ body {
     rgb(var(--c-bg));
   color: rgb(var(--c-ink));
   overflow-x: hidden;
+  /* Mobile: kill the grey tap flash and stop iOS auto-inflating text. */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
   /* Smooth the cross-fade when the theme changes at runtime. */
   transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* Belt-and-braces guard against accidental horizontal overflow on
+ * small screens (a single mis-sized child can otherwise force a
+ * full-page sideways scroll). */
+html {
+  overflow-x: hidden;
+}
+
+/* Larger, comfortable tap targets on touch devices. */
+@media (pointer: coarse) {
+  button,
+  a,
+  [role='button'],
+  [role='menuitem'],
+  [role='menuitemradio'] {
+    -webkit-tap-highlight-color: transparent;
+  }
 }
 
 /* scrollbar */
@@ -237,5 +259,22 @@ body {
       rgb(var(--viewer-mid)) 55%,
       rgb(var(--viewer-bot))
     );
+  }
+
+  /* Safe-area helpers for notched phones (viewport-fit=cover). */
+  .safe-pb {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .safe-pt {
+    padding-top: env(safe-area-inset-top);
+  }
+  .safe-px {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+  /* Adds the safe-area inset ON TOP of an existing offset (eg a
+   * bottom-positioned floating control above the home indicator). */
+  .safe-inset-b {
+    bottom: calc(env(safe-area-inset-bottom) + 1rem);
   }
 }

@@ -86,9 +86,9 @@ export function BrainExplorerPage() {
       : null
 
   return (
-    <div className="grid lg:grid-cols-[320px_1fr_360px] h-[calc(100vh-4rem)] border-t border-line/60">
+    <div className="flex flex-col lg:grid lg:grid-cols-[320px_1fr_360px] lg:h-[calc(100vh-4rem)] border-t border-line/60">
       {/* Left: regions list */}
-      <aside className="border-r border-line/60 bg-bg-soft/50 overflow-y-auto">
+      <aside className="border-b lg:border-b-0 lg:border-r border-line/60 bg-bg-soft/50 lg:overflow-y-auto">
         <div className="p-5">
           <Breadcrumbs
             items={[
@@ -106,7 +106,7 @@ export function BrainExplorerPage() {
           </p>
         </div>
 
-        <ul className="px-2 pb-6 space-y-0.5">
+        <ul className="px-2 pb-6 space-y-0.5 max-h-[38vh] overflow-y-auto lg:max-h-none lg:overflow-visible">
           {regions.map(r => {
             const label = REGION_LABELS[r.regionSlug]?.name ?? r.regionSlug
             return (
@@ -145,7 +145,7 @@ export function BrainExplorerPage() {
       </aside>
 
       {/* Center: 3D viewer */}
-      <div className="relative bg-[radial-gradient(circle_at_50%_30%,rgba(167,139,250,0.18),transparent_70%)]">
+      <div className="relative h-[56vh] min-h-[320px] lg:h-auto bg-[radial-gradient(circle_at_50%_30%,rgba(167,139,250,0.18),transparent_70%)]">
         <Canvas
           camera={{ position: [0, 0.05, 3.0], fov: 38, near: 0.1, far: 50 }}
           gl={ANATOMICAL_GL_SETTINGS}
@@ -209,7 +209,7 @@ export function BrainExplorerPage() {
       </div>
 
       {/* Right: region detail */}
-      <aside className="border-l border-line/60 bg-bg-soft/50 overflow-y-auto p-5">
+      <aside className="border-t lg:border-t-0 lg:border-l border-line/60 bg-bg-soft/50 lg:overflow-y-auto p-5 safe-pb">
         <AnimatePresence mode="wait">
           {focusedDesc ? (
             <motion.div
