@@ -4,6 +4,7 @@ import { Search, Activity } from 'lucide-react'
 import { useState } from 'react'
 import { GlobalSearch } from '../search/GlobalSearch'
 import { ThemeToggle } from './ThemeToggle'
+import { MobileNav } from './MobileNav'
 import { cn } from '@/lib/cn'
 
 const NAV = [
@@ -79,18 +80,23 @@ export function TopBar() {
             ))}
           </nav>
 
-          <div className="ml-auto flex items-center gap-3">
+          <div className="ml-auto flex items-center gap-2 sm:gap-3">
             <button
               onClick={() => setSearchOpen(true)}
-              className="flex items-center gap-2 px-3 py-1.5 text-xs text-ink-mute border border-line/70 rounded-md hover:border-line hover:text-ink transition-colors"
+              aria-label="Rechercher"
+              className="flex items-center gap-2 px-2.5 sm:px-3 h-11 sm:h-auto sm:py-1.5 text-xs text-ink-mute border border-line/70 rounded-md hover:border-line hover:text-ink transition-colors"
             >
-              <Search className="w-3.5 h-3.5" />
+              <Search className="w-4 h-4 sm:w-3.5 sm:h-3.5" />
               <span className="hidden sm:inline">Rechercher</span>
               <kbd className="hidden sm:inline text-[10px] px-1.5 py-0.5 rounded bg-bg-elev border border-line/70">
                 ⌘K
               </kbd>
             </button>
-            <ThemeToggle />
+            {/* Theme picker: in the bar on desktop, inside the drawer on mobile. */}
+            <div className="hidden md:block">
+              <ThemeToggle />
+            </div>
+            <MobileNav items={NAV} />
           </div>
         </div>
       </header>
