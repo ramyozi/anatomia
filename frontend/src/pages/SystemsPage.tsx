@@ -7,6 +7,8 @@ import { Suspense } from 'react'
 import { ANATOMICAL_GL_SETTINGS, Stage } from '@/components/body/Stage'
 import { PostFX } from '@/components/body/PostFX'
 import { HumanBody } from '@/components/anatomy/HumanBody'
+import { CameraRig } from '@/components/anatomy/CameraRig'
+import { CameraControlsOverlay } from '@/components/anatomy/CameraControlsOverlay'
 import { SceneDebug } from '@/components/anatomy/SceneDebug'
 import { type SystemKey } from '@/components/anatomy/systems'
 import { Breadcrumbs } from '@/components/nav/Breadcrumbs'
@@ -173,6 +175,7 @@ export function SystemsPage() {
   }
   const backendKey = SYSTEM_TO_BACKEND_KEY[def.slug]
   const linkedOrgans = (organs ?? []).filter(o => o.system === backendKey)
+  const viewerSystem: SystemKey = SYSTEM_KEY_FROM_SLUG[def.slug] ?? 'all'
 
   return (
     <div className="flex flex-col-reverse lg:grid lg:grid-cols-[360px_1fr] lg:h-[calc(100vh-4rem)] border-t border-line/60">
@@ -257,21 +260,29 @@ export function SystemsPage() {
           <Stage preset="apartment" />
           <Suspense fallback={null}>
             <HumanBody
-              system={SYSTEM_KEY_FROM_SLUG[def.slug] ?? 'all'}
+              system={viewerSystem}
               fadeRest={false}
               tweenCamera={false}
             />
+            {/* Auto-focus the camera on this system's meshes. */}
+            <CameraRig system={viewerSystem} />
           </Suspense>
           <SceneDebug id={`system-${def.slug}`} />
           <OrbitControls
             makeDefault
-            enablePan={false}
-            minDistance={1.4}
-            maxDistance={6}
+            enablePan
+            screenSpacePanning
+            zoomToCursor
+            minDistance={0.1}
+            maxDistance={14}
             enableDamping
-            dampingFactor={0.08}
+            dampingFactor={0.09}
+            rotateSpeed={0.9}
+            zoomSpeed={0.9}
           />
         </Canvas>
+
+        <CameraControlsOverlay />
       </motion.div>
     </div>
   )
