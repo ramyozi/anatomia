@@ -15,6 +15,28 @@
       rel="stylesheet"
     />
     <title>Anatomia, explorer le corps humain</title>
+    <script>
+      /* Anti-FOUC: resolve and apply the theme BEFORE first paint so the
+         page never flashes the wrong palette. Mirrors the logic in
+         src/stores/theme.ts (storage key + zustand-persist shape). */
+      (function () {
+        try {
+          var raw = localStorage.getItem('anatomia.theme')
+          var pref = raw ? JSON.parse(raw).state.preference : 'system'
+          var theme = pref
+          if (pref === 'system' || !pref) {
+            theme = window.matchMedia('(prefers-color-scheme: dark)').matches
+              ? 'dark'
+              : 'light'
+          }
+          var root = document.documentElement
+          root.dataset.theme = theme
+          root.style.colorScheme = theme === 'light' ? 'light' : 'dark'
+        } catch (e) {
+          document.documentElement.dataset.theme = 'dark'
+        }
+      })()
+    </script>
   </head>
   <body class="bg-bg text-ink antialiased">
     <div id="root"></div>
