@@ -1,12 +1,13 @@
-name: Deploy to VPS
+name: Deploy verification
 
-# Triggered manually OR on every push to main when CI is green.
-# Requires the following repository secrets:
-#   DEPLOY_HOST       — VPS hostname or IP
-#   DEPLOY_USER       — SSH user (must own /srv/anatomia)
-#   DEPLOY_SSH_KEY    — private key (no passphrase)
-#   DEPLOY_DOMAIN     — public domain used for healthcheck
-#   DEPLOY_TARGET     — install dir (default: /srv/anatomia)
+# Production runs on managed PaaS with native git integration:
+#   - Backend  → Render  (auto-deploys on push to main)
+#   - Frontend → Vercel  (auto-deploys on push to main)
+#
+# There is nothing to SSH into. This workflow instead *verifies* that the
+# auto-deployed production is healthy once CI is green: it polls the live
+# endpoints and fails if production is broken. Free-tier Render services
+# sleep after inactivity, so the first request may need a cold-start wait.
 
 on:
   workflow_dispatch:
@@ -15,23 +16,68 @@ on:
     types: [completed]
     branches: [main]
 
+permissions:
+  contents: read
+
+env:
+  BACKEND_URL: https://anatomia-api.onrender.com
+  FRONTEND_URL: https://anatomia.ramzibenmansour.com
+
 jobs:
-  rollout:
+  verify:
+    # Only run when CI succeeded (or on a manual dispatch).
     if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
-    environment: production
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Configure SSH
+      - name: Wake + verify backend health
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -H "${{ secrets.DEPLOY_HOST }}" >> ~/.ssh/known_hosts
+          echo "Probing $BACKEND_URL/api/health (Render free tier may cold-start)"
+          for i in $(seq 1 12); do
+            code=$(curl -s -o /tmp/body -w '%{http_code}' "$BACKEND_URL/api/health" || echo 000)
+            if [ "$code" = "200" ]; then
+              echo "backend healthy: $(cat /tmp/body)"
+              exit 0
+            fi
+            echo "attempt $i: HTTP $code — waiting for cold start..."
+            sleep 10
+          done
+          echo "::error::backend health check failed after 12 attempts"
+          exit 1
 
-      - name: Trigger update.sh on the VPS
+      - name: Verify core API endpoints return data
         run: |
-          ssh -i ~/.ssh/id_ed25519 "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}" \
-            "cd ${{ secrets.DEPLOY_TARGET || '/srv/anatomia' }} && \
-             ./deploy/scripts/update.sh ${{ secrets.DEPLOY_DOMAIN }}"
+          fail=0
+          check() {
+            local path="$1" min="$2"
+            local n
+            n=$(curl -s "$BACKEND_URL$path" | tr ',' '\n' | grep -c '"' || true)
+            if [ "$n" -lt "$min" ]; then
+              echo "::error::$path returned too little data (markers=$n, expected >=$min)"
+              fail=1
+            else
+              echo "ok: $path (markers=$n)"
+            fi
+          }
+          check /api/organs 20
+          check /api/diseases 20
+          check /api/world/burden 10
+          check /api/stats/global 5
+          exit $fail
+
+      - name: Verify frontend is served
+        run: |
+          code=$(curl -s -o /dev/null -w '%{http_code}' "$FRONTEND_URL/")
+          if [ "$code" != "200" ]; then
+            echo "::error::frontend returned HTTP $code"
+            exit 1
+          fi
+          echo "frontend healthy: HTTP 200"
+
+      - name: Verify /api proxy through the frontend domain
+        run: |
+          code=$(curl -s -o /dev/null -w '%{http_code}' "$FRONTEND_URL/api/health")
+          if [ "$code" != "200" ]; then
+            echo "::error::frontend /api rewrite returned HTTP $code"
+            exit 1
+          fi
+          echo "frontend /api rewrite healthy: HTTP 200"

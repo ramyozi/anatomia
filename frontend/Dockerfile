@@ -11,20 +11,28 @@
 ############################
 # Stage 1 — dependencies   #
 ############################
-FROM node:20-alpine AS deps
+# Node 22 (current LTS): the build toolchain (rollup / vite / tsc)
+# references the ``node:sqlite`` builtin, which only exists on Node
+# >= 22.5. Building on node:20 fails early with
+# ``ERR_UNKNOWN_BUILTIN_MODULE: No such built-in module: node:sqlite``.
+# Local dev and CI both run Node 22, so the image must match.
+FROM node:22-alpine AS deps
 
 WORKDIR /app
 RUN corepack enable && corepack prepare pnpm@9.12.2 --activate
 
 COPY package.json pnpm-lock.yaml* ./
+# Strict install: the lockfile must be in sync. The previous
+# ``|| pnpm install`` fallback silently produced non-reproducible builds
+# whenever the lockfile drifted — fail loudly instead.
 RUN --mount=type=cache,id=pnpm,target=/root/.local/share/pnpm/store \
-    pnpm install --frozen-lockfile || pnpm install
+    pnpm install --frozen-lockfile
 
 
 ############################
 # Stage 2 — build          #
 ############################
-FROM node:20-alpine AS build
+FROM node:22-alpine AS build
 
 ENV NODE_ENV=production \
     VITE_API_BASE_URL=/api
