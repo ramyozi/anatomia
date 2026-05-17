@@ -2,9 +2,124 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+/* ------------------------------------------------------------------ *
+ * Design tokens
+ * ------------------------------------------------------------------ *
+ * Every colour is a space-separated RGB triplet so Tailwind's
+ * ``rgb(var(--x) / <alpha-value>)`` channel keeps opacity modifiers
+ * working. Themes are switched at runtime by setting ``data-theme`` on
+ * <html> (see src/stores/theme.ts + the anti-FOUC script in index.html).
+ *
+ * Adding a new theme = add one ``[data-theme='name']`` block below.
+ * ------------------------------------------------------------------ */
+
+:root,
+[data-theme='dark'] {
   color-scheme: dark;
+
+  --c-bg: 6 8 13;
+  --c-bg-soft: 11 15 23;
+  --c-bg-panel: 16 21 31;
+  --c-bg-elev: 22 28 40;
+
+  --c-ink: 232 237 245;
+  --c-ink-mute: 154 163 178;
+  --c-ink-dim: 91 100 115;
+
+  --c-accent: 126 224 210;
+  --c-accent-glow: 154 242 228;
+  --c-accent-deep: 42 138 124;
+
+  --c-coral: 255 107 107;
+  --c-coral-soft: 255 163 163;
+  --c-gold: 233 196 106;
+  --c-line: 31 39 53;
+
+  /* derived helpers */
+  --c-shadow: 0 0 0;
+  --c-shadow-inset: 255 255 255;
+
+  /* page ambience (radial accent washes behind the app) */
+  --wash-1: 126 224 210;
+  --wash-1-a: 0.07;
+  --wash-2-a: 0.04;
   --grain-opacity: 0.04;
+
+  /* 3D viewport backdrop (neutral, model-readable) */
+  --viewer-top: 28 33 44;
+  --viewer-mid: 21 25 34;
+  --viewer-bot: 14 17 24;
+}
+
+/* Dark soft — lighter, lower-contrast, no pure black. Easier on the
+ * eyes for long sessions while staying a dark theme. */
+[data-theme='dark-soft'] {
+  color-scheme: dark;
+
+  --c-bg: 24 27 35;
+  --c-bg-soft: 30 34 44;
+  --c-bg-panel: 37 42 54;
+  --c-bg-elev: 47 53 67;
+
+  --c-ink: 223 228 236;
+  --c-ink-mute: 159 167 181;
+  --c-ink-dim: 113 122 137;
+
+  --c-accent: 126 224 210;
+  --c-accent-glow: 154 242 228;
+  --c-accent-deep: 52 158 144;
+
+  --c-coral: 255 122 122;
+  --c-coral-soft: 255 170 170;
+  --c-gold: 235 200 116;
+  --c-line: 58 65 81;
+
+  --c-shadow: 0 0 0;
+  --c-shadow-inset: 255 255 255;
+
+  --wash-1: 126 224 210;
+  --wash-1-a: 0.06;
+  --wash-2-a: 0.035;
+  --grain-opacity: 0.03;
+
+  --viewer-top: 52 58 72;
+  --viewer-mid: 43 48 61;
+  --viewer-bot: 33 37 48;
+}
+
+/* Light */
+[data-theme='light'] {
+  color-scheme: light;
+
+  --c-bg: 246 248 251;
+  --c-bg-soft: 237 240 245;
+  --c-bg-panel: 255 255 255;
+  --c-bg-elev: 232 236 242;
+
+  --c-ink: 24 30 41;
+  --c-ink-mute: 84 94 110;
+  --c-ink-dim: 132 141 156;
+
+  --c-accent: 23 150 134;
+  --c-accent-glow: 31 168 150;
+  --c-accent-deep: 16 110 99;
+
+  --c-coral: 219 68 68;
+  --c-coral-soft: 200 96 96;
+  --c-gold: 169 124 28;
+  --c-line: 212 218 227;
+
+  --c-shadow: 30 41 59;
+  --c-shadow-inset: 255 255 255;
+
+  --wash-1: 23 150 134;
+  --wash-1-a: 0.06;
+  --wash-2-a: 0.04;
+  --grain-opacity: 0.02;
+
+  --viewer-top: 226 230 236;
+  --viewer-mid: 211 216 224;
+  --viewer-bot: 191 196 205;
 }
 
 html,
@@ -16,11 +131,21 @@ body,
 body {
   font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
   background:
-    radial-gradient(1200px 600px at 50% -10%, rgba(126, 224, 210, 0.07), transparent 60%),
-    radial-gradient(900px 600px at 100% 100%, rgba(126, 224, 210, 0.04), transparent 70%),
-    #06080d;
-  color: #e8edf5;
+    radial-gradient(
+      1200px 600px at 50% -10%,
+      rgb(var(--wash-1) / var(--wash-1-a)),
+      transparent 60%
+    ),
+    radial-gradient(
+      900px 600px at 100% 100%,
+      rgb(var(--wash-1) / var(--wash-2-a)),
+      transparent 70%
+    ),
+    rgb(var(--c-bg));
+  color: rgb(var(--c-ink));
   overflow-x: hidden;
+  /* Smooth the cross-fade when the theme changes at runtime. */
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 /* scrollbar */
@@ -29,14 +154,14 @@ body {
   height: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: #0b0f17;
+  background: rgb(var(--c-bg-soft));
 }
 ::-webkit-scrollbar-thumb {
-  background: #1f2735;
+  background: rgb(var(--c-line));
   border-radius: 8px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #2a3447;
+  background: rgb(var(--c-ink-dim));
 }
 
 /* utilities */
@@ -94,9 +219,23 @@ body {
     mask-image: linear-gradient(0deg, #000 60%, transparent);
   }
   .text-gradient {
-    background: linear-gradient(135deg, #9af2e4 0%, #e8edf5 60%, #9af2e4 120%);
+    background: linear-gradient(
+      135deg,
+      rgb(var(--c-accent-glow)) 0%,
+      rgb(var(--c-ink)) 60%,
+      rgb(var(--c-accent-glow)) 120%
+    );
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+  }
+  /* Themeable 3D viewport backdrop. */
+  .viewer-backdrop {
+    background: linear-gradient(
+      to bottom,
+      rgb(var(--viewer-top)),
+      rgb(var(--viewer-mid)) 55%,
+      rgb(var(--viewer-bot))
+    );
   }
 }

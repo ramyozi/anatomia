@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { Search, Activity } from 'lucide-react'
 import { useState } from 'react'
 import { GlobalSearch } from '../search/GlobalSearch'
+import { ThemeToggle } from './ThemeToggle'
 import { cn } from '@/lib/cn'
 
 const NAV = [
@@ -89,6 +90,7 @@ export function TopBar() {
                 ⌘K
               </kbd>
             </button>
+            <ThemeToggle />
           </div>
         </div>
       </header>

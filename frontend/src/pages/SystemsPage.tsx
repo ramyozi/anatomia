@@ -247,7 +247,7 @@ export function SystemsPage() {
         key={def.slug}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="relative bg-gradient-to-b from-[#e2e6ec] via-[#d3d8e0] to-[#bfc4cd]"
+        className="relative viewer-backdrop"
       >
         <Canvas
           camera={{ position: [0, 0, 3.2], fov: 38, near: 0.05, far: 50 }}
