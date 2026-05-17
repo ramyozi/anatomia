@@ -78,8 +78,9 @@ export function CameraControlsOverlay({ className }: Props) {
               if (a) b.run(a)
             }}
             className={cn(
-              'grid place-items-center w-9 h-9 rounded-lg transition-colors',
-              'text-ink-mute hover:text-ink hover:bg-bg-elev',
+              // 44px touch target on mobile, compact 36px from sm up.
+              'grid place-items-center w-11 h-11 sm:w-9 sm:h-9 rounded-lg transition-colors',
+              'text-ink-mute hover:text-ink hover:bg-bg-elev active:scale-95',
               'disabled:opacity-40 disabled:cursor-not-allowed',
               'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/60',
             )}
