@@ -41,13 +41,13 @@ export function GlossaryPage() {
         Définitions courtes des termes utilisés sur les fiches.
       </p>
 
-      <div className="panel p-3 flex items-center gap-2 mb-6">
-        <Search className="w-4 h-4 text-ink-mute" />
+      <div className="panel px-3 flex items-center gap-2 mb-6 min-h-[48px]">
+        <Search className="w-4 h-4 text-ink-mute flex-shrink-0" />
         <input
           value={q}
           onChange={e => setQ(e.target.value)}
           placeholder="Filtrer le glossaire..."
-          className="flex-1 bg-transparent outline-none text-ink placeholder:text-ink-dim text-sm"
+          className="flex-1 min-w-0 bg-transparent outline-none text-ink placeholder:text-ink-dim text-[15px]"
         />
       </div>
 
