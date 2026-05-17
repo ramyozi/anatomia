@@ -47,9 +47,9 @@ export function BodyExplorerPage() {
   const sysDef = systems.find(s => s.key === system)!
 
   return (
-    <div className="grid lg:grid-cols-[300px_1fr_340px] h-[calc(100vh-4rem)] border-t border-line/60">
+    <div className="flex flex-col lg:grid lg:grid-cols-[300px_1fr_340px] lg:h-[calc(100vh-4rem)] border-t border-line/60">
       {/* Left rail — system selector + visible regions */}
-      <aside className="border-r border-line/60 bg-bg-soft/50 overflow-y-auto">
+      <aside className="border-b lg:border-b-0 lg:border-r border-line/60 bg-bg-soft/50 lg:overflow-y-auto">
         <div className="p-5">
           <div className="flex items-center gap-2 mb-2 text-ink-dim text-xs uppercase tracking-wider">
             <Layers3 className="w-3.5 h-3.5" /> Atlas anatomique
@@ -107,7 +107,7 @@ export function BodyExplorerPage() {
         <div className="px-5 text-xs text-ink-dim mb-1">
           {visibleRegions.length} régions
         </div>
-        <ul className="px-2 pb-6">
+        <ul className="px-2 pb-6 max-h-[38vh] overflow-y-auto lg:max-h-none lg:overflow-visible">
           {visibleRegions.map(r => (
             <li key={r}>
               <button
@@ -134,7 +134,7 @@ export function BodyExplorerPage() {
       {/* 3D viewport — theme-aware neutral backdrop (.viewer-backdrop):
           a light medical grey in light mode, a muted neutral in the dark
           themes, while the model stays lit by the Stage rig. */}
-      <div className="relative viewer-backdrop">
+      <div className="relative viewer-backdrop h-[58vh] min-h-[320px] lg:h-auto">
         <Canvas
           camera={{ position: [0, 0, 3.6], fov: 38, near: 0.05, far: 50 }}
           gl={ANATOMICAL_GL_SETTINGS}
@@ -184,7 +184,7 @@ export function BodyExplorerPage() {
       </div>
 
       {/* Right info */}
-      <aside className="border-l border-line/60 bg-bg-soft/50 overflow-y-auto p-5">
+      <aside className="border-t lg:border-t-0 lg:border-l border-line/60 bg-bg-soft/50 lg:overflow-y-auto p-5 safe-pb">
         <div className="text-xs uppercase tracking-wider text-ink-dim mb-2">
           Système
         </div>
